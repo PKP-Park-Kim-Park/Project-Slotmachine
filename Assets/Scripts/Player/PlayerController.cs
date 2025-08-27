@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
 
     // 현재 바라보고 있는 Outline 컴포넌트를 저장할 변수
     private Outline currentLookAtOutline;
+    // 현재 바라보고 있는 InteractableObject 컴포넌트를 저장할 변수
+    private InteractableObject currentLookAtInteractable;
+    // 현재 레이캐스트에 맞은 오브젝트의 Transform을 저장
+    private Transform currentHitTransform;
 
     void Start()
     {
@@ -29,11 +33,11 @@ public class PlayerController : MonoBehaviour
         // 키보드 입력에 따른 이동
         Move();
 
-        //상호 작용 가능한 물체를 바라보고 있는지 체크
-        Interaction();
     }
     void Update()
     {
+        //상호 작용 가능한 물체를 바라보고 있는지 체크
+        Interaction();
     }
     void LateUpdate()
     {
@@ -88,47 +92,59 @@ public class PlayerController : MonoBehaviour
 
     public void Interaction()
     {
-        // 1. 화면 정중앙에서 레이캐스트를 발사
         Ray ray = theCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
 
-        // 현재 바라보고 있는 Outline 컴포넌트 초기화
-        Outline newLookAtOutline = null;
-        InteractableObject newLookAtInteractable = null;
-
-        // 2. 레이캐스트에 물체가 맞았는지 확인
+        // 1. 레이캐스트를 발사하여 현재 바라보는 오브젝트를 확인합니다.
         if (Physics.Raycast(ray, out hit, interactRange))
         {
-            // 'Interactable'이라는 태그를 가진 물체인지 확인
-            if (hit.transform.CompareTag("Interactable"))
+            // 'Interactable' 태그가 있는 새로운 오브젝트를 바라보고 있는지 확인
+            if (hit.transform.CompareTag("Interactable") && hit.transform != currentHitTransform)
             {
-                Debug.Log("상호작용 가능한 물체를 바라보고있습니다!");
-                newLookAtOutline = hit.transform.GetComponent<Outline>();
-                newLookAtInteractable = hit.transform.GetComponent<InteractableObject>();
+                // 이전에 바라보던 오브젝트가 있다면 외곽선을 비활성화
+                if (currentLookAtOutline != null)
+                {
+                    currentLookAtOutline.enabled = false;
+                }
+
+                // 새로운 오브젝트의 Outline 컴포넌트를 찾아 저장하고 활성화
+                currentLookAtOutline = hit.transform.GetComponent<Outline>();
+                if (currentLookAtOutline != null)
+                {
+                    currentLookAtOutline.enabled = true;
+                }
+
+                // 새로운 오브젝트의 InteractableObject 컴포넌트를 찾아 저장
+                currentLookAtInteractable = hit.transform.GetComponent<InteractableObject>();
+
+                // 현재 바라보는 오브젝트의 Transform을 갱신
+                currentHitTransform = hit.transform;
+                Debug.Log("상호작용 가능한 물체를 바라보고 있습니다!");
+            }
+            // 기존에 바라보던 오브젝트를 계속 바라보고 있는 경우
+            else if (hit.transform == currentHitTransform)
+            {
+                // 아무것도 하지 않음 (버벅거림 방지)
             }
         }
-        // 3.  외곽선 상태 업데이트
-        if (newLookAtOutline != currentLookAtOutline)
+        else // 레이캐스트에 아무것도 맞지 않았을 경우
         {
-            // 이전에 바라보던 오브젝트가 있다면
+            // 이전에 바라보던 오브젝트가 있었다면 외곽선을 비활성화
             if (currentLookAtOutline != null)
             {
-                // 그 오브젝트의 Outline 컴포넌트를 비활성화하여 외곽선을 제거합니다.
                 currentLookAtOutline.enabled = false;
             }
-
-            // 새롭게 바라보는 오브젝트가 있다면
-            if (newLookAtOutline != null)
-            {
-                // 그 오브젝트의 Outline 컴포넌트를 활성화하여 외곽선을 표시합니다.
-                newLookAtOutline.enabled = true;
-            }
-
-            // 현재 바라보고 있는 오브젝트를 새롭게 바라보는 오브젝트로 갱신합니다.
-            currentLookAtOutline = newLookAtOutline;
+            // 현재 바라보는 오브젝트 정보 초기화
+            currentLookAtOutline = null;
+            currentLookAtInteractable = null;
+            currentHitTransform = null;
         }
 
-
+        // 2. 마우스 클릭 입력 처리
+        if (currentLookAtInteractable != null && Input.GetMouseButtonDown(0))
+        {
+            currentLookAtInteractable.Interact();
+        }
     }
 
 }

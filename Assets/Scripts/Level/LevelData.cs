@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Level
+public class LevelData
 {
     public int _level { get; private set; }
     public int _minGold { get; private set; }
@@ -9,7 +9,7 @@ public class Level
     private const int CONVERT_SIZE = 10_000;
     private const int MAX_SIZE = 5;
 
-    public Level(int level)
+    public LevelData(int level)
     {
         _level = level;
         _minGold = level * CONVERT_SIZE;

@@ -3,14 +3,14 @@
 public class Test : MonoBehaviour
 {
     private Money money;
-    private Level level;
+    private LevelData level;
 
     void Start()
     {
         money = new Money();
         Debug.Log("new Money() 골드: " + money._gold + ", 토큰: " + money._token);
 
-        level = new Level(1);
+        level = new LevelData(1);
         Debug.Log("레벨 데이터 // 레벨: " + level._level + ", 최대: " + level._maxGold + ", 최소: " + level._minGold + ", 증감단위: " + level._unitGold);
     }
 

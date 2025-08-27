@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     // 현재 바라보고 있는 Outline 컴포넌트를 저장할 변수
     private Outline currentLookAtOutline;
     // 현재 바라보고 있는 InteractableObject 컴포넌트를 저장할 변수
-    private InteractableObject currentLookAtInteractable;
+    private IInteractable currentLookAtInteractable;
     // 현재 레이캐스트에 맞은 오브젝트의 Transform을 저장
     private Transform currentHitTransform;
 
@@ -114,12 +114,12 @@ public class PlayerController : MonoBehaviour
                     currentLookAtOutline.enabled = true;
                 }
 
-                // 새로운 오브젝트의 InteractableObject 컴포넌트를 찾아 저장
-                currentLookAtInteractable = hit.transform.GetComponent<InteractableObject>();
+                // 새로운 오브젝트에서 IInteractable 인터페이스를 구현한 컴포넌트를 찾아 저장
+                currentLookAtInteractable = hit.transform.GetComponent<IInteractable>();
 
                 // 현재 바라보는 오브젝트의 Transform을 갱신
                 currentHitTransform = hit.transform;
-                Debug.Log("상호작용 가능한 물체를 바라보고 있습니다!");
+                Debug.Log(currentLookAtInteractable.InteractionPrompt + "와(과) 상호작용 가능합니다!");
             }
             // 기존에 바라보던 오브젝트를 계속 바라보고 있는 경우
             else if (hit.transform == currentHitTransform)

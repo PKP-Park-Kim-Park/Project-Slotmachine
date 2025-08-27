@@ -1,12 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
 {
     public void Interact()
     {
-        // ÀÌ ÇÔ¼ö°¡ È£ÃâµÇ¸é »óÈ£ÀÛ¿ë ·ÎÁ÷À» ½ÇÇàÇÕ´Ï´Ù.
-        // ¿¹: ¹°Ã¼ÀÇ »ö±ò ¹Ù²Ù±â
-        GetComponent<Renderer>().material.color = Color.red;
-        Debug.Log("¹°Ã¼¿Í »óÈ£ÀÛ¿ëÇß½À´Ï´Ù!");
+        // ì´ í•¨ìˆ˜ê°€ í˜¸ì¶œë˜ë©´ ìƒí˜¸ì‘ìš© ë¡œì§ì„ ì‹¤í–‰í•©ë‹ˆë‹¤.
+        Debug.Log("ë¬¼ì²´ì™€ ìƒí˜¸ì‘ìš©í–ˆìŠµë‹ˆë‹¤!");
     }
 }

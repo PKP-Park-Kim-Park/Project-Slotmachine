@@ -4,14 +4,7 @@ public class StopBell : MonoBehaviour, IInteractable
 {
     public string InteractionPrompt => "StopBell";
 
-    private Money money;
-
     private bool stop = false;
-
-    void Start()
-    {
-        money = new Money();
-    }
 
     public void Interact()
     {
@@ -27,10 +20,10 @@ public class StopBell : MonoBehaviour, IInteractable
         {
             Debug.LogWarning("게임이 정지 상태입니다.");
 
-            if (money != null)
+            if (GameManager.instance.money != null)
             {
                 Debug.LogWarning("ConvertToken 실행.");
-                money.ConvertToken();
+                GameManager.instance.money.ConvertToken();
             }
             else
             {

@@ -1,25 +1,25 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class Sphere : MonoBehaviour, IInteractable
 {
-    // IInteractable ÀÎÅÍÆäÀÌ½ºÀÇ »óÈ£ÀÛ¿ë ÇÁ·ÒÇÁÆ® ±¸Çö.
-    // ÇÃ·¹ÀÌ¾î°¡ ¿ÀºêÁ§Æ®¸¦ ¹Ù¶óº¼ ¶§ UI¿¡ Ç¥½ÃµÉ ÅØ½ºÆ®ÀÔ´Ï´Ù.
-    public string InteractionPrompt => "Sphere Å×½ºÆ®¿ë";
-    // SphereÀÇ MaterialÀ» ÀúÀåÇÒ º¯¼ö
+    // IInteractable ì¸í„°í˜ì´ìŠ¤ì˜ ìƒí˜¸ì‘ìš© í”„ë¡¬í”„íŠ¸ êµ¬í˜„.
+    // í”Œë ˆì´ì–´ê°€ ì˜¤ë¸Œì íŠ¸ë¥¼ ë°”ë¼ë³¼ ë•Œ UIì— í‘œì‹œë  í…ìŠ¤íŠ¸ì…ë‹ˆë‹¤.
+    public string InteractionPrompt => "Sphere í…ŒìŠ¤íŠ¸ìš©";
+    // Sphereì˜ Materialì„ ì €ì¥í•  ë³€ìˆ˜
     private Material sphereMaterial;
 
     void Start()
     {
-        // ½ÃÀÛ ½Ã ÀÚ½ÅÀÇ MeshRenderer¿¡¼­ Material ÄÄÆ÷³ÍÆ® °¡Á®¿À±â
+        // ì‹œì‘ ì‹œ ìì‹ ì˜ MeshRendererì—ì„œ Material ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ê¸°
         sphereMaterial = GetComponent<MeshRenderer>().material;
     }
 
-    // IInteractable ÀÎÅÍÆäÀÌ½ºÀÇ Interact() ¸Ş¼Òµå ±¸Çö.
-    // ÇÃ·¹ÀÌ¾î°¡ »óÈ£ÀÛ¿ë ¹öÆ°(¸¶¿ì½º ¿ŞÂÊ Å¬¸¯)À» ´©¸£¸é ÀÌ ÇÔ¼ö°¡ È£ÃâµË´Ï´Ù.
+    // IInteractable ì¸í„°í˜ì´ìŠ¤ì˜ Interact() ë©”ì†Œë“œ êµ¬í˜„.
+    // í”Œë ˆì´ì–´ê°€ ìƒí˜¸ì‘ìš© ë²„íŠ¼(ë§ˆìš°ìŠ¤ ì™¼ìª½ í´ë¦­)ì„ ëˆ„ë¥´ë©´ ì´ í•¨ìˆ˜ê°€ í˜¸ì¶œë©ë‹ˆë‹¤.
     public void Interact()
     {
-        // Interact()°¡ È£ÃâµÇ¸é »ö»óÀ» ·£´ıÇÏ°Ô º¯°æ
+        // Interact()ê°€ í˜¸ì¶œë˜ë©´ ìƒ‰ìƒì„ ëœë¤í•˜ê²Œ ë³€ê²½
         sphereMaterial.color = new Color(Random.value, Random.value, Random.value);
-        Debug.Log("SphereÀÇ »ö»óÀÌ º¯°æµÇ¾ú½À´Ï´Ù!");
+        Debug.Log("Sphereì˜ ìƒ‰ìƒì´ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤!");
     }
 }

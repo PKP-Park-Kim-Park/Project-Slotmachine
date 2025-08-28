@@ -8,8 +8,6 @@ public class BtnMotion : MonoBehaviour, IInteractable
 
     void Awake()
     {
-        // 스크립트가 시작될 때 Animator 컴포넌트를 자동으로 찾아옵니다.
-        // 이 스크립트와 Animator가 항상 같은 게임 오브젝트에 있다는 가정 하에 작동합니다.
         btnAnim = GetComponent<Animator>();
         if (btnAnim == null)
         {
@@ -22,7 +20,6 @@ public class BtnMotion : MonoBehaviour, IInteractable
         PressBtn();
     }
 
-    // 레버를 당겼을 때 호출될 함수입니다.
     public void PressBtn()
     {
         // leverAnim이 할당되었는지 확인 후 애니메이션 실행

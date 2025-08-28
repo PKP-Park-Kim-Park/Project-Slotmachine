@@ -3,8 +3,8 @@ using System.Collections;
 
 public class LeverMotion : MonoBehaviour, IInteractable
 {
-    [Tooltip("레버와 상호작용 시 색상을 변경할 Outline 컴포넌트입니다.")]
-    public Outline outline; // Outline.cs 스크립트에 대한 참조
+    [Tooltip("레버와 상호작용 시 색상을 변경할 Outline 컴포넌트")]
+    public Outline outline;
 
     private Animator leverAnim;
     private bool isInteractable = true;
@@ -29,7 +29,6 @@ public class LeverMotion : MonoBehaviour, IInteractable
             Debug.LogError("LeverMotion 스크립트가 있는 오브젝트에 Animator 컴포넌트 추가 바람...");
         }
 
-        // 만약 Inspector에서 Outline을 할당했다면, 원래 색상을 저장합니다.
         if (outline != null)
         {
             originalOutlineColor = outline.OutlineColor;
@@ -38,7 +37,7 @@ public class LeverMotion : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        // 상호작용이 불가능한 상태이면 아무것도 하지 않습니다.
+        // 상호작용이 불가능한 상태이면 아무것도 않음
         if (!isInteractable)
         {
             return;
@@ -67,25 +66,23 @@ public class LeverMotion : MonoBehaviour, IInteractable
 
     private IEnumerator LeverCooldown()
     {
-        // 상호작용을 비활성화합니다.
+        // 상호작용 비활성화
         isInteractable = false;
 
-        // 아웃라인 색상을 빨간색으로 변경합니다.
+        // 아웃라인 색상을 빨간색
         if (outline != null)
         {
             outline.OutlineColor = Color.red;
         }
 
-        // 3초 동안 기다립니다.
+        // 3초
         yield return new WaitForSeconds(3f);
 
-        // 아웃라인 색상을 원래대로 되돌립니다.
+        // 아웃라인 색상을 원래대로
         if (outline != null)
         {
             outline.OutlineColor = originalOutlineColor;
         }
-
-        // 상호작용을 다시 활성화합니다.
         isInteractable = true;
     }
 }

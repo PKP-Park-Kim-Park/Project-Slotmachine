@@ -1,20 +1,11 @@
 using UnityEngine;
 
-/// <remarks>
-/// 필요한 Animator 설정:
-/// - States: Closed, OpenForward
-/// - Triggers: OpenForward, Close
-///
-/// Transitions:
-/// - Any State -> OpenForward (Condition: OpenForward trigger)
-/// - OpenForward -> Closed (Condition: Close trigger)
-/// </remarks>
 public class Door : MonoBehaviour, IInteractable
 {
-    [Tooltip("문이 잠겼는지 여부를 설정합니다.")]
+    [Tooltip("문이 잠겼는지 여부")]
     public bool locked = false;
 
-    [Tooltip("이 오브젝트와 상호작용하면 문이 자동으로 닫히고 잠깁니다.")]
+    [Tooltip("이 오브젝트와 상호작용하면 문이 자동으로 닫히고 잠김")]
     public AutoLockTrigger lockTrigger;
 
     private Animator animator;
@@ -29,15 +20,26 @@ public class Door : MonoBehaviour, IInteractable
         animator = GetComponent<Animator>();
         if (animator == null)
         {
-            Debug.LogError("Door 스크립트가 부착된 오브젝트에 Animator 컴포넌트가 없습니다.", this);
+            Debug.LogError("Door 스크립트가 부착된 오브젝트에 Animator 컴포넌트 없음", this);
         }
 
         openForwardTriggerHash = Animator.StringToHash("OpenForward");
         closeTriggerHash = Animator.StringToHash("Close");
+    }
 
+    private void OnEnable()
+    {
         if (lockTrigger != null)
         {
             lockTrigger.OnInteracted.AddListener(AutoCloseAndLock);
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (lockTrigger != null)
+        {
+            lockTrigger.OnInteracted.RemoveListener(AutoCloseAndLock);
         }
     }
 

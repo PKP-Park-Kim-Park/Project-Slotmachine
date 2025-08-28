@@ -30,19 +30,11 @@ public class PlayerController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        // 시점이 고정되어 있지 않을 때만 이동
-        if (!playerLook.IsViewFixed)
-        {
             Move();
-        }
     }
     void Update()
     {
-        // 시점이 고정되어 있지 않을 때만 상호작용 체크
-        if (!playerLook.IsViewFixed)
-        {
             HandleInteraction();
-        }
     }
 
     private void Move()
@@ -117,6 +109,14 @@ public class PlayerController : MonoBehaviour
             ViewFixObject viewFix = currentHitTransform.GetComponent<ViewFixObject>();
             if (viewFix != null)
             {
+                // 시점 고정 전, 현재 바라보고 있는 오브젝트의 아웃라인을 끈다.
+                if (currentLookAtOutline != null)
+                {
+                    currentLookAtOutline.enabled = false;
+                    currentLookAtOutline = null;
+                    currentLookAtInteractable = null;
+                    currentHitTransform = null;
+                }
                 playerLook.FixViewPoint(viewFix.GetCameraTarget());
             }
             else

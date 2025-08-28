@@ -53,8 +53,10 @@ public class PlayerLook : MonoBehaviour
     {
         if (isViewFixed)
         {
-            // 시점이 고정되었을 때 카메라를 목표 지점으로 부드럽게 이동
+            // 시점 고정 모드
+            // 카메라 위치는 목표 지점으로 부드럽게 이동
             theCamera.transform.position = Vector3.Lerp(theCamera.transform.position, cameraTarget.position, Time.deltaTime * cameraTransitionSpeed);
+            // 카메라 회전도 목표 지점으로 부드럽게 이동
             theCamera.transform.rotation = Quaternion.Slerp(theCamera.transform.rotation, cameraTarget.rotation, Time.deltaTime * cameraTransitionSpeed);
         }
         else if (isReturningToPlayer)
@@ -108,6 +110,8 @@ public class PlayerLook : MonoBehaviour
         isViewFixed = true;
         isReturningToPlayer = false; // 복귀 중이었다면 중단
         cameraTarget = target;
+
+        // UI 조작을 위해 커서 잠금 해제
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }

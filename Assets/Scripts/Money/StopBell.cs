@@ -1,30 +1,38 @@
 ﻿using UnityEngine;
 
-public class StopBell : MonoBehaviour
+public class StopBell : MonoBehaviour, IInteractable
 {
-    private bool stop;
+    public string InteractionPrompt => "StopBell";
 
-    public Money money;
+    private bool stop = false;
+
+    public void Interact()
+    {
+        StopGame();
+    }
+
     public void StopGame()
     {
         stop = true;
 
-        // 게임 정지 bool로 체크후 컨버트 토큰 하기
-        if (stop && money != null)
+        // 게임 정지 상태를 확인합니다.
+        if (stop)
         {
-            Debug.LogWarning("ConvertToken 실행.");
-            money.ConvertToken();
+            Debug.LogWarning("게임이 정지 상태입니다.");
+
+            if (GameManager.instance.money != null)
+            {
+                Debug.LogWarning("ConvertToken 실행.");
+                GameManager.instance.money.ConvertToken();
+            }
+            else
+            {
+                Debug.LogWarning("Money 인스턴스가 할당되지 않았습니다.");
+            }
         }
-        else if(money == null)
+        else
         {
-            //게임 매니저에서 초기화해서 받아야댐
-            Debug.LogWarning("Money 컴포넌트 할당 X.");
-            
-        }
-        else if(!stop)
-        {
-            Debug.LogWarning("게임 정지 상태 X.");
+            Debug.LogWarning("게임이 정지 상태가 아닙니다.");
         }
     }
-
 }

@@ -3,26 +3,49 @@ using System.Collections;
 
 public class LeverMotion : MonoBehaviour, IInteractable
 {
-    public string InteractionPrompt => "레버 당기기";
+    [Tooltip("레버와 상호작용 시 색상을 변경할 Outline 컴포넌트")]
+    public Outline outline;
+
     private Animator leverAnim;
+    private bool isInteractable = true;
+    private Color originalOutlineColor;
+
+    public string InteractionPrompt
+    {
+        get
+        {
+            if (isInteractable)
+                return "레버 당기기";
+            else
+                return ""; // 상호작용 불가 상태일 때는 프롬프트를 표시하지 않음
+        }
+    }
 
     void Awake()
     {
-        // 스크립트가 시작될 때 Animator 컴포넌트를 자동으로 찾아옵니다.
-        // 이 스크립트와 Animator가 항상 같은 게임 오브젝트에 있다는 가정 하에 작동합니다.
         leverAnim = GetComponent<Animator>();
         if (leverAnim == null)
         {
             Debug.LogError("LeverMotion 스크립트가 있는 오브젝트에 Animator 컴포넌트 추가 바람...");
         }
+
+        if (outline != null)
+        {
+            originalOutlineColor = outline.OutlineColor;
+        }
     }
 
     public void Interact()
     {
+        // 상호작용이 불가능한 상태이면 아무것도 않음
+        if (!isInteractable)
+        {
+            return;
+        }
+
         PullLever();
     }
 
-    // 레버를 당겼을 때 호출될 함수입니다.
     public void PullLever()
     {
         // leverAnim이 할당되었는지 확인 후 애니메이션 실행
@@ -30,6 +53,7 @@ public class LeverMotion : MonoBehaviour, IInteractable
         {
             Debug.Log("레버 당김...");
             leverAnim.SetTrigger("Pull");
+            StartCoroutine(LeverCooldown());
         }
         else
         {
@@ -38,5 +62,27 @@ public class LeverMotion : MonoBehaviour, IInteractable
 
         // TODO
         // 레버 당길 시 Spin()
+    }
+
+    private IEnumerator LeverCooldown()
+    {
+        // 상호작용 비활성화
+        isInteractable = false;
+
+        // 아웃라인 색상을 빨간색
+        if (outline != null)
+        {
+            outline.OutlineColor = Color.red;
+        }
+
+        // 3초
+        yield return new WaitForSeconds(3f);
+
+        // 아웃라인 색상을 원래대로
+        if (outline != null)
+        {
+            outline.OutlineColor = originalOutlineColor;
+        }
+        isInteractable = true;
     }
 }

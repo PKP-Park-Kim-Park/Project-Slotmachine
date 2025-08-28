@@ -14,6 +14,9 @@ public class Door : MonoBehaviour, IInteractable
     [Tooltip("문이 잠겼는지 여부를 설정합니다.")]
     public bool locked = false;
 
+    [Tooltip("이 오브젝트와 상호작용하면 문이 자동으로 닫히고 잠깁니다.")]
+    public AutoLockTrigger lockTrigger;
+
     private Animator animator;
     private bool isOpen = false;
     private int openForwardTriggerHash;
@@ -31,6 +34,11 @@ public class Door : MonoBehaviour, IInteractable
 
         openForwardTriggerHash = Animator.StringToHash("OpenForward");
         closeTriggerHash = Animator.StringToHash("Close");
+
+        if (lockTrigger != null)
+        {
+            lockTrigger.OnInteracted.AddListener(AutoCloseAndLock);
+        }
     }
 
     public void Interact()
@@ -81,5 +89,20 @@ public class Door : MonoBehaviour, IInteractable
 
         animator.SetTrigger(closeTriggerHash);
         isOpen = false;
+    }
+
+    /// <summary>
+    /// 문 자동 잠금 함수
+    /// lockTrigger 오브젝트와 상호작용 시 호출
+    /// </summary>
+    public void AutoCloseAndLock()
+    {
+        if (isOpen)
+        {
+            Close();
+        }
+
+        locked = true;
+        Debug.Log("문 자동 닫힘, 잠금");
     }
 }

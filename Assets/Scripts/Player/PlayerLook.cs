@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 플레이어의 시점 및 카메라 회전을 관리합니다.
+/// 플레이어 시점 및 카메라 회전 관리
 /// </summary>
 public class PlayerLook : MonoBehaviour
 {
@@ -9,7 +9,12 @@ public class PlayerLook : MonoBehaviour
     [SerializeField] private float lookSensitivity = 3f;
     [SerializeField] private float cameraRotationLimit = 80f;
     [SerializeField] private Camera theCamera;
+
+    [Header("Fixed View Settings")]
     [SerializeField] private float cameraTransitionSpeed = 5f;
+    [SerializeField] private Vector2 edgePanDeadZone = new Vector2(0.7f, 0.7f); // 화면 중앙의 데드존 크기 (0~1)
+    [SerializeField] private float edgePanMaxAngleX = 5f; // 상하 시야 이동 최대 각도
+    [SerializeField] private float edgePanMaxAngleY = 10f; // 좌우 시야 이동 최대 각도
 
     private float currentCameraRotationX = 0f;
     private Rigidbody myRigid;
@@ -21,12 +26,12 @@ public class PlayerLook : MonoBehaviour
     private Vector3 originalCameraLocalPosition;
 
     /// <summary>
-    /// 현재 시점이 고정된 상태인지 여부를 반환합니다.
+    /// 현재 시점이 고정된 상태인지 여부
     /// </summary>
     public bool IsViewFixed => isViewFixed;
 
     /// <summary>
-    /// 플레이어의 메인 카메라를 반환합니다.
+    /// 플레이어의 메인 카메라
     /// </summary>
     public Camera PlayerCamera => theCamera;
 
@@ -54,28 +59,51 @@ public class PlayerLook : MonoBehaviour
         if (isViewFixed)
         {
             // 시점 고정 모드
-            // 카메라 위치는 목표 지점으로 부드럽게 이동
             theCamera.transform.position = Vector3.Lerp(theCamera.transform.position, cameraTarget.position, Time.deltaTime * cameraTransitionSpeed);
-            // 카메라 회전도 목표 지점으로 부드럽게 이동
-            theCamera.transform.rotation = Quaternion.Slerp(theCamera.transform.rotation, cameraTarget.rotation, Time.deltaTime * cameraTransitionSpeed);
+
+            float mouseOffsetX = (Input.mousePosition.x / Screen.width) - 0.5f;
+            float mouseOffsetY = (Input.mousePosition.y / Screen.height) - 0.5f;
+
+            float targetAngleY = 0f;
+            float targetAngleX = 0f;
+
+            float deadZoneHalfWidth = edgePanDeadZone.x / 2f;
+            float deadZoneHalfHeight = edgePanDeadZone.y / 2f;
+
+            if (Mathf.Abs(mouseOffsetX) > deadZoneHalfWidth)
+            {
+                float panRangeX = 0.5f - deadZoneHalfWidth;
+                float panInputX = Mathf.Sign(mouseOffsetX) * (Mathf.Abs(mouseOffsetX) - deadZoneHalfWidth);
+                float normalizedPanX = Mathf.Clamp(panInputX / panRangeX, -1f, 1f);
+                targetAngleY = normalizedPanX * edgePanMaxAngleY;
+            }
+
+            if (Mathf.Abs(mouseOffsetY) > deadZoneHalfHeight)
+            {
+                float panRangeY = 0.5f - deadZoneHalfHeight;
+                float panInputY = Mathf.Sign(mouseOffsetY) * (Mathf.Abs(mouseOffsetY) - deadZoneHalfHeight);
+                float normalizedPanY = Mathf.Clamp(panInputY / panRangeY, -1f, 1f);
+                targetAngleX = normalizedPanY * edgePanMaxAngleX * -1f; // Y축은 반전
+            }
+
+            Quaternion panOffset = Quaternion.Euler(targetAngleX, targetAngleY, 0f);
+            Quaternion finalTargetRotation = cameraTarget.rotation * panOffset;
+
+            theCamera.transform.rotation = Quaternion.Slerp(theCamera.transform.rotation, finalTargetRotation, Time.deltaTime * cameraTransitionSpeed);
         }
         else if (isReturningToPlayer)
         {
-            // 카메라를 플레이어의 원래 시점으로 부드럽게 복귀
             Vector3 targetPosition = transform.TransformPoint(originalCameraLocalPosition);
             Quaternion targetRotation = transform.rotation * Quaternion.identity; // 원래 로컬 회전은 Quaternion.identity
 
             theCamera.transform.position = Vector3.Lerp(theCamera.transform.position, targetPosition, Time.deltaTime * cameraTransitionSpeed);
             theCamera.transform.rotation = Quaternion.Slerp(theCamera.transform.rotation, targetRotation, Time.deltaTime * cameraTransitionSpeed);
 
-            // 전환이 거의 완료되었는지 확인 (거리가 매우 가까워지면)
             if (Vector3.Distance(theCamera.transform.position, targetPosition) < 0.01f)
             {
                 isReturningToPlayer = false;
-                // 오차를 없애기 위해 마지막에 위치를 정확히 맞춰줌
                 theCamera.transform.localPosition = originalCameraLocalPosition;
                 theCamera.transform.localRotation = Quaternion.identity;
-                // 카메라 상하 회전 값 초기화
                 currentCameraRotationX = 0f;
             }
         }

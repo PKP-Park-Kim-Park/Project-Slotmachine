@@ -27,29 +27,23 @@ public class SlotMachine : MonoBehaviour
 
         if(isIncrease == true)
         {
-            // 레벨의 증감액 보다 골드가 많으면
-            if(GameManager.instance.levelData._unitGold < GameManager.instance.money._gold)
+            if(GameManager.instance.levelData._maxGold < bettingGold + GameManager.instance.levelData._unitGold)
             {
-                bettingGold += GameManager.instance.levelData._unitGold;
-                GameManager.instance.money.SpendGold(GameManager.instance.levelData._unitGold);
+                // 배팅가능한 최대치이다.
+                return;
             }
-            else
-            {
-                // 돈부족 !
-            }
+
+            bettingGold += GameManager.instance.levelData._unitGold;
         }
         else if(isIncrease == false)
         {
-            // 레벨의 증감액 보다 베팅 골드가 많으면
-            if (GameManager.instance.levelData._unitGold < bettingGold)
+            if (GameManager.instance.levelData._minGold > bettingGold - GameManager.instance.levelData._unitGold)
             {
-                bettingGold -= GameManager.instance.levelData._unitGold;
-                GameManager.instance.money.AddGold(GameManager.instance.levelData._unitGold);
+                // 배팅가능한 최소치이다.
+                return;
             }
-            else
-            {
-                // 돈부족 !
-            }
+
+            bettingGold -= GameManager.instance.levelData._unitGold;
         }
     }
 
@@ -67,6 +61,13 @@ public class SlotMachine : MonoBehaviour
             return;
         }
 
+        if(GameManager.instance.money._gold < bettingGold)
+        {
+            // 소지한 골드 부족
+            return;
+        }
+
+        GameManager.instance.money.SpendGold(bettingGold);
         isActivating = true;
 
         // Reel 의 RelocateSymbol 함수 호출

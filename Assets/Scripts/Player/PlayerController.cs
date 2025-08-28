@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // 이동 속도, 시야 감도, 카메라 회전 제한 값
+    [Header("Movement Settings")]
     [SerializeField] private float walkSpeed = 5f;
-    [SerializeField] private float lookSensitivity = 3f;
-    [SerializeField] private float cameraRotationLimit = 80f;
-    [SerializeField] private Camera theCamera;
-    [SerializeField] private float interactRange = 3f; // 상호작용 가능한 거리
 
-    private float currentCameraRotationX;
+    [Header("Interaction Settings")]
+    [SerializeField] private float interactRange = 3f;
+    // 시점 고정 시 상호작용할 레이어
+    [SerializeField] private LayerMask slotMachineInteractableLayer;
+    // 기본 상호작용 레이어
+    [SerializeField] private LayerMask defaultInteractableLayer;
+
+    [Header("Dependencies")]
+    [SerializeField] private PlayerLook playerLook; // 시점 및 카메라 제어 스크립트
+
     private Rigidbody myRigid;
-
-    // 현재 바라보고 있는 Outline 컴포넌트를 저장할 변수
     private Outline currentLookAtOutline;
     // 현재 바라보고 있는 InteractableObject 컴포넌트를 저장할 변수
     private IInteractable currentLookAtInteractable;
@@ -23,89 +26,66 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        // Rigidbody 컴포넌트 가져오기
         myRigid = GetComponent<Rigidbody>();
-        // 마우스 커서 숨기기 및 고정
-        Cursor.lockState = CursorLockMode.Locked;
     }
     void FixedUpdate()
     {
-        // 키보드 입력에 따른 이동
-        Move();
-
+        // 시점이 고정되어 있지 않을 때만 이동
+        if (!playerLook.IsViewFixed)
+        {
+            Move();
+        }
     }
     void Update()
     {
-        //상호 작용 가능한 물체를 바라보고 있는지 체크
-        Interaction();
-    }
-    void LateUpdate()
-    {
-        // 마우스 좌우 움직임에 따른 캐릭터 회전
-        CharacterRotation();
-        // 마우스 상하 움직임에 따른 카메라 회전
-        CameraRotation();
+        // PlayerLook 스크립트가 준비되면 상호작용 처리 시작
+        if (playerLook != null && playerLook.PlayerCamera != null)
+            HandleInteraction();
     }
 
     private void Move()
     {
-        // 수평, 수직 입력 값 가져오기 (W,A,S,D)
         float _moveDirX = Input.GetAxisRaw("Horizontal");
         float _moveDirZ = Input.GetAxisRaw("Vertical");
 
-        // 이동 방향 계산
         Vector3 _moveHorizontal = transform.right * _moveDirX;
         Vector3 _moveVertical = transform.forward * _moveDirZ;
 
         // 속도를 적용하여 최종 이동 벡터 생성
         Vector3 _velocity = (_moveHorizontal + _moveVertical).normalized * walkSpeed;
 
-        // Rigidbody를 사용하여 물리적으로 이동
-        myRigid.MovePosition(transform.position + _velocity * Time.deltaTime);
+        myRigid.MovePosition(transform.position + _velocity * Time.fixedDeltaTime);
     }
 
-    private void CharacterRotation()
+    private void HandleInteraction()
     {
-        // 마우스 좌우 움직임 입력 값 가져오기
-        float _yRotation = Input.GetAxisRaw("Mouse X");
-        // 회전 벡터 계산
-        Vector3 _characterRotationY = new Vector3(0f, _yRotation, 0f) * lookSensitivity;
+        Ray ray;
+        LayerMask targetLayer;
 
-        // Rigidbody를 사용하여 캐릭터 회전
-        myRigid.MoveRotation(myRigid.rotation * Quaternion.Euler(_characterRotationY));
-    }
+        // 1. 시점 고정 상태에 따라 레이와 타겟 레이어를 다르게 설정합니다.
+        if (playerLook.IsViewFixed)
+        {
+            // 시점이 고정된 경우: 마우스 위치에서 레이를 쏘고, 슬롯머신 레이어만 감지
+            ray = playerLook.PlayerCamera.ScreenPointToRay(Input.mousePosition);
+            targetLayer = slotMachineInteractableLayer;
+        }
+        else
+        {
+            // 일반 모드인 경우: 화면 중앙에서 레이를 쏘고, 기본 상호작용 레이어를 감지
+            ray = playerLook.PlayerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+            targetLayer = defaultInteractableLayer;
+        }
 
-    private void CameraRotation()
-    {
-        // 마우스 상하 움직임 입력 값 가져오기
-        float _xRotation = Input.GetAxisRaw("Mouse Y");
-        // 카메라 회전 값 계산
-        float _cameraRotationX = _xRotation * lookSensitivity;
-
-        currentCameraRotationX -= _cameraRotationX;
-        // 카메라 회전 각도 제한
-        currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
-
-        // 카메라 회전 적용
-        theCamera.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
-    }
-
-    public void Interaction()
-    {
-        Ray ray = theCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
 
-        // 1. 레이캐스트를 발사하여 현재 바라보는 오브젝트를 확인합니다.
-        if (Physics.Raycast(ray, out hit, interactRange))
+        // 2. 설정된 레이와 레이어 마스크로 레이캐스트를 발사합니다.
+        if (Physics.Raycast(ray, out hit, interactRange, targetLayer))
         {
-            // 'Interactable' 태그가 있는 새로운 오브젝트를 바라보고 있는지 확인
-            if (hit.transform.CompareTag("Interactable") && hit.transform != currentHitTransform)
+            // 새로운 오브젝트를 바라보고 있는지 확인
+            if (hit.transform != currentHitTransform)
             {
                 // 이전에 바라보던 오브젝트가 있다면 외곽선을 비활성화
-                if (currentLookAtOutline != null)
-                {
-                    currentLookAtOutline.enabled = false;
-                }
+                ClearLookAtObject();
 
                 // 새로운 오브젝트의 Outline 컴포넌트를 찾아 저장하고 활성화
                 currentLookAtOutline = hit.transform.GetComponent<Outline>();
@@ -119,32 +99,47 @@ public class PlayerController : MonoBehaviour
 
                 // 현재 바라보는 오브젝트의 Transform을 갱신
                 currentHitTransform = hit.transform;
-                Debug.Log(currentLookAtInteractable.InteractionPrompt + "와(과) 상호작용 가능합니다!");
-            }
-            // 기존에 바라보던 오브젝트를 계속 바라보고 있는 경우
-            else if (hit.transform == currentHitTransform)
-            {
-                // 아무것도 하지 않음 (버벅거림 방지)
+
+                if (currentLookAtInteractable != null)
+                {
+                    Debug.Log(currentLookAtInteractable.InteractionPrompt + "와(과) 상호작용 가능합니다!");
+                }
             }
         }
         else // 레이캐스트에 아무것도 맞지 않았을 경우
         {
-            // 이전에 바라보던 오브젝트가 있었다면 외곽선을 비활성화
-            if (currentLookAtOutline != null)
-            {
-                currentLookAtOutline.enabled = false;
-            }
-            // 현재 바라보는 오브젝트 정보 초기화
-            currentLookAtOutline = null;
-            currentLookAtInteractable = null;
-            currentHitTransform = null;
+            ClearLookAtObject();
         }
 
-        // 2. 마우스 클릭 입력 처리
+        // 3. 마우스 클릭 입력 처리
         if (currentLookAtInteractable != null && Input.GetMouseButtonDown(0))
         {
-            currentLookAtInteractable.Interact();
+            // 시점 고정 상태가 아니고, 클릭한 오브젝트가 ViewFixObject일 경우
+            if (!playerLook.IsViewFixed && currentHitTransform.TryGetComponent(out ViewFixObject viewFix))
+            {
+                // 1. 상호작용(AutoLockTrigger 등)을 먼저 호출
+                currentLookAtInteractable.Interact();
+
+                // 2. 그 다음 시점을 고정
+                ClearLookAtObject();
+                playerLook.FixViewPoint(viewFix.GetCameraTarget());
+            }
+            else // 그 외의 모든 상호작용 (레버, 버튼 등)
+            {
+                currentLookAtInteractable.Interact();
+            }
         }
     }
 
+    // 바라보는 오브젝트 정보를 초기화하는 함수
+    private void ClearLookAtObject()
+    {
+        if (currentLookAtOutline != null)
+        {
+            currentLookAtOutline.enabled = false;
+        }
+        currentLookAtOutline = null;
+        currentLookAtInteractable = null;
+        currentHitTransform = null;
+    }
 }

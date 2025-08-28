@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2974990293985440018
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3420500346108120789}
+  m_Layer: 0
+  m_Name: FixedCam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3420500346108120789
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2974990293985440018}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: -0.9945219, z: 0.10452846, w: 0}
+  m_LocalPosition: {x: 0, y: 0.74, z: 2.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1688498214517732109}
+  m_LocalEulerAnglesHint: {x: 12, y: -180, z: 0}
 --- !u!1001 &1217231198406350054
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8,6 +39,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -9080165238244270026, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: -9080165238244270026, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
       propertyPath: m_TagString
       value: Interactable
@@ -65,6 +100,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -6429965755936260320, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -6429965755936260320, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
       propertyPath: m_TagString
       value: Interactable
       objectReference: {fileID: 0}
@@ -105,8 +144,16 @@ PrefabInstance:
       value: Slotmachine
       objectReference: {fileID: 0}
     - target: {fileID: 3646697037475613024, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3646697037475613024, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
       propertyPath: m_TagString
       value: Interactable
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740984516714099051, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6740984516714099051, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
       propertyPath: m_TagString
@@ -114,7 +161,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3420500346108120789}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3646697037475613024, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
       insertIndex: -1
@@ -149,6 +199,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -6429965755936260320, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4554021405734443716}
+    - targetCorrespondingSourceObject: {fileID: -6429965755936260320, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1915947200027476442}
     - targetCorrespondingSourceObject: {fileID: 6740984516714099051, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8233762229504285014}
@@ -240,6 +293,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 755effb3ead44c0498a938f6bc777c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1688498214517732109 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
+  m_PrefabInstance: {fileID: 1217231198406350054}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2485937452208659846 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3646697037475613024, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
@@ -379,6 +437,19 @@ MonoBehaviour:
       m_Calls: []
   interactionPrompt: "\uC0C1\uD638\uC791\uC6A9"
   interactOnce: 1
+--- !u!114 &1915947200027476442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3900211170555374534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 078b0dbc73c737840b0a6667b1abb3a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraTarget: {fileID: 3420500346108120789}
 --- !u!1 &5577902616860321165 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6740984516714099051, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}

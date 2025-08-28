@@ -157,7 +157,7 @@ MonoBehaviour:
   lookSensitivity: 3
   cameraRotationLimit: 80
   theCamera: {fileID: 7026121511223973348}
-  interactRange: 3
+  interactRange: 2
 --- !u!1 &2772658958984324237
 GameObject:
   m_ObjectHideFlags: 0

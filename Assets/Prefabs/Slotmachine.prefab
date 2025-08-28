@@ -146,6 +146,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -6429965755936260320, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7163208286433361526}
+    - targetCorrespondingSourceObject: {fileID: -6429965755936260320, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4554021405734443716}
     - targetCorrespondingSourceObject: {fileID: 6740984516714099051, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8233762229504285014}
@@ -359,6 +362,23 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &4554021405734443716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3900211170555374534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d2663fd446eebc41b3ca745f13bd505, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnInteracted:
+    m_PersistentCalls:
+      m_Calls: []
+  interactionPrompt: "\uC0C1\uD638\uC791\uC6A9"
+  interactOnce: 1
 --- !u!1 &5577902616860321165 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6740984516714099051, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}

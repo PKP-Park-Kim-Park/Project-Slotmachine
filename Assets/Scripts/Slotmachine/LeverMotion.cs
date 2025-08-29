@@ -1,14 +1,22 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Events; // UnityEvent를 사용하기 위해 추가
 
 public class LeverMotion : MonoBehaviour, IInteractable
 {
     [Tooltip("레버와 상호작용 시 색상을 변경할 Outline 컴포넌트")]
     public Outline outline;
 
+    [Tooltip("레버를 당긴 후 다시 당길 수 있을 때까지의 대기 시간 (초)")]
+    [SerializeField] private float cooldownSeconds = 3f;
+
+    [Tooltip("레버를 당겼을 때 호출될 이벤트")]
+    public UnityEvent OnLeverPulled;
+
     private Animator leverAnim;
     private bool isInteractable = true;
     private Color originalOutlineColor;
+    private int pullTriggerHash;
 
     public string InteractionPrompt
     {
@@ -33,6 +41,9 @@ public class LeverMotion : MonoBehaviour, IInteractable
         {
             originalOutlineColor = outline.OutlineColor;
         }
+
+        // 애니메이션 트리거 문자열을 해시값으로 변환
+        pullTriggerHash = Animator.StringToHash("Pull");
     }
 
     public void Interact()
@@ -52,7 +63,7 @@ public class LeverMotion : MonoBehaviour, IInteractable
         if (leverAnim != null)
         {
             Debug.Log("레버 당김...");
-            leverAnim.SetTrigger("Pull");
+            leverAnim.SetTrigger(pullTriggerHash);
             StartCoroutine(LeverCooldown());
         }
         else
@@ -60,8 +71,8 @@ public class LeverMotion : MonoBehaviour, IInteractable
             Debug.LogWarning("레버 애니메이션을 실행할 수 없음..");
         }
 
-        // TODO
-        // 레버 당길 시 Spin()
+        // UnityEvent를 호출하여 연결된 모든 함수(예: Spin())를 실행
+        OnLeverPulled?.Invoke();
     }
 
     private IEnumerator LeverCooldown()
@@ -75,8 +86,8 @@ public class LeverMotion : MonoBehaviour, IInteractable
             outline.OutlineColor = Color.red;
         }
 
-        // 3초
-        yield return new WaitForSeconds(3f);
+        // 설정된 쿨타임만큼 대기
+        yield return new WaitForSeconds(cooldownSeconds);
 
         // 아웃라인 색상을 원래대로
         if (outline != null)

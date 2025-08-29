@@ -23,12 +23,6 @@ public class ReelTest : MonoBehaviour
                 symbolsInReel += (Symbols)targetReel.row[i] + (i < targetReel.row.Length - 1 ? ", " : "");
             }
             Debug.Log(symbolsInReel);
-        }
-
-        // 'E'번 키를 누르면 StopSpin() 함수를 호출하고 결과를 받습니다.
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("E 키 눌림: StopSpin() 테스트 시작");
 
             // StopSpin()을 호출할 때 Reel에 있는 현재 값을 그대로 전달합니다.
             int[] resultSymbols = targetReel.StopSpin(targetReel.row);
@@ -40,6 +34,14 @@ public class ReelTest : MonoBehaviour
                 resultOutput += (Symbols)resultSymbols[i] + (i < resultSymbols.Length - 1 ? ", " : "");
             }
             Debug.Log(resultOutput);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("R 키가 눌렸습니다. 릴 회전을 시작합니다.");
+
+            // Reel의 StartSpin 코루틴을 호출
+            StartCoroutine(targetReel.StartSpin());
         }
 
         // '1' 키를 누르면 Cherry 심볼의 확률을 10% 올립니다.

@@ -14,30 +14,15 @@ public class Door : MonoBehaviour, IInteractable
     [Tooltip("문이 잠겼는지 여부")]
     [SerializeField]
     private bool doorLock = false;
-    
-    /// <summary>
-    /// 문 잠금 여부, 아웃라인 색상 변경
-    /// </summary>
-    public bool locked
-    {
-        get => doorLock;
-        set
-        {
-            // 상태가 변경되지 않았으면 아무것도 하지 않음
-            if (doorLock == value) return; 
-            doorLock = value;
-            UpdateDoorVisuals();
-        }
-    }
 
     /// <summary>
-    /// 상호작용 텍스트
+    /// 상호작용 텍스트(이건 인터페이스 땜시 냅둠)
     /// </summary>
     public string InteractionPrompt
     {
         get
         {
-            if (locked) return "잠겨있음";
+            if (doorLock) return "잠겨있음";
             return isOpen ? "문 닫기" : "문 열기";
         }
     }
@@ -86,29 +71,20 @@ public class Door : MonoBehaviour, IInteractable
     public void Interact()
     {
         // 문이 잠겨있거나 애니메이션 전환 중일 때는 상호작용 불가
-        if (locked) return;
+        if (doorLock) return;
         if (animator != null && animator.IsInTransition(0)) return;
 
         ToggleDoor();
     }
 
-    // 문 제어
-    // 열기
-    public void Open()
+    // --- 문 상태 제어 메서드 ---
+
+    /// <summary>
+    /// 문이 잠겨있는지 확인
+    /// </summary>
+    public bool IsLocked()
     {
-        if (locked || isOpen || animator == null) return;
-
-        animator.SetTrigger(openForwardTriggerHash);
-        isOpen = true;
-    }
-
-    // 닫기
-    public void Close()
-    {
-        if (!isOpen || animator == null) return;
-
-        animator.SetTrigger(closeTriggerHash);
-        isOpen = false;
+        return doorLock;
     }
 
     /// <summary>
@@ -116,9 +92,9 @@ public class Door : MonoBehaviour, IInteractable
     /// </summary>
     public void Lock()
     {
-        if (locked) return;
+        if (doorLock) return;
 
-        locked = true;
+        SetLockedState(true);
         Debug.Log("문이 잠겼습니다.");
     }
 
@@ -127,10 +103,32 @@ public class Door : MonoBehaviour, IInteractable
     /// </summary>
     public void Unlock()
     {
-        if (!locked) return;
+        if (!doorLock) return;
 
-        locked = false;
+        SetLockedState(false);
         Debug.Log("문이 잠금 해제되었습니다.");
+    }
+
+    /// <summary>
+    /// 문 열기
+    /// </summary>
+    public void Open()
+    {
+        if (doorLock || isOpen || animator == null) return;
+
+        animator.SetTrigger(openForwardTriggerHash);
+        isOpen = true;
+    }
+
+    /// <summary>
+    /// 문 닫기
+    /// </summary>
+    public void Close()
+    {
+        if (!isOpen || animator == null) return;
+
+        animator.SetTrigger(closeTriggerHash);
+        isOpen = false;
     }
 
     /// <summary>
@@ -143,11 +141,21 @@ public class Door : MonoBehaviour, IInteractable
             Close();
         }
 
-        locked = true;
+        SetLockedState(true);
         Debug.Log("문이 자동으로 닫히고 잠겼습니다.");
     }
 
-    // 헬퍼 함수
+    /// <summary>
+    /// 문의 잠금 상태를 변경 및 아웃라인 변경
+    /// </summary>
+    private void SetLockedState(bool newLockedState)
+    {
+        if (doorLock == newLockedState) return;
+
+        doorLock = newLockedState;
+        UpdateDoorVisuals();
+    }
+
     /// <summary>
     /// 성능 최적화(해시값을 미리 처리)
     /// </summary>

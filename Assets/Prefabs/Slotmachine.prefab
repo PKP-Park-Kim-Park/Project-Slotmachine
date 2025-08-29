@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6319861612509407082}
   - component: {fileID: 7271241435415842914}
   m_Layer: 5
-  m_Name: Screen
+  m_Name: Canvas-Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -637,19 +637,7 @@ MonoBehaviour:
   cooldownSeconds: 3
   OnLeverPulled:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SlotMachine, Assembly-CSharp
-        m_MethodName: Spin
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!4 &8098727620931438225 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6953571635744723575, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}

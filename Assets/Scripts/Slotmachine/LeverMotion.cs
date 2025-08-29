@@ -17,7 +17,7 @@ public class LeverMotion : MonoBehaviour, IInteractable
             if (isInteractable)
                 return "레버 당기기";
             else
-                return ""; // 상호작용 불가 상태일 때는 프롬프트를 표시하지 않음
+                return "당기기 실패"; // 상호작용 불가 상태
         }
     }
 

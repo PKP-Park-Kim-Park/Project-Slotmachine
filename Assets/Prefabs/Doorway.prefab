@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 201953668497195405}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00000003774895, y: 0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.559, y: 0, z: 1.918}
   m_LocalScale: {x: 250, y: 255, z: 240}
   m_ConstrainProportionsScale: 0
@@ -233,8 +233,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9118635186edf8044b0790f596c7ee90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  locked: 0
+  outline: {fileID: 1437970684881750985}
   lockTrigger: {fileID: 0}
+  doorLock: 0
 --- !u!114 &1437970684881750985
 MonoBehaviour:
   m_ObjectHideFlags: 0

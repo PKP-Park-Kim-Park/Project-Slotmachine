@@ -177,7 +177,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lookSensitivity: 3
   cameraRotationLimit: 80
-  theCamera: {fileID: 7026121511223973348}
+  mainCam: {fileID: 7026121511223973348}
   cameraTransitionSpeed: 5
   edgePanDeadZone: {x: 0.6, y: 0.6}
   edgePanMaxAngleX: 15

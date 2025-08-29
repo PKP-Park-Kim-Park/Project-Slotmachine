@@ -37,6 +37,7 @@ public class Reel : MonoBehaviour
             SetDefaultProbabilities();
         }
         RecalculateTotalProbability();
+        LogAllProbabilities();
     }
 
     // 슬롯 확률 초기 값 설정
@@ -59,6 +60,7 @@ public class Reel : MonoBehaviour
     private void RecalculateTotalProbability()
     {
         totalProbability = weightedSymbols.Sum(s => s.probability);
+        Debug.Log($"보정 후 총 확률 = {totalProbability:F2}%");
     }
 
     // 특정 심볼의 확률을 조정하고 나머지 심볼들의 확률을 보정합니다.
@@ -174,13 +176,20 @@ public class Reel : MonoBehaviour
     // 릴의 회전을 시작합니다.
     public IEnumerator StartSpin()
     {
+        // 릴 회전 전에 심볼을 재배치합니다.
+        RelocateSymbols();
+
         if (isSpinning)
         {
             yield break;
         }
-
         isSpinning = true;
-        Debug.Log("릴 회전 시작!");
+
+        // 릴 회전 애니메이션 시작 (실제 구현 필요)
+
+        //// 회전이 끝난 후 StopSpin() 호출
+        //int[] resultSymbols = StopSpin(row);
+        //Debug.Log("릴 회전 중지! 결과: " + string.Join(", ", resultSymbols));
     }
 
 

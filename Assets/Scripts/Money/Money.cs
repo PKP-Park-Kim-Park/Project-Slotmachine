@@ -1,5 +1,8 @@
-﻿public class Money
+﻿using System;
+using UnityEngine;
+public class Money
 {
+    public event Action OnMoneyChanged;
     public int _token { get; private set; }
     public int _gold { get; private set; }
     private const int CONVERT_SIZE = 100_000;
@@ -13,6 +16,7 @@
     public void AddGold(int amount)
     {
         _gold += amount;
+        OnMoneyChanged?.Invoke();
     }
 
     public bool SpendGold(int amount)
@@ -20,6 +24,7 @@
         if (amount > 0 && _gold >= amount)
         {
             _gold -= amount;
+            OnMoneyChanged?.Invoke();
             return true;
         }
         return false; // 골드 부족
@@ -28,6 +33,7 @@
     public void AddToken(int amount)
     {
         _token += amount;
+        OnMoneyChanged?.Invoke();
     }
 
     public bool SpendToken(int amount)
@@ -35,6 +41,7 @@
         if (amount > 0 && _token >= amount)
         {
             _token -= amount;
+            OnMoneyChanged?.Invoke();
             return true;
         }
 
@@ -44,7 +51,7 @@
     public void ConvertToken()
     {
         _token += _gold / CONVERT_SIZE;
-
         _gold = 0;
+        OnMoneyChanged?.Invoke();
     }
 }

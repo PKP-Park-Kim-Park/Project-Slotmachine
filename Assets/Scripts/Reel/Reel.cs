@@ -181,7 +181,7 @@ public class Reel : MonoBehaviour
         }
         isSpinning = true;
 
-        // [추가] ReelAnimator에게 애니메이션 시작을 위임합니다.
+        // ReelAnimator에 start 넘김
         reelAnimator.StartSpin();
         yield return null;
     }
@@ -194,15 +194,14 @@ public class Reel : MonoBehaviour
         row = finalRow;
         Debug.Log("릴 회전 중지!");
 
-        // [추가] SymbolManager를 사용하여 int[]를 Sprites[]로 변환합니다.
+        // SymbolManager로 int를 sprite로 변환
         Sprite[] finalSprites = new Sprite[3];
         for (int i = 0; i < 3; i++)
         {
-            // 중앙 3개 심볼(인덱스 2, 3, 4)을 결과로 사용합니다.
+            // 중앙 3개 심볼(인덱스 2, 3, 4)을 결과로 사용
             finalSprites[i] = SymbolManager.Instance.GetSprite((Symbols)row[i + 2]);
         }
 
-        // [추가] ReelAnimator에게 최종 스프라이트를 전달하고 애니메이션 종료를 위임합니다.
         yield return reelAnimator.StopSpin(finalSprites);
     }
 

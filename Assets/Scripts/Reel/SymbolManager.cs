@@ -50,9 +50,8 @@ public class SymbolManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 관리되는 모든 심볼 스프라이트 목록을 반환합니다.
+    /// 관리되는 모든 심볼 스프라이트 목록을 반환
     /// </summary>
-    /// <returns>모든 스프라이트의 리스트</returns>
     public List<Sprite> GetAllSprites()
     {
         return _symbolSpriteMap.Values.ToList();

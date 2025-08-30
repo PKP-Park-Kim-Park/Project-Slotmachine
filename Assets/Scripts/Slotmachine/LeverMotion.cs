@@ -71,7 +71,7 @@ public class LeverMotion : MonoBehaviour, IInteractable
             Debug.LogWarning("레버 애니메이션을 실행할 수 없음..");
         }
 
-        // UnityEvent를 호출하여 연결된 모든 함수(예: Spin())를 실행
+        // UnityEvent를 호출하여 연결된 모든 함수를 실행 => 현재는 Spin()만 연결
         OnLeverPulled?.Invoke();
     }
 

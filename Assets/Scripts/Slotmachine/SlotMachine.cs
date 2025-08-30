@@ -107,7 +107,7 @@ public class SlotMachine : MonoBehaviour
             // 4. 결과를 matrix에 저장
             ConvertMatrix(i, resultRow);
 
-            // 릴이 순차적으로 '탁-탁-탁' 멈추는 효과를 위한 딜레이
+            // 릴 순차적으로 멈추는 딜레이
             yield return new WaitForSeconds(0.3f);
         }
 
@@ -139,6 +139,7 @@ public class SlotMachine : MonoBehaviour
         }
     }
 
+    // 스핀 종료 후 보상 처리
     private void DropGold()
     {
         // TODO: CheckRewardPattern 의 CheckReward 호출
@@ -151,8 +152,8 @@ public class SlotMachine : MonoBehaviour
         // bool isGameover = GameManager.CheckGameOver()
         // if(isGameover == true)
         // {
-            // money.ConvertToken()
-            // GameManager.Init()
+        // money.ConvertToken()
+        // GameManager.Init()
         // }
 
         // 초기화

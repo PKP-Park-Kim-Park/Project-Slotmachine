@@ -755,7 +755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb571f7ee29ef114fa9b9d00651b5a43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reelContainer: {fileID: 1823788668433948223}
+  reelStrip: {fileID: 1823788668433948223}
   symbolImages:
   - {fileID: 3498130636073469792}
   - {fileID: 3492391981678103148}
@@ -779,8 +779,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.84525245
-      value: 1.0193046
+      time: 0.81192726
+      value: 1.0042404
       inSlope: 1.9958324
       outSlope: 1.9958324
       tangentMode: 0
@@ -799,7 +799,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  settleBounceDistance: 0
 --- !u!114 &1170488609907094709
 MonoBehaviour:
   m_ObjectHideFlags: 0

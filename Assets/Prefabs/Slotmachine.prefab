@@ -258,6 +258,10 @@ PrefabInstance:
       value: Interactable
       objectReference: {fileID: 0}
     - target: {fileID: 6740984516714099051, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
+      propertyPath: m_Name
+      value: Lever
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740984516714099051, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
@@ -433,7 +437,7 @@ MonoBehaviour:
   - {fileID: 162748133655468380}
   - {fileID: 3274760981780481139}
   - {fileID: 5235067890994808195}
-  spinTime: 2
+  spinTime: 1
 --- !u!1 &2485937452208659846 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3646697037475613024, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
@@ -666,7 +670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outline: {fileID: 7064599352814805392}
-  cooldownSeconds: 3
+  cooldownSeconds: 4
   OnLeverPulled:
     m_PersistentCalls:
       m_Calls:
@@ -921,7 +925,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8522720149703538295, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_Name
-      value: ReelViewport (2)
+      value: ReelViewport3
       objectReference: {fileID: 0}
     - target: {fileID: 8787103200461693860, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1202,7 +1206,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8522720149703538295, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_Name
-      value: ReelViewport
+      value: ReelViewport1
       objectReference: {fileID: 0}
     - target: {fileID: 8787103200461693860, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1483,7 +1487,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8522720149703538295, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_Name
-      value: ReelViewport (3)
+      value: ReelViewport4
       objectReference: {fileID: 0}
     - target: {fileID: 8787103200461693860, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1764,7 +1768,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8522720149703538295, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_Name
-      value: ReelViewport (1)
+      value: ReelViewport2
       objectReference: {fileID: 0}
     - target: {fileID: 8787103200461693860, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2045,7 +2049,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8522720149703538295, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_Name
-      value: ReelViewport (4)
+      value: ReelViewport5
       objectReference: {fileID: 0}
     - target: {fileID: 8787103200461693860, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y

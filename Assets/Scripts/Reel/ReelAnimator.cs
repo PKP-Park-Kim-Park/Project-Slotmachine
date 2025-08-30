@@ -7,12 +7,12 @@ public class ReelAnimator : MonoBehaviour
 {
     [Header("UI Components")]
     [Tooltip("심볼 이미지들을 담고 있는 부모 RectTransform")]
-    [SerializeField] private RectTransform reelContainer;
+    [SerializeField] private RectTransform reelStrip;
     [Tooltip("릴에 표시될 UI 이미지들 (위에서 아래 순서)")]
     [SerializeField] private Image[] symbolImages;
 
     [Header("Animation Settings")]
-    [Tooltip("릴이 돌아가는 속도 (pixels/sec)")]
+    [Tooltip("릴이 돌아가는 속도")]
     [SerializeField] private float spinSpeed = 3000f;
     [Tooltip("릴이 멈출 때 부드럽게 정착하는 시간")]
     [SerializeField] private float settleDuration = 0.5f;
@@ -24,56 +24,54 @@ public class ReelAnimator : MonoBehaviour
     private bool isSpinning = false;
     private Coroutine spinCoroutine;
 
-    // 스핀 중 무작위로 보여줄 스프라이트 목록 (블러 효과용)
+    // 스핀 중 무작위로 보여줄 스프라이트 목록 (스핀 효과)
     private List<Sprite> availableSpritesForBlur = new List<Sprite>();
 
     void Start()
     {
-        // 초기화 로직을 코루틴으로 분리하여 실행합니다.
+        // 초기화 로직 분리 실행
         StartCoroutine(InitializeReel());
     }
 
     /// <summary>
-    /// UI 레이아웃이 계산된 후 릴을 초기화하는 코루틴입니다.
+    /// UI 레이아웃이 계산된 후 릴 초기화
     /// </summary>
     private IEnumerator InitializeReel()
     {
-        if (reelContainer == null || symbolImages == null || symbolImages.Length < 2)
+        if (reelStrip == null || symbolImages == null || symbolImages.Length < 2)
         {
             Debug.LogError("ReelAnimator에 필요한 컴포넌트가 할당되지 않았습니다.", this);
-            this.enabled = false;
-            yield break; // 코루틴 중단
-        }
-
-        // UI 레이아웃 시스템이 심볼 크기를 계산할 때까지 한 프레임의 끝까지 대기합니다.
-        yield return new WaitForEndOfFrame();
-
-        // 심볼 하나의 높이를 계산합니다. (모든 심볼의 높이는 같다고 가정)
-        symbolHeight = symbolImages[0].rectTransform.rect.height;
-
-        // 만약 symbolHeight가 0이라면, 인스펙터 설정에 문제가 있는 것입니다.
-        if (symbolHeight <= 0)
-        {
-            Debug.LogError("심볼 높이가 0 또는 음수입니다. ReelStrip의 VerticalLayoutGroup과 자식 Image의 LayoutElement 설정을 확인해주세요.", this);
             this.enabled = false;
             yield break;
         }
 
-        // SymbolManager에서 블러 효과에 사용할 모든 스프라이트를 가져옵니다.
+        // UI 레이아웃이 심볼 크기 계산할 때까지 1프렘 대기
+        yield return new WaitForEndOfFrame();
+
+        // 심볼 하나 높이 계산
+        symbolHeight = symbolImages[0].rectTransform.rect.height;
+
+        if (symbolHeight <= 0)
+        {
+            Debug.LogError("심볼 높이가 0 또는 음수 입니다.", this);
+            this.enabled = false;
+            yield break;
+        }
+
+        // SymbolManager에서 스핀 효과에 사용할 스프라이트 가져옴
         if (SymbolManager.Instance != null)
         {
             availableSpritesForBlur = SymbolManager.Instance.GetAllSprites();
         }
         else
         {
-            Debug.LogError("SymbolManager 인스턴스를 찾을 수 없습니다. 블러 효과용 스프라이트를 로드할 수 없습니다.", this);
+            Debug.LogError("SymbolManager를 추가하세요.", this);
             this.enabled = false;
         }
     }
 
-
     /// <summary>
-    /// 릴 회전 애니메이션을 시작합니다.
+    /// 릴 회전 애니메이션
     /// </summary>
     public void StartSpin()
     {
@@ -88,9 +86,8 @@ public class ReelAnimator : MonoBehaviour
     }
 
     /// <summary>
-    /// 릴 회전 애니메이션을 멈추고 최종 결과에 정착시킵니다.
+    /// 릴 회전 애니메이션을 멈추고 최종 결과 3개 인덱스 표시
     /// </summary>
-    /// <param name="finalSprites">중앙 3개 심볼에 표시될 최종 스프라이트</param>
     public IEnumerator StopSpin(Sprite[] finalSprites)
     {
         if (!isSpinning) yield break;
@@ -103,33 +100,31 @@ public class ReelAnimator : MonoBehaviour
             spinCoroutine = null;
         }
 
-        // 최종 심볼 배치 및 정착 애니메이션
         yield return StartCoroutine(SettleCoroutine(finalSprites));
     }
 
     /// <summary>
-    /// 릴이 무한히 돌아가는 것처럼 보이게 하는 코루틴 (블러 효과)
+    /// 릴이 돌아가는 것처럼 보이게 하는 코루틴 (스핀 효과)
     /// </summary>
     private IEnumerator SpinCoroutine()
     {
-        reelContainer.anchoredPosition = new Vector2(reelContainer.anchoredPosition.x, 0);
+        reelStrip.anchoredPosition = new Vector2(reelStrip.anchoredPosition.x, 0);
         int topImageIndex = 0;
 
         while (isSpinning)
         {
-            // 릴을 아래로 이동
-            reelContainer.anchoredPosition -= new Vector2(0, spinSpeed * Time.deltaTime);
+            reelStrip.anchoredPosition -= new Vector2(0, spinSpeed * Time.deltaTime);
 
-            // 맨 위 심볼이 화면 밖으로 완전히 나갔다면
-            if (reelContainer.anchoredPosition.y <= -symbolHeight)
+            // 맨 위 심볼이 뷰포트 밖으로 나갔을 때
+            if (reelStrip.anchoredPosition.y <= -symbolHeight)
             {
-                // Y 위치를 초기화하여 끊김없이 보이게 함
-                reelContainer.anchoredPosition += new Vector2(0, symbolHeight);
+                // Y 위치를 초기화해서 연결되는 듯한 느낌
+                reelStrip.anchoredPosition += new Vector2(0, symbolHeight);
 
                 // 맨 위 심볼을 맨 아래로 이동
                 symbolImages[topImageIndex].rectTransform.SetAsLastSibling();
 
-                // 맨 아래로 간 심볼에 무작위 스프라이트 할당 (블러 효과)
+                // 맨 아래로 간 심볼에 무작위 스프라이트 할당 (스핀 효과)
                 if (availableSpritesForBlur.Count > 0)
                 {
                     symbolImages[topImageIndex].sprite = availableSpritesForBlur[Random.Range(0, availableSpritesForBlur.Count)];
@@ -163,7 +158,7 @@ public class ReelAnimator : MonoBehaviour
         }
 
         // 최종 위치로 부드럽게 이동
-        Vector2 startPos = reelContainer.anchoredPosition;
+        Vector2 startPos = reelStrip.anchoredPosition;
         Vector2 endPos = Vector2.zero;
 
         float elapsedTime = 0f;
@@ -171,10 +166,10 @@ public class ReelAnimator : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             float t = settleCurve.Evaluate(elapsedTime / settleDuration);
-            reelContainer.anchoredPosition = Vector2.Lerp(startPos, endPos, t);
+            reelStrip.anchoredPosition = Vector2.Lerp(startPos, endPos, t);
             yield return null;
         }
 
-        reelContainer.anchoredPosition = endPos;
+        reelStrip.anchoredPosition = endPos;
     }
 }

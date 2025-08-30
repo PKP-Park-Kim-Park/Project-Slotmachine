@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class SlotMachine : MonoBehaviour
 {
+    private int bettingGold;
+    private int rewardGold;
     private int[,] matrix; // [row, column]
     private bool isActivating;
     [SerializeField] private Reel[] reels; // 릴들을 관리할 배열
@@ -10,6 +12,8 @@ public class SlotMachine : MonoBehaviour
 
     private void Awake()
     {
+        bettingGold = 0;
+        rewardGold = 0;
         isActivating = false;
 
         if (reels == null || reels.Length == 0)
@@ -19,28 +23,72 @@ public class SlotMachine : MonoBehaviour
         }
         matrix = new int[3, reels.Length]; // 3행, reel 개수만큼의 열
     }
-
-    public void Spin()
+    public void Bet(bool isIncrease)
     {
         // 슬롯머신 작동중
-        if (isActivating == true)
+        if (isActivating)
         {
             return;
         }
-        isActivating = true;
+
+        if (isIncrease == true)
+        {
+            if (GameManager.instance.levelData._maxGold < bettingGold + GameManager.instance.levelData._unitGold)
+            {
+                // 배팅가능한 최대치이다.
+                return;
+            }
+
+            bettingGold += GameManager.instance.levelData._unitGold;
+        }
+        else if (isIncrease == false)
+        {
+            if (GameManager.instance.levelData._minGold > bettingGold - GameManager.instance.levelData._unitGold)
+            {
+                // 배팅가능한 최소치이다.
+                return;
+            }
+
+            bettingGold -= GameManager.instance.levelData._unitGold;
+        }
+    }
+    public void Spin()
+    {
+        // 슬롯머신 작동중
+        if (isActivating)
+        {
+            return;
+        }
+
+        /*
+        if (bettingGold < GameManager.instance.levelData._minGold)
+        {
+            // 배팅액 부족!
+            return;
+        }
+
+        if (GameManager.instance.money._gold < bettingGold)
+        {
+            // 소지한 골드 부족
+            return;
+        }
+        */
 
         // 모든 릴의 회전 애니메이션 시작
         foreach (var reel in reels)
         {
             StartCoroutine(reel.StartSpin());
         }
+        isActivating = true;
+
+        GameManager.instance.money.SpendGold(bettingGold);
 
         // 일정 시간 후 릴을 정지시키는 코루틴 시작
-        StartCoroutine(StopReelsCoroutine());
+        StartCoroutine(IStopSpin());
     }
 
     // 릴들을 순차적으로 멈추고 결과를 처리하는 코루틴
-    private IEnumerator StopReelsCoroutine()
+    private IEnumerator IStopSpin()
     {
         yield return new WaitForSeconds(spinTime);
 
@@ -75,7 +123,8 @@ public class SlotMachine : MonoBehaviour
         }
         Debug.Log(resultLog);
 
-        ResetForNextSpin();
+        // 스핀 종료 및 보상/초기화 처리
+        DropGold();
     }
 
     // 릴에서 반환된 1차원 배열(행)을 2차원 결과 매트릭스의 열에 저장
@@ -90,9 +139,25 @@ public class SlotMachine : MonoBehaviour
         }
     }
 
-    private void ResetForNextSpin()
+    private void DropGold()
     {
-        // 다음 스핀을 위한 초기화
+        // TODO: CheckRewardPattern 의 CheckReward 호출
+        // rewardGold = CheckReward(matrix) * bettingGold;
+        // GameManager.instance.money.AddGold(rewardGold);
+
+
+        //결과 처리
+        // money.AddGold(rewardGold)
+        // bool isGameover = GameManager.CheckGameOver()
+        // if(isGameover == true)
+        // {
+            // money.ConvertToken()
+            // GameManager.Init()
+        // }
+
+        // 초기화
+        bettingGold = 0;
+        rewardGold = 0;
         isActivating = false;
     }
 }

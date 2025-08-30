@@ -433,7 +433,7 @@ MonoBehaviour:
   - {fileID: 162748133655468380}
   - {fileID: 3274760981780481139}
   - {fileID: 5235067890994808195}
-  spinTime: 3
+  spinTime: 2
 --- !u!1 &2485937452208659846 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3646697037475613024, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}

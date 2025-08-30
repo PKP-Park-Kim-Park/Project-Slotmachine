@@ -764,7 +764,7 @@ MonoBehaviour:
   - {fileID: 1544273808484365279}
   - {fileID: 7488991865526389686}
   - {fileID: 3798189220486809423}
-  spinSpeed: 2000
+  spinSpeed: 1750
   settleDuration: 0.3
   settleCurve:
     serializedVersion: 2
@@ -779,6 +779,15 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
+      time: 0.84525245
+      value: 1.0193046
+      inSlope: 1.9958324
+      outSlope: 1.9958324
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.54431343
+    - serializedVersion: 3
       time: 1
       value: 1
       inSlope: 0
@@ -790,6 +799,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  settleBounceDistance: 0
 --- !u!114 &1170488609907094709
 MonoBehaviour:
   m_ObjectHideFlags: 0

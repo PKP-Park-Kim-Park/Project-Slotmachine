@@ -1,21 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI; // ReelAnimator와 연동 시 필요할 수 있음
 using System.Linq;
 
-// Reel 클래스는 슬롯머신 릴의 동작을 관리합니다.
-// Symbols 열거형은 별도의 파일에 정의되어 있다고 가정합니다.
+// Reel 클래스는 슬롯머신 릴의 동작을 관리
 public class Reel : MonoBehaviour
 {
     [Header("Components")]
     [Tooltip("릴의 애니메이션을 담당하는 컴포넌트")]
     [SerializeField] private ReelAnimator reelAnimator;
-
-    // 릴이 현재 회전 중인지 여부, 외부에서 읽기 전용으로 접근 가능
     public bool isSpinning { get; private set; }
-
-    // 릴에 배치된 심볼을 나타내는 배열, 외부에서 읽기 전용으로 접근 가능
     public int[] row { get; private set; } = new int[7];
 
     // 심볼과 그에 해당하는 확률을 함께 저장하는 클래스
@@ -153,7 +147,6 @@ public class Reel : MonoBehaviour
         LogAllProbabilities(); // 릴 재배치 시에도 확률 로그 추가
     }
 
-
     /// 확률에 따라 무작위로 심볼을 선택합니다.
     private int GetRandomWeightedSymbol()
     {
@@ -192,7 +185,6 @@ public class Reel : MonoBehaviour
         reelAnimator.StartSpin();
         yield return null;
     }
-
 
     // 릴의 회전을 멈추고 최종 심볼 배열을 설정합니다.
     public IEnumerator StopSpin(int[] finalRow)

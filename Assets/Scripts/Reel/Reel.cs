@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI; // ReelAnimator와 연동 시 필요할 수 있음
 using System.Linq;
 
 // Reel 클래스는 슬롯머신 릴의 동작을 관리합니다.
 // Symbols 열거형은 별도의 파일에 정의되어 있다고 가정합니다.
 public class Reel : MonoBehaviour
 {
+    [Header("Components")]
+    [Tooltip("릴의 애니메이션을 담당하는 컴포넌트")]
+    [SerializeField] private ReelAnimator reelAnimator;
+
     // 릴이 현재 회전 중인지 여부, 외부에서 읽기 전용으로 접근 가능
     public bool isSpinning { get; private set; }
 
@@ -24,7 +29,8 @@ public class Reel : MonoBehaviour
     }
 
     // 심볼과 확률을 설정할 수 있도록 합니다.
-    private List<WeightedSymbol> weightedSymbols;
+    [Header("Symbol Probabilities")]
+    [SerializeField] private List<WeightedSymbol> weightedSymbols;
 
     // 모든 심볼의 총 확률의 합을 저장하는 변수
     private float totalProbability;
@@ -176,38 +182,42 @@ public class Reel : MonoBehaviour
     // 릴의 회전을 시작합니다.
     public IEnumerator StartSpin()
     {
-        // 릴 회전 전에 심볼을 재배치합니다.
-        RelocateSymbols();
-
         if (isSpinning)
         {
             yield break;
         }
         isSpinning = true;
 
-        // 릴 회전 애니메이션 시작 (실제 구현 필요)
-
-        //// 회전이 끝난 후 StopSpin() 호출
-        //int[] resultSymbols = StopSpin(row);
-        //Debug.Log("릴 회전 중지! 결과: " + string.Join(", ", resultSymbols));
+        // [추가] ReelAnimator에게 애니메이션 시작을 위임합니다.
+        reelAnimator.StartSpin();
+        yield return null;
     }
 
 
     // 릴의 회전을 멈추고 최종 심볼 배열을 설정합니다.
-    public int[] StopSpin(int[] finalRow)
+    public IEnumerator StopSpin(int[] finalRow)
     {
         isSpinning = false;
         // 최종 심볼 배열을 릴에 적용합니다.
         row = finalRow;
         Debug.Log("릴 회전 중지!");
 
-        // 인덱스 2, 3, 4번만 출력
-        int[] resultRow = new int[3];
+        // [추가] SymbolManager를 사용하여 int[]를 Sprites[]로 변환합니다.
+        Sprite[] finalSprites = new Sprite[3];
         for (int i = 0; i < 3; i++)
         {
-            resultRow[i] = row[i + 2];
+            // 중앙 3개 심볼(인덱스 2, 3, 4)을 결과로 사용합니다.
+            finalSprites[i] = SymbolManager.Instance.GetSprite((Symbols)row[i + 2]);
         }
 
-        return resultRow;
+        // [추가] ReelAnimator에게 최종 스프라이트를 전달하고 애니메이션 종료를 위임합니다.
+        yield return reelAnimator.StopSpin(finalSprites);
+    }
+
+    // [추가] SlotMachine에서 최종 결과를 가져갈 수 있도록 메서드를 제공합니다.
+    public int[] GetResultSymbols()
+    {
+        // 중앙 3개 심볼(인덱스 2, 3, 4)을 반환합니다.
+        return new int[] { row[2], row[3], row[4] };
     }
 }

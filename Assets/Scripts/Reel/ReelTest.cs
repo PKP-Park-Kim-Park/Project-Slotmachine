@@ -12,28 +12,7 @@ public class ReelTest : MonoBehaviour
         // 'Q' 키를 눌렀을 때만 RelocateSymbols() 함수를 호출합니다.
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            Debug.Log("Q 키 눌림: RelocateSymbols() 테스트 시작");
-            targetReel.RelocateSymbols();
-
-            // Reel에 배치된 심볼을 확인하는 로직
-            string symbolsInReel = "현재 릴 심볼: ";
-            for (int i = 0; i < targetReel.row.Length; i++)
-            {
-                // Symbols 열거형을 사용해 숫자 값을 심볼 이름으로 변환하여 출력
-                symbolsInReel += (Symbols)targetReel.row[i] + (i < targetReel.row.Length - 1 ? ", " : "");
-            }
-            Debug.Log(symbolsInReel);
-
-            // StopSpin()을 호출할 때 Reel에 있는 현재 값을 그대로 전달합니다.
-            int[] resultSymbols = targetReel.StopSpin(targetReel.row);
-
-            // 결과값을 디버그 로그에 출력합니다.
-            string resultOutput = "선택된 릴 심볼: ";
-            for (int i = 0; i < resultSymbols.Length; i++)
-            {
-                resultOutput += (Symbols)resultSymbols[i] + (i < resultSymbols.Length - 1 ? ", " : "");
-            }
-            Debug.Log(resultOutput);
+            StartCoroutine(TestStopSpinCoroutine());
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -106,5 +85,25 @@ public class ReelTest : MonoBehaviour
         }
 
 
+    }
+
+    private IEnumerator TestStopSpinCoroutine()
+    {
+        Debug.Log("Q 키 눌림: RelocateSymbols() 및 StopSpin() 테스트 시작");
+        targetReel.RelocateSymbols();
+
+        // Reel에 배치된 심볼을 확인하는 로직
+        string symbolsInReel = "현재 릴 심볼: " + string.Join(", ", targetReel.row.Select(s => ((Symbols)s).ToString()));
+        Debug.Log(symbolsInReel);
+
+        // StopSpin()을 코루틴으로 호출하고 애니메이션이 끝날 때까지 기다립니다.
+        yield return StartCoroutine(targetReel.StopSpin(targetReel.row));
+
+        // 애니메이션이 끝난 후, GetResultSymbols()로 최종 결과를 가져옵니다.
+        int[] resultSymbols = targetReel.GetResultSymbols();
+
+        // 결과값을 디버그 로그에 출력합니다.
+        string resultOutput = "선택된 릴 심볼: " + string.Join(", ", resultSymbols.Select(s => ((Symbols)s).ToString()));
+        Debug.Log(resultOutput);
     }
 }

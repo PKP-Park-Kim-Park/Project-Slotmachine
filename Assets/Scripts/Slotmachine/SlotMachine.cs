@@ -5,7 +5,7 @@ public class SlotMachine : MonoBehaviour
 {
     private int bettingGold;
     private int rewardGold;
-    public int[,] matrix; // [row, column]
+    private int[,] matrix; // [row, column]
     private bool isActivating;
     [SerializeField] private Reel[] reels; // 릴들을 관리할 배열
     [SerializeField] private float spinTime = 3f;

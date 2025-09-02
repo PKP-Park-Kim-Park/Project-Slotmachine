@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private IInteractable currentLookAtInteractable;
     // 현재 레이캐스트에 맞은 오브젝트의 Transform을 저장
     private Transform currentHitTransform;
+    private Vector3 moveInput; // 이동 입력을 저장할 변수
 
     void Start()
     {
@@ -35,9 +36,19 @@ public class PlayerController : MonoBehaviour
         {
             Move();
         }
+        else
+        {
+            // 시점이 고정되면 움직임을 멈춥니다.
+            myRigid.linearVelocity = Vector3.zero;
+        }
     }
     void Update()
     {
+        // 매 프레임
+        float _moveDirX = Input.GetAxisRaw("Horizontal");
+        float _moveDirZ = Input.GetAxisRaw("Vertical");
+        moveInput = new Vector3(_moveDirX, 0f, _moveDirZ);
+
         // PlayerLook 스크립트가 준비되면 상호작용 처리 시작
         if (playerLook != null && playerLook.PlayerCamera != null)
             HandleInteraction();
@@ -45,16 +56,21 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
-        float _moveDirX = Input.GetAxisRaw("Horizontal");
-        float _moveDirZ = Input.GetAxisRaw("Vertical");
+        // FixedUpdate에서 물리 효과를 적용
+        float _moveDirX = moveInput.x;
+        float _moveDirZ = moveInput.z;
 
         Vector3 _moveHorizontal = transform.right * _moveDirX;
         Vector3 _moveVertical = transform.forward * _moveDirZ;
 
         // 속도를 적용하여 최종 이동 벡터 생성
-        Vector3 _velocity = (_moveHorizontal + _moveVertical).normalized * walkSpeed;
+        Vector3 _targetVelocity = (_moveHorizontal + _moveVertical).normalized * walkSpeed;
 
-        myRigid.MovePosition(transform.position + _velocity * Time.fixedDeltaTime);
+        // y축 속도는 유지하여 중력 등의 효과를 보존
+        _targetVelocity.y = myRigid.linearVelocity.y;
+
+        // Rigidbody의 속도를 직접 제어하여 부드러운 움직임
+        myRigid.linearVelocity = _targetVelocity;
     }
 
     private void HandleInteraction()

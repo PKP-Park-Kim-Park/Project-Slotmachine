@@ -51,6 +51,29 @@ public class CheckRewardPattern
 
     private void CheckHorizontalPatterns()
     {
+        int numRows = matrix.GetLength(0);
+        int numCols = matrix.GetLength(1);
+
+        for (int row = 0; row < numRows; row++)
+        {
+            bool isWinningPattern = true;
+            int firstSymbol = matrix[row, 0];
+
+            for (int col = 1; col < numCols; col++)
+            {
+                if (matrix[row, col] != firstSymbol)
+                {
+                    isWinningPattern = false;
+                    break;
+                }
+            }
+
+            if (isWinningPattern)
+            {
+                this.totalOdds += oddsTable.GetOdds(firstSymbol);
+                Debug.Log($"가로줄 패턴 당첨! 행: {row}, 심볼: {(Symbols)firstSymbol}, 배당률 추가: {oddsTable.GetOdds(firstSymbol)}");
+            }
+        }
     }
 
     private void CheckVerticalPatterns()

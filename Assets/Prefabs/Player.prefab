@@ -255,7 +255,7 @@ MonoBehaviour:
   mainCam: {fileID: 7026121511223973348}
   cameraTransitionSpeed: 5
   edgePanDeadZone: {x: 0.6, y: 0.6}
-  edgePanMaxAngleX: 15
+  edgePanMaxAngleX: 10
   edgePanMaxAngleY: 10
 --- !u!1 &2772658958984324237
 GameObject:
@@ -868,7 +868,7 @@ Canvas:
   m_GameObject: {fileID: 8101574574499182514}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 7026121511223973348}
   m_PlaneDistance: 0.52
   m_PixelPerfect: 0

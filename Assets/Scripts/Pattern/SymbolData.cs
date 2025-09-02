@@ -12,21 +12,17 @@ public class SymbolData
     public SymbolData()
     {
         // 생성자에서 심볼 배당률 데이터를 초기화합니다.
-        // Symbols 열거형에 맞춰 데이터를 추가합니다.
         symbolOdds.Add((int)Symbols.Cherry, 1.0f);
         symbolOdds.Add((int)Symbols.Lemon, 2.0f);
         symbolOdds.Add((int)Symbols.Orange, 3.0f);
         symbolOdds.Add((int)Symbols.Bell, 4.0f);
         symbolOdds.Add((int)Symbols.Diamond, 5.0f);
         symbolOdds.Add((int)Symbols.Star, 6.0f);
-        symbolOdds.Add((int)Symbols.Seven, 7.0f); // 가장 높은 배당률
+        symbolOdds.Add((int)Symbols.Seven, 7.0f);
     }
 
-    /// <summary>
-    /// 특정 심볼 ID의 배당률을 가져옵니다.
-    /// </summary>
-    /// <param name="symbolId">배당률을 조회할 심볼 ID</param>
-    /// <returns>해당 심볼의 배당률. 존재하지 않을 경우 0.0f 반환</returns>
+
+    // 특정 심볼 ID의 배당률을 가져옵니다.
     public float GetOdds(int symbolId)
     {
         if (symbolOdds.TryGetValue(symbolId, out float odds))

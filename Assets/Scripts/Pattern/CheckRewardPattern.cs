@@ -49,6 +49,7 @@ public class CheckRewardPattern
         // 추가 보너스 로직이 필요할 경우 여기에 구현합니다.
     }
 
+    //가로줄 5개 패턴 확인
     private void CheckHorizontalPatterns()
     {
         int numRows = matrix.GetLength(0);

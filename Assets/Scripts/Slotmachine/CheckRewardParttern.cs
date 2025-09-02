@@ -8,10 +8,23 @@ public class CheckRewardParttern
     private float totalOdds; // 총 배율
 
     private Dictionary<Symbols, float> symbolOdds = new Dictionary<Symbols, float>(); // 심볼 배율
-    private Dictionary<string, float> parttern = new Dictionary<string, float>(); // 패턴 배율
+    private Dictionary<Patterns, float> partternOdds = new Dictionary<Patterns, float>(); // 패턴 배율
 
-    public float CheckReward(int[,] _matrix)
+    public float CheckReward(int[,] _matrix, PatternRewardOdds sheet, SymbolRewardOdds sheet2)
     {
+        partternOdds.Clear();
+        symbolOdds.Clear();
+
+        foreach (var entry in sheet.rewardPatterns)
+        {
+            partternOdds.Add(entry.patternType, entry.rewardOddsMultiplier);
+        }
+
+        foreach (var entry in sheet2.rewardSymbols)
+        {
+            symbolOdds.Add(entry.symbolType, entry.rewardOddsMultiplier);
+        }
+
         matrix = _matrix;
 
         CalculatePattern();

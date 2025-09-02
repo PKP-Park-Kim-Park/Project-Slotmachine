@@ -85,7 +85,7 @@ public class SlotMachine : MonoBehaviour
         }
         */
 
-        // 이전 스핀의 당첨 테두리 애니메이션을 제거합니다.
+        // 이전 스핀의 당첨 테두리 제거
         if (patternAnimator != null)
         {
             patternAnimator.ClearBorders();
@@ -112,23 +112,19 @@ public class SlotMachine : MonoBehaviour
         // 각 릴을 순차적으로 멈춤
         for (int i = 0; i < reels.Length; i++)
         {
-            // 1. 릴의 최종 결과를 결정 (RelocateSymbols가 내부적으로 호출됨)
             reels[i].RelocateSymbols();
 
-            // 2. 릴의 정지 애니메이션을 실행하고 끝날 때까지 대기
             yield return StartCoroutine(reels[i].StopSpin(reels[i].row));
 
-            // 3. 릴의 최종 결과(중앙 3개 심볼)를 가져옴
             int[] resultRow = reels[i].GetResultSymbols();
-
             // 4. 결과를 matrix에 저장
             ConvertMatrix(i, resultRow);
 
-            // 릴 순차적으로 멈추는 딜레이
             yield return new WaitForSeconds(0.3f);
         }
 
         // 결과 로그 출력 (디버깅용)
+        /*
         string resultLog = "Spin Result Matrix:\n";
         for (int row = 0; row < matrix.GetLength(0); row++)
         {
@@ -139,12 +135,13 @@ public class SlotMachine : MonoBehaviour
             resultLog += "\n";
         }
         Debug.Log(resultLog);
+        */
 
-        // 스핀 종료 후 애니메이션과 보상 처리를 시작합니다.
+        // 스핀 종료 후 애니메이션과 당첨 보상 처리
         StartCoroutine(IDropGold());
     }
 
-    // 릴에서 반환된 1차원 배열(행)을 2차원 결과 매트릭스의 열에 저장
+    // 3X5 행렬로 변환
     private void ConvertMatrix(int column, int[] inputRow)
     {
         for (int row = 0; row < inputRow.Length; row++)

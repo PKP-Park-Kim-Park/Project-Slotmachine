@@ -1327,25 +1327,12 @@ PrefabInstance:
       propertyPath: lockTrigger
       value: 
       objectReference: {fileID: 1241832987}
-    - target: {fileID: 1584707729285728277, guid: aee1476490b145e4cbe08108b7480b99, type: 3}
-      propertyPath: m_Name
-      value: Ground
-      objectReference: {fileID: 0}
-    - target: {fileID: 4786630532368014310, guid: aee1476490b145e4cbe08108b7480b99, type: 3}
-      propertyPath: m_Name
-      value: DoorWall
-      objectReference: {fileID: 0}
     - target: {fileID: 4989714910332864781, guid: aee1476490b145e4cbe08108b7480b99, type: 3}
       propertyPath: m_Name
       value: Map
       objectReference: {fileID: 0}
-    - target: {fileID: 8084427235085310265, guid: aee1476490b145e4cbe08108b7480b99, type: 3}
-      propertyPath: m_Name
-      value: Ground
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 8084427235085310265, guid: aee1476490b145e4cbe08108b7480b99, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aee1476490b145e4cbe08108b7480b99, type: 3}

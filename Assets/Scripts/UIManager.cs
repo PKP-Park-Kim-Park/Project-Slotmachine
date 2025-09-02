@@ -21,8 +21,8 @@ public class UIManager : MonoBehaviour
     {
         if (goldText != null && tokenText != null)
         {
-            goldText.text = $"Gold: {GameManager.instance.money._gold}";
-            tokenText.text = $"Token: {GameManager.instance.money._token}";
+            goldText.text = $"{GameManager.instance.money._gold}";
+            tokenText.text = $"{GameManager.instance.money._token}";
         }
     }
 

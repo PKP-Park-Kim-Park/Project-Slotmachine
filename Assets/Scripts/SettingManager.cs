@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,9 @@ public class SettingManager : MonoBehaviour
     public Button xButton;
     public Slider mouseSensitivitySlider; // 마우스 감도 슬라이더 추가
     public PlayerLook playerLook; // PlayerLook 스크립트 참조 추가
+
+    // TMP_InputField 변수 추가
+    public TMP_InputField mouseSensitivityInputField;
 
     private const string MouseSensitivityKey = "MouseSensitivity";
 
@@ -25,8 +29,16 @@ public class SettingManager : MonoBehaviour
         float savedSensitivity = PlayerPrefs.GetFloat(MouseSensitivityKey, 3f);
         mouseSensitivitySlider.value = savedSensitivity;
 
-        // 슬라이더 값이 변경될 때마다 OnMouseSensitivityChanged 함수를 호출합니다.
-        mouseSensitivitySlider.onValueChanged.AddListener(OnMouseSensitivityChanged);
+        // 슬라이더 값이 변경될 때 OnSensitivityChangedFromSlider 함수 호출
+        mouseSensitivitySlider.onValueChanged.AddListener(OnSensitivityChangedFromSlider);
+
+        // 입력 필드 값이 변경될 때 OnSensitivityChangedFromInputField 함수 호출
+        mouseSensitivityInputField.onEndEdit.AddListener(OnSensitivityChangedFromInputField);
+
+
+
+        // 시작 시 초기값 설정
+        UpdateSensitivityDisplay(savedSensitivity);
     }
 
     void Update()
@@ -74,16 +86,54 @@ public class SettingManager : MonoBehaviour
         }
     }
 
-    // 슬라이더 값이 변경될 때 호출되는 함수
-    private void OnMouseSensitivityChanged(float newSensitivity)
+    // 슬라이더 조작
+    private void OnSensitivityChangedFromSlider(float newSensitivity)
     {
-        // 마우스 감도 값을 PlayerPrefs에 저장합니다.
+        // 입력 필드와 게임 감도를 업데이트
+        UpdateSensitivityValue(newSensitivity);
+    }
+
+    // 입력 필드 조작
+    private void OnSensitivityChangedFromInputField(string newText)
+    {
+        // 입력된 텍스트를 float으로 변환
+        if (float.TryParse(newText, out float newSensitivity))
+        {
+            // 슬라이더와 게임 감도를 업데이트
+            UpdateSensitivityValue(newSensitivity);
+        }
+    }
+
+    // 슬라이더, 입력 필드, 게임 감도를 모두 동기화하는 공통 함수
+    private void UpdateSensitivityValue(float newSensitivity)
+    {
+        // 슬라이더의 범위를 벗어나지 않도록 클램프
+        newSensitivity = Mathf.Clamp(newSensitivity, mouseSensitivitySlider.minValue, mouseSensitivitySlider.maxValue);
+
+        // PlayerPrefs에 감도 값 저장
         PlayerPrefs.SetFloat(MouseSensitivityKey, newSensitivity);
 
-        // PlayerLook 스크립트에 새로운 감도 값을 전달합니다.
+        // PlayerLook 스크립트의 감도 업데이트
         if (playerLook != null)
         {
             playerLook.lookSensitivity = newSensitivity;
+        }
+
+        // 슬라이더와 입력 필드 UI를 업데이트
+        UpdateSensitivityDisplay(newSensitivity);
+    }
+
+    // UI(슬라이더, 입력 필드)를 업데이트하는 함수
+    private void UpdateSensitivityDisplay(float newSensitivity)
+    {
+        if (mouseSensitivitySlider != null)
+        {
+            mouseSensitivitySlider.value = newSensitivity;
+        }
+
+        if (mouseSensitivityInputField != null)
+        {
+            mouseSensitivityInputField.text = newSensitivity.ToString("F3");
         }
     }
 }

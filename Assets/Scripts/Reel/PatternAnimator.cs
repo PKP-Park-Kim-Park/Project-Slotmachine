@@ -13,6 +13,13 @@ public class PatternAnimator : MonoBehaviour
     [Tooltip("각 당첨 라인 애니메이션 사이의 딜레이 (초)")]
     [SerializeField] private float animationDelay = 0.5f;
 
+    [Header("Pop Effect")]
+    [Tooltip("당첨 심볼이 커지는 배율")]
+    [SerializeField] private float popScale = 1.2f;
+
+    [Tooltip("당첨 심볼이 커졌다가 돌아오는 총 애니메이션 시간")]
+    [SerializeField] private float popDuration = 0.2f;
+
     [Header("Particle Effect")]
     [Tooltip("각 당첨 라인에 표시될 파티클 프리팹")]
     [SerializeField] private GameObject winningParticlePrefab;
@@ -20,9 +27,9 @@ public class PatternAnimator : MonoBehaviour
     // 오브젝트 풀링을 위한 리스트와 코루틴 관리 변수
     private readonly List<GameObject> borderPool = new List<GameObject>();
     private int poolIndex = 0;
-    private Coroutine m_AnimationCoroutine;
+    private Coroutine animationCoroutine;
     
-    private const int k_NumColumns = 5;
+    private const int numColumns = 5;
 
     private void Awake()
     {
@@ -49,14 +56,14 @@ public class PatternAnimator : MonoBehaviour
     public void AnimateWinning(List<WinningLine> winningLines)
     {
         // 기존 애니메이션이 실행 중이면 중지
-        if (m_AnimationCoroutine != null)
+        if (animationCoroutine != null)
         {
-            StopCoroutine(m_AnimationCoroutine);
+            StopCoroutine(animationCoroutine);
         }
 
         // 기존 테두리 정리
         ClearBorders();
-        m_AnimationCoroutine = StartCoroutine(AnimateSeq(winningLines));
+        animationCoroutine = StartCoroutine(AnimateSeq(winningLines));
     }
 
     private IEnumerator AnimateSeq(List<WinningLine> winningLines)
@@ -64,13 +71,17 @@ public class PatternAnimator : MonoBehaviour
         // 각 당첨 라인을 순서대로 보여줌
         foreach (var line in winningLines)
         {
-            // 현재 라인의 심볼들에 테두리 표시
+            List<Transform> transformsToAnimate = new List<Transform>();
+
+            // 현재 라인의 심볼에 테두리 표시
             foreach (var coord in line.Coordinates)
             {
                 // coord.x == 행(row), coord.y == 열(column)
                 if (IsValidCoordinate(coord.x, coord.y))
                 {
                     ShowBorderAt(coord.x, coord.y);
+                    int index = coord.x * numColumns + coord.y;
+                    transformsToAnimate.Add(slotPositions[index]);
                 }
             }
 
@@ -81,41 +92,62 @@ public class PatternAnimator : MonoBehaviour
                 {
                     if (IsValidCoordinate(coord.x, coord.y))
                     {
-                        int index = coord.x * k_NumColumns + coord.y;
+                        int index = coord.x * numColumns + coord.y;
                         Instantiate(winningParticlePrefab, slotPositions[index]);
                     }
                 }
             }
 
+            // 튀나오는 애니메이션
+            if (transformsToAnimate.Count > 0)
+            {
+                yield return StartCoroutine(AnimatePop(transformsToAnimate, popScale, popDuration / 2f));
+            }
+
             yield return new WaitForSeconds(animationDelay);
+
+            // 튀들어가는 애니메이션
+            if (transformsToAnimate.Count > 0)
+            {
+                yield return StartCoroutine(AnimatePop(transformsToAnimate, 1.0f, popDuration / 2f));
+            }
 
             // 현재 테두리 제거
             ClearBorders();
         }
 
-        ShowAll(winningLines);
-        m_AnimationCoroutine = null; // 코루틴 완료
+        animationCoroutine = null; // 코루틴 완료
     }
 
-    // 모든 당첨 심볼을 한 번에 표시하는 함수
-    private void ShowAll(List<WinningLine> winningLines)
+    private IEnumerator AnimatePop(List<Transform> targets, float targetScale, float duration)
     {
-        ClearBorders();
-        HashSet<Vector2Int> uniqueCoords = new HashSet<Vector2Int>();
-        foreach (var line in winningLines)
+        if (targets.Count == 0 || duration <= 0)
         {
-            foreach (var coord in line.Coordinates)
-            {
-                uniqueCoords.Add(coord);
-            }
+            yield break;
         }
 
-        foreach (var coord in uniqueCoords)
+        List<Vector3> originalScales = new List<Vector3>();
+        foreach (var t in targets)
         {
-            if (IsValidCoordinate(coord.x, coord.y))
+            originalScales.Add(t.localScale);
+        }
+        Vector3 finalScale = Vector3.one * targetScale;
+
+        float timer = 0f;
+        while (timer < duration)
+        {
+            float progress = timer / duration;
+            for (int i = 0; i < targets.Count; i++)
             {
-                ShowBorderAt(coord.x, coord.y);
+                targets[i].localScale = Vector3.Lerp(originalScales[i], finalScale, progress);
             }
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        foreach (var t in targets)
+        {
+            t.localScale = finalScale;
         }
     }
 
@@ -124,7 +156,7 @@ public class PatternAnimator : MonoBehaviour
     {
         if (poolIndex >= borderPool.Count) return; // 풀이 부족한 경우 방지
 
-        int index = row * k_NumColumns + col;
+        int index = row * numColumns + col;
         GameObject border = borderPool[poolIndex];
         Transform slotTransform = slotPositions[index];
 
@@ -152,7 +184,7 @@ public class PatternAnimator : MonoBehaviour
     {
         if (slotPositions == null || slotPositions.Length != 15) return false;
 
-        int index = row * k_NumColumns + col;
+        int index = row * numColumns + col;
         return index >= 0 && index < slotPositions.Length && slotPositions[index] != null;
     }
 }

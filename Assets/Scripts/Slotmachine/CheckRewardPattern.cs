@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class CheckRewardParttern
+public class CheckRewardPattern
 {
     private int[,] matrix = new int[3, 5]; // 가져온 배열 결과값
     private const int ROW = 3;
@@ -41,10 +42,11 @@ public class CheckRewardParttern
 
     private void CalculatePattern()
     {
-        // 잭팟을 먼저 확인
         if (IsJackpot())
         {
-            // 잭팟의 보상 실행
+            // 잭팟 보상 실행
+            CheckVertical();
+            CheckHorizontal();
             CheckUp();
             CheckDown();
             CheckEyes();
@@ -52,16 +54,15 @@ public class CheckRewardParttern
         }
         else
         {
-            // 2. 잭팟이 아닐 경우에만 다른 모든 일반 패턴을 검사합니다.
-            CheckEyes();
-            CheckUp();
-            CheckDown();
-            CheckZig();
-            CheckZag();
-            CheckHorizontal();
             CheckVertical();
+            CheckHorizontal();
             CheckLowerDiagonal();
             CheckUpperDiagonal();
+            CheckZig();
+            CheckZag();
+            CheckUp();
+            CheckDown();
+            CheckEyes();
         }
     }
 
@@ -388,13 +389,13 @@ public class CheckRewardParttern
         }
         return true; // 모든 심볼 동일
     }
-
+    
     private void CalculateReward(Patterns pattern, Symbols symbol)
     {
         float symbolOdd;
         float patternOdd;
 
-        if(symbolOdds.ContainsKey(symbol) && partternOdds.ContainsKey(pattern))
+        if (symbolOdds.ContainsKey(symbol) && partternOdds.ContainsKey(pattern))
         {
             symbolOdd = symbolOdds[symbol];
             patternOdd = partternOdds[pattern];

@@ -18,9 +18,7 @@ public class SlotMachine : MonoBehaviour
     [SerializeField] private PatternRewardOdds patternOddsData;
     [Tooltip("심볼별 배율 정보가 담긴 ScriptableObject")]
     [SerializeField] private SymbolRewardOdds symbolOddsData;
-
-    private CheckRewardParttern rewardChecker;
-
+    private CheckRewardPattern rewardChecker;
     private void Awake()
     {
         bettingGold = 0;
@@ -34,7 +32,7 @@ public class SlotMachine : MonoBehaviour
         }
         matrix = new int[3, reels.Length]; // 3행, reel 개수만큼의 열
 
-        rewardChecker = new CheckRewardParttern();
+        rewardChecker = new CheckRewardPattern();
     }
     public void Bet(bool isIncrease)
     {

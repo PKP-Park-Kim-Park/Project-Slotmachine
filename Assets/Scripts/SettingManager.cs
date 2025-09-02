@@ -45,11 +45,14 @@ public class SettingManager : MonoBehaviour
 
         if (isPanelActive)
         {
-            Time.timeScale = 0f;
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            // 설정창이 열릴 때 GameManager의 PauseGame 함수 호출
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.Pause();
+                Cursor.visible = true;
+            }
 
-            // 설정창이 열릴 때 플레이어의 카메라 스크립트를 비활성화합니다.
+            // 플레이어 카메라 스크립트 비활성화
             if (playerLook != null)
             {
                 playerLook.enabled = false;
@@ -57,11 +60,15 @@ public class SettingManager : MonoBehaviour
         }
         else
         {
-            Time.timeScale = 1f;
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
 
-            // 설정창이 닫힐 때 플레이어의 카메라 스크립트를 다시 활성화합니다.
+            // 설정창이 닫힐 때 GameManager의 ResumeGame 함수 호출
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.Resume();
+                Cursor.visible = false;
+            }
+
+            // 플레이어 카메라 스크립트 다시 활성화
             if (playerLook != null)
             {
                 playerLook.enabled = true;

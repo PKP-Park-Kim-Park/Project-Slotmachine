@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
     public static GameManager instance; // 싱글톤
 
     private bool isGaimng;
-    private bool isPause;
     public LevelData levelData { get; private set; }
     public Money money { get; private set; }
 
@@ -51,15 +50,15 @@ public class GameManager : MonoBehaviour
 
     public void Pause()
     {
-        if(!isPause)
-        {
             Time.timeScale = 0f;
-            isPause = true;
-        }
-        else
-        {
-            Time.timeScale = 1f;
-            isPause = false;
-        }
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void Resume()
+    {
+            Time.timeScale = 0f;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
     }
 }

@@ -3,6 +3,7 @@ using TMPro;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class SettingManager : MonoBehaviour
 {
@@ -11,34 +12,48 @@ public class SettingManager : MonoBehaviour
     public Slider mouseSensitivitySlider; // 마우스 감도 슬라이더 추가
     public PlayerLook playerLook; // PlayerLook 스크립트 참조 추가
 
+    // 사운드 조절 관련 변수
+    public AudioMixer mixer; // 오디오 믹서 변수 추가
+    public Slider bgmSlider; // BGM 슬라이더 추가
+    public Slider sfxSlider; // SFX 슬라이더 추가
+
     // TMP_InputField 변수 추가
     public TMP_InputField mouseSensitivityInputField;
+    // 텍스트 변수 추가
+    public TextMeshProUGUI bgmText;
+    public TextMeshProUGUI sfxText;
 
     private const string MouseSensitivityKey = "MouseSensitivity";
+    private const string BgmVolumeKey = "BgmVolume";
+    private const string SfxVolumeKey = "SfxVolume";
 
     void Start()
     {
         // 게임 시작 시 설정 패널을 비활성화(숨기기)합니다.
         settingsPanel.SetActive(false);
-
         // X 버튼 클릭 시 'ToggleSettings' 함수를 실행하도록 설정합니다.
         xButton.onClick.AddListener(ToggleSettings);
 
-        // 슬라이더의 값을 초기화하고 저장된 값으로 설정합니다.
-        // 저장된 값이 없으면 기본값인 3f로 설정합니다.
+
         float savedSensitivity = PlayerPrefs.GetFloat(MouseSensitivityKey, 3f);
         mouseSensitivitySlider.value = savedSensitivity;
-
-        // 슬라이더 값이 변경될 때 OnSensitivityChangedFromSlider 함수 호출
         mouseSensitivitySlider.onValueChanged.AddListener(OnSensitivityChangedFromSlider);
-
-        // 입력 필드 값이 변경될 때 OnSensitivityChangedFromInputField 함수 호출
         mouseSensitivityInputField.onEndEdit.AddListener(OnSensitivityChangedFromInputField);
-
-
-
         // 시작 시 초기값 설정
         UpdateSensitivityDisplay(savedSensitivity);
+
+        // BGM 슬라이더 설정
+        float savedBgmVolume = PlayerPrefs.GetFloat(BgmVolumeKey, 0.75f);
+        bgmSlider.value = savedBgmVolume;
+        bgmSlider.onValueChanged.AddListener(SetBgmVolume);
+
+        // SFX 슬라이더 설정
+        float savedSfxVolume = PlayerPrefs.GetFloat(SfxVolumeKey, 0.75f);
+        sfxSlider.value = savedSfxVolume;
+        sfxSlider.onValueChanged.AddListener(SetSfxVolume);
+        // 초기 텍스트 값 설정
+        UpdateBgmText(savedBgmVolume);
+        UpdateSfxText(savedSfxVolume);
     }
 
     void Update()
@@ -136,4 +151,39 @@ public class SettingManager : MonoBehaviour
             mouseSensitivityInputField.text = newSensitivity.ToString("F3");
         }
     }
+    public void SetBgmVolume(float volume)
+    {
+        // PlayerPrefs에 값 저장
+        PlayerPrefs.SetFloat(BgmVolumeKey, volume);
+        // 믹서의 BGM 그룹 볼륨 조절
+        mixer.SetFloat("BGM_Volume", Mathf.Log10(volume) * 20);
+        UpdateBgmText(volume);
+    }
+    public void SetSfxVolume(float volume)
+    {
+        // PlayerPrefs에 값 저장
+        PlayerPrefs.SetFloat(SfxVolumeKey, volume);
+
+        // 믹서의 SFX 그룹 볼륨 조절
+        mixer.SetFloat("SFX_Volume", Mathf.Log10(volume) * 20);
+        UpdateSfxText(volume);
+    }
+    // BGM 텍스트 UI 업데이트 함수
+    private void UpdateBgmText(float volume)
+    {
+        if (bgmText != null)
+        {
+            bgmText.text = (volume * 100).ToString("F0") + "%";
+        }
+    }
+
+    // SFX 텍스트 UI 업데이트 함수
+    private void UpdateSfxText(float volume)
+    {
+        if (sfxText != null)
+        {
+            sfxText.text = (volume * 100).ToString("F0") + "%";
+        }
+    }
+
 }

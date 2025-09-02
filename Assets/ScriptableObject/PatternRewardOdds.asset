@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a886d97dba0c4b4cb7a645a054c6561, type: 3}
+  m_Name: PatternRewardOdds
+  m_EditorClassIdentifier: Assembly-CSharp::PatternRewardOdds
+  rewardPatterns:
+  - patternType: 0
+    rewardOddsMultiplier: 1
+  - patternType: 1
+    rewardOddsMultiplier: 2
+  - patternType: 2
+    rewardOddsMultiplier: 3
+  - patternType: 3
+    rewardOddsMultiplier: 1
+  - patternType: 4
+    rewardOddsMultiplier: 2
+  - patternType: 5
+    rewardOddsMultiplier: 2
+  - patternType: 6
+    rewardOddsMultiplier: 3
+  - patternType: 7
+    rewardOddsMultiplier: 3
+  - patternType: 8
+    rewardOddsMultiplier: 4
+  - patternType: 9
+    rewardOddsMultiplier: 4
+  - patternType: 10
+    rewardOddsMultiplier: 5
+  - patternType: 10
+    rewardOddsMultiplier: 6

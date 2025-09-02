@@ -258,6 +258,7 @@ MonoBehaviour:
   edgePanDeadZone: {x: 0.6, y: 0.6}
   edgePanMaxAngleX: 10
   edgePanMaxAngleY: 10
+  crosshair: {fileID: 2772658958984324237}
 --- !u!1 &2772658958984324237
 GameObject:
   m_ObjectHideFlags: 0

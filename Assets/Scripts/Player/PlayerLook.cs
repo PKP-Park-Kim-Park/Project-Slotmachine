@@ -20,6 +20,8 @@ public class PlayerLook : MonoBehaviour
     private float currentCameraRotationX = 0f;
     private Rigidbody rb;
 
+    public GameObject crosshair;
+
     // 시점 고정 상태 관련 변수
     private bool isViewFixed = false;
     private bool isReturningToPlayer = false; // 카메라 복귀 상태
@@ -107,6 +109,9 @@ public class PlayerLook : MonoBehaviour
     /// </summary>
     private void HandleFixedView()
     {
+        // 크로스헤어 비활성
+        crosshair.SetActive(false);
+
         // 부드럽게 이동
         mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, cameraTarget.position, Time.deltaTime * cameraEnterSpeed);
 
@@ -162,6 +167,9 @@ public class PlayerLook : MonoBehaviour
     /// </summary>
     private void ReturnNomalView()
     {
+        // 크로스헤어 활성
+        crosshair.SetActive(true);
+
         // 원래 위치로 부드럽게 복귀
         Vector3 targetPosition = transform.TransformPoint(originalCamPosition);
         Quaternion targetRotation = transform.rotation; // 플레이어 회전 따라감

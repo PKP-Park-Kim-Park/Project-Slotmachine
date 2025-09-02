@@ -1,32 +1,32 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ½½·Ô¸Ó½Å ½Éº¼µéÀÇ ¹è´ç·ü µ¥ÀÌÅÍ¸¦ °ü¸®ÇÏ´Â Å¬·¡½º.
+/// ìŠ¬ë¡¯ë¨¸ì‹  ì‹¬ë³¼ë“¤ì˜ ë°°ë‹¹ë¥  ë°ì´í„°ë¥¼ ê´€ë¦¬í•˜ëŠ” í´ë˜ìŠ¤.
 /// </summary>
 public class SymbolData
 {
-    // ½Éº¼ ID¿Í ¹è´ç·üÀ» ¿¬°áÇÏ´Â µñ¼Å³Ê¸®
+    // ì‹¬ë³¼ IDì™€ ë°°ë‹¹ë¥ ì„ ì—°ê²°í•˜ëŠ” ë”•ì…”ë„ˆë¦¬
     private Dictionary<int, float> symbolOdds = new Dictionary<int, float>();
 
     public SymbolData()
     {
-        // »ı¼ºÀÚ¿¡¼­ ½Éº¼ ¹è´ç·ü µ¥ÀÌÅÍ¸¦ ÃÊ±âÈ­ÇÕ´Ï´Ù.
-        // Symbols ¿­°ÅÇü¿¡ ¸ÂÃç µ¥ÀÌÅÍ¸¦ Ãß°¡ÇÕ´Ï´Ù.
+        // ìƒì„±ìì—ì„œ ì‹¬ë³¼ ë°°ë‹¹ë¥  ë°ì´í„°ë¥¼ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
+        // Symbols ì—´ê±°í˜•ì— ë§ì¶° ë°ì´í„°ë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
         symbolOdds.Add((int)Symbols.Cherry, 1.0f);
         symbolOdds.Add((int)Symbols.Lemon, 2.0f);
         symbolOdds.Add((int)Symbols.Orange, 3.0f);
         symbolOdds.Add((int)Symbols.Bell, 4.0f);
         symbolOdds.Add((int)Symbols.Diamond, 5.0f);
         symbolOdds.Add((int)Symbols.Star, 6.0f);
-        symbolOdds.Add((int)Symbols.Seven, 7.0f); // °¡Àå ³ôÀº ¹è´ç·ü
+        symbolOdds.Add((int)Symbols.Seven, 7.0f); // ê°€ì¥ ë†’ì€ ë°°ë‹¹ë¥ 
     }
 
     /// <summary>
-    /// Æ¯Á¤ ½Éº¼ IDÀÇ ¹è´ç·üÀ» °¡Á®¿É´Ï´Ù.
+    /// íŠ¹ì • ì‹¬ë³¼ IDì˜ ë°°ë‹¹ë¥ ì„ ê°€ì ¸ì˜µë‹ˆë‹¤.
     /// </summary>
-    /// <param name="symbolId">¹è´ç·üÀ» Á¶È¸ÇÒ ½Éº¼ ID</param>
-    /// <returns>ÇØ´ç ½Éº¼ÀÇ ¹è´ç·ü. Á¸ÀçÇÏÁö ¾ÊÀ» °æ¿ì 0.0f ¹İÈ¯</returns>
+    /// <param name="symbolId">ë°°ë‹¹ë¥ ì„ ì¡°íšŒí•  ì‹¬ë³¼ ID</param>
+    /// <returns>í•´ë‹¹ ì‹¬ë³¼ì˜ ë°°ë‹¹ë¥ . ì¡´ì¬í•˜ì§€ ì•Šì„ ê²½ìš° 0.0f ë°˜í™˜</returns>
     public float GetOdds(int symbolId)
     {
         if (symbolOdds.TryGetValue(symbolId, out float odds))
@@ -34,7 +34,7 @@ public class SymbolData
             return odds;
         }
 
-        Debug.LogWarning($"SymbolData¿¡¼­ ½Éº¼ ID '{symbolId}'¿¡ ÇØ´çÇÏ´Â ¹è´ç·üÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+        Debug.LogWarning($"SymbolDataì—ì„œ ì‹¬ë³¼ ID '{symbolId}'ì— í•´ë‹¹í•˜ëŠ” ë°°ë‹¹ë¥ ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
         return 0.0f;
     }
 }

@@ -1,7 +1,7 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ½½·Ô¸Ó½Å °á°ú ¸ÅÆ®¸¯½º¸¦ ºĞ¼®ÇÏ¿© º¸»ó ¹è´ç·üÀ» °è»êÇÏ´Â Å¬·¡½º.
+/// ìŠ¬ë¡¯ë¨¸ì‹  ê²°ê³¼ ë§¤íŠ¸ë¦­ìŠ¤ë¥¼ ë¶„ì„í•˜ì—¬ ë³´ìƒ ë°°ë‹¹ë¥ ì„ ê³„ì‚°í•˜ëŠ” í´ë˜ìŠ¤.
 /// </summary>
 public class CheckRewardPattern
 {
@@ -11,7 +11,7 @@ public class CheckRewardPattern
 
     public CheckRewardPattern()
     {
-        // »ı¼ºÀÚ¿¡¼­ SymbolData ÀÎ½ºÅÏ½º¸¦ »ı¼ºÇÕ´Ï´Ù.
+        // ìƒì„±ìì—ì„œ SymbolData ì¸ìŠ¤í„´ìŠ¤ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
         this.oddsTable = new SymbolData();
     }
 
@@ -19,7 +19,7 @@ public class CheckRewardPattern
     {
         if (inputMatrix == null || inputMatrix.GetLength(0) == 0 || inputMatrix.GetLength(1) == 0)
         {
-            Debug.LogError("ÀÔ·Â ¸ÅÆ®¸¯½º°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.");
+            Debug.LogError("ì…ë ¥ ë§¤íŠ¸ë¦­ìŠ¤ê°€ ìœ íš¨í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
             return 0f;
         }
 
@@ -34,19 +34,19 @@ public class CheckRewardPattern
 
     private void CalculatePattern()
     {
-        // °¡·Î ÆĞÅÏ È®ÀÎ
+        // ê°€ë¡œ íŒ¨í„´ í™•ì¸
         CheckHorizontalPatterns();
 
-        // ¼¼·Î ÆĞÅÏ È®ÀÎ
+        // ì„¸ë¡œ íŒ¨í„´ í™•ì¸
         CheckVerticalPatterns();
 
-        // ´ë°¢¼± ÆĞÅÏ È®ÀÎ
+        // ëŒ€ê°ì„  íŒ¨í„´ í™•ì¸
         CheckDiagonalPatterns();
     }
 
     private void CalculateReward()
     {
-        // Ãß°¡ º¸³Ê½º ·ÎÁ÷ÀÌ ÇÊ¿äÇÒ °æ¿ì ¿©±â¿¡ ±¸ÇöÇÕ´Ï´Ù.
+        // ì¶”ê°€ ë³´ë„ˆìŠ¤ ë¡œì§ì´ í•„ìš”í•  ê²½ìš° ì—¬ê¸°ì— êµ¬í˜„í•©ë‹ˆë‹¤.
     }
 
     private void CheckHorizontalPatterns()

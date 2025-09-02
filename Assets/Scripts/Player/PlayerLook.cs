@@ -51,7 +51,7 @@ public class PlayerLook : MonoBehaviour
 
     void Update()
     {
-        // 시점이 고정된 상태에서 ESC 키를 누르면 시점 고정 해제
+        // 시점이 고정된 상태에서 Q 키를 누르면 시점 고정 해제
         if (isViewFixed && Input.GetKeyDown(KeyCode.Q))
         {
             UnfixViewPoint();

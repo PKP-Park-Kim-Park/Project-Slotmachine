@@ -57,8 +57,8 @@ public class GameManager : MonoBehaviour
 
     public void Resume()
     {
-            Time.timeScale = 0f;
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 1f;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
     }
 }

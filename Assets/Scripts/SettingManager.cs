@@ -32,7 +32,7 @@ public class SettingManager : MonoBehaviour
     void Update()
     {
         // 'P' 키를 누를 때마다 'ToggleSettings' 함수를 호출합니다.
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             ToggleSettings();
         }
@@ -49,7 +49,6 @@ public class SettingManager : MonoBehaviour
             if (GameManager.instance != null)
             {
                 GameManager.instance.Pause();
-                Cursor.visible = true;
             }
 
             // 플레이어 카메라 스크립트 비활성화
@@ -65,7 +64,6 @@ public class SettingManager : MonoBehaviour
             if (GameManager.instance != null)
             {
                 GameManager.instance.Resume();
-                Cursor.visible = false;
             }
 
             // 플레이어 카메라 스크립트 다시 활성화

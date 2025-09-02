@@ -12,6 +12,8 @@ public class CheckRewardParttern
 
     public float CheckReward(int[,] _matrix, PatternRewardOdds sheet, SymbolRewardOdds sheet2)
     {
+        totalOdds = 0;
+
         partternOdds.Clear();
         symbolOdds.Clear();
 
@@ -28,7 +30,6 @@ public class CheckRewardParttern
         matrix = _matrix;
 
         CalculatePattern();
-        totalOdds = CalculateReward();
 
         return totalOdds;
     }
@@ -91,12 +92,15 @@ public class CheckRewardParttern
             {
                 case 3:
                     // 총 배율 += (highSymbolNum)심볼 배율 * 패턴 배율
+                    CalculateReward(Patterns.Column_3, (Symbols)highSymbolNum);
                     break;
                 case 4:
                     // 총 배율 += (highSymbolNum)심볼 배율 * 패턴 배율
+                    CalculateReward(Patterns.Column_4, (Symbols)highSymbolNum);
                     break;
                 case 5:
                     // 총 배율 += (highSymbolNum)심볼 배율 * 패턴 배율
+                    CalculateReward(Patterns.Column_5, (Symbols)highSymbolNum);
                     break;
                 default:
                     break;
@@ -135,6 +139,7 @@ public class CheckRewardParttern
             if (count + 1 == 3)
             {
                 // 총 배율 += 심볼 배율 * 패턴 배율
+                CalculateReward(Patterns.Row_3, (Symbols)symbolNum);
             }
         }
     }
@@ -159,6 +164,7 @@ public class CheckRewardParttern
             if (count == 3)
             {
                 // 총 배율 += 심볼 배율 * 패턴 배율
+                CalculateReward(Patterns.LowerDiagonal, (Symbols)symbolNum);
             }
         }
     }
@@ -183,6 +189,7 @@ public class CheckRewardParttern
             if (count == 3)
             {
                 // 총 배율 += 심볼 배율 * 패턴 배율
+                CalculateReward(Patterns.UpperDiagonal, (Symbols)symbolNum);
             }
         }
     }
@@ -200,6 +207,7 @@ public class CheckRewardParttern
         }
 
         // 총 배율 += 심볼 배율 * 패턴 배율
+        CalculateReward(Patterns.Zig, (Symbols)symbolNum);
     }
 
     private void CheckZag()
@@ -215,6 +223,7 @@ public class CheckRewardParttern
         }
 
         // 총 배율 += 심볼 배율 * 패턴 배율
+        CalculateReward(Patterns.Zag, (Symbols)symbolNum);
     }
 
     private void CheckUp()
@@ -233,6 +242,7 @@ public class CheckRewardParttern
         }
 
         // 총 배율 += 심볼 배율 * 패턴 배율
+        CalculateReward(Patterns.Up, (Symbols)symbolNum);
     }
 
     private void CheckDown()
@@ -252,6 +262,7 @@ public class CheckRewardParttern
 
 
         // 총 배율 += 심볼 배율 * 패턴 배율
+        CalculateReward(Patterns.Down, (Symbols)symbolNum);
     }
 
     private void CheckEyes()
@@ -272,6 +283,7 @@ public class CheckRewardParttern
         }
 
         // 총 배율 += 심볼 배율 * 패턴 배율
+        CalculateReward(Patterns.Eyes, (Symbols)symbolNum);
     }
 
     private void CheckJackpot()
@@ -290,12 +302,20 @@ public class CheckRewardParttern
             }
         }
 
-        // 총 배율 += 심볼 배율 * 패턴 배율
+        CalculateReward(Patterns.Jackpot, (Symbols)symbolNum);
     }
 
-    private float CalculateReward()
+    private void CalculateReward(Patterns pattern, Symbols symbol)
     {
-        float Odds = 0f;
-        return Odds;
+        float symbolOdd;
+        float patternOdd;
+
+        if(symbolOdds.ContainsKey(symbol) && partternOdds.ContainsKey(pattern))
+        {
+            symbolOdd = symbolOdds[symbol];
+            patternOdd = partternOdds[pattern];
+
+            totalOdds += patternOdd * patternOdd;
+        }
     }
 }

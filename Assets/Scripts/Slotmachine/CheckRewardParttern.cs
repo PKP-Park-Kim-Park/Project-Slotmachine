@@ -41,8 +41,8 @@ public class CheckRewardParttern
 
     private void CalculatePattern()
     {
-        CheckColumn();
         CheckRow();
+        CheckColumn();
         CheckLowerDiagonal();
         CheckUpperDiagonal();
         CheckZig();

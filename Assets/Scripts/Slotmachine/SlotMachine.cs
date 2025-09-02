@@ -5,7 +5,7 @@ public class SlotMachine : MonoBehaviour
 {
     private int bettingGold;
     private int rewardGold;
-    private int[,] matrix; // [row, column]
+    public int[,] matrix; // [row, column]
     private bool isActivating;
     [SerializeField] private Reel[] reels; // 릴들을 관리할 배열
     [SerializeField] private float spinTime = 3f;
@@ -142,6 +142,13 @@ public class SlotMachine : MonoBehaviour
     // 스핀 종료 후 보상 처리
     private void DropGold()
     {
+        // 보상 계산 로직
+        CheckRewardPattern rewardChecker = new CheckRewardPattern();
+        float finalOdds = rewardChecker.CheckReward(this.matrix);
+
+        rewardGold = (int)(finalOdds * bettingGold);
+        GameManager.instance.money.AddGold(rewardGold);
+
         // TODO: CheckRewardPattern 의 CheckReward 호출
         // rewardGold = CheckReward(matrix) * bettingGold;
         // GameManager.instance.money.AddGold(rewardGold);

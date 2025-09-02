@@ -25,7 +25,7 @@ public class ReelAnimator : MonoBehaviour
     private Coroutine spinCoroutine;
 
     // 스핀 중 무작위로 보여줄 스프라이트 목록 (스핀 효과)
-    private List<Sprite> availableSpritesForBlur = new List<Sprite>();
+    private List<Sprite> spritesBlur = new List<Sprite>();
 
     void Start()
     {
@@ -61,7 +61,7 @@ public class ReelAnimator : MonoBehaviour
         // SymbolManager에서 스핀 효과에 사용할 스프라이트 가져옴
         if (SymbolManager.Instance != null)
         {
-            availableSpritesForBlur = SymbolManager.Instance.GetAllSprites();
+            spritesBlur = SymbolManager.Instance.GetAllSprites();
         }
         else
         {
@@ -125,9 +125,9 @@ public class ReelAnimator : MonoBehaviour
                 symbolImages[topImageIndex].rectTransform.SetAsLastSibling();
 
                 // 맨 아래로 간 심볼에 무작위 스프라이트 할당 (스핀 효과)
-                if (availableSpritesForBlur.Count > 0)
+                if (spritesBlur.Count > 0)
                 {
-                    symbolImages[topImageIndex].sprite = availableSpritesForBlur[Random.Range(0, availableSpritesForBlur.Count)];
+                    symbolImages[topImageIndex].sprite = spritesBlur[Random.Range(0, spritesBlur.Count)];
                 }
 
                 // 다음 심볼을 맨 위 심볼로 지정

@@ -943,7 +943,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 162748133655468380, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[0].probability
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 162748133655468380, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[1].probability
@@ -951,7 +951,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 162748133655468380, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[2].probability
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 162748133655468380, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[3].probability
@@ -1303,7 +1303,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3274760981780481139, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[0].probability
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3274760981780481139, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[1].probability
@@ -1311,7 +1311,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3274760981780481139, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[2].probability
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3274760981780481139, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[3].probability
@@ -1379,7 +1379,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3784882660664531556, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[0].probability
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3784882660664531556, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[1].probability
@@ -1387,7 +1387,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3784882660664531556, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[2].probability
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3784882660664531556, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[3].probability
@@ -1555,7 +1555,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5235067890994808195, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[0].probability
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5235067890994808195, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[1].probability
@@ -1563,7 +1563,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5235067890994808195, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[2].probability
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5235067890994808195, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[3].probability
@@ -1691,7 +1691,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6279725457475516249, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[0].probability
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6279725457475516249, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[1].probability
@@ -1699,7 +1699,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6279725457475516249, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[2].probability
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6279725457475516249, guid: de8525d54193d0e4b98aa86b0e0575a5, type: 3}
       propertyPath: weightedSymbols.Array.data[3].probability

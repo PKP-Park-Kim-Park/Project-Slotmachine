@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rewardSymbols:
   - symbolType: 1
-    rewardOddsMultiplier: 1
+    rewardOddsMultiplier: 2
   - symbolType: 2
     rewardOddsMultiplier: 2
   - symbolType: 3

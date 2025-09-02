@@ -41,19 +41,31 @@ public class CheckRewardParttern
 
     private void CalculatePattern()
     {
-        CheckRow();
-        CheckColumn();
-        CheckLowerDiagonal();
-        CheckUpperDiagonal();
-        CheckZig();
-        CheckZag();
-        CheckUp();
-        CheckDown();
-        CheckEyes();
-        CheckJackpot();
+        // 잭팟을 먼저 확인
+        if (IsJackpot())
+        {
+            // 잭팟의 보상 실행
+            CheckUp();
+            CheckDown();
+            CheckEyes();
+            CheckJackpot();
+        }
+        else
+        {
+            // 2. 잭팟이 아닐 경우에만 다른 모든 일반 패턴을 검사합니다.
+            CheckEyes();
+            CheckUp();
+            CheckDown();
+            CheckZig();
+            CheckZag();
+            CheckHorizontal();
+            CheckVertical();
+            CheckLowerDiagonal();
+            CheckUpperDiagonal();
+        }
     }
 
-    private void CheckColumn()
+    private void CheckHorizontal()
     {
         // 가로
         for (int y = 0; y < ROW; y++)
@@ -126,7 +138,7 @@ public class CheckRewardParttern
         }
     }
 
-    private void CheckRow()
+    private void CheckVertical()
     {
         // 세로
         for (int x = 0; x < COLUMN; x++)
@@ -351,23 +363,30 @@ public class CheckRewardParttern
     private void CheckJackpot()
     {
         int symbolNum = matrix[0, 0];
+        CalculateReward(Patterns.Jackpot, (Symbols)symbolNum);
 
+        List<Vector2Int> coords = new List<Vector2Int>();
+        for (int y = 0; y < ROW; y++) for (int x = 0; x < COLUMN; x++) coords.Add(new Vector2Int(y, x));
+        winningLines.Add(new WinningLine(coords));
+    }
+
+    /// <summary>
+    /// 잭팟 조건인지 확인
+    /// </summary>
+    private bool IsJackpot()
+    {
+        int firstSymbol = matrix[0, 0];
         for (int y = 0; y < ROW; y++)
         {
             for (int x = 0; x < COLUMN; x++)
             {
-                // 심볼 체크
-                if (symbolNum != matrix[y, x])
+                if (matrix[y, x] != firstSymbol)
                 {
-                    return;
+                    return false; // 하나라도 다르면 X
                 }
             }
         }
-
-        CalculateReward(Patterns.Jackpot, (Symbols)symbolNum);
-        List<Vector2Int> coords = new List<Vector2Int>();
-        for (int y = 0; y < ROW; y++) for (int x = 0; x < COLUMN; x++) coords.Add(new Vector2Int(y, x));
-        winningLines.Add(new WinningLine(coords));
+        return true; // 모든 심볼 동일
     }
 
     private void CalculateReward(Patterns pattern, Symbols symbol)

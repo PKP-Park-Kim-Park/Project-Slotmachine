@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerLook : MonoBehaviour
 {
     [Header("Camera Settings")]
-    [SerializeField] private float lookSensitivity = 3f;
+    [SerializeField] public float lookSensitivity = 3f;
     [SerializeField] private float cameraRotationLimit = 80f;
     [SerializeField] private Camera mainCam;
 
@@ -40,6 +40,9 @@ public class PlayerLook : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         originalCamPosition = mainCam.transform.localPosition;
+
+        // PlayerPrefs에서 저장된 마우스 감도를 불러와 적용합니다.
+        lookSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", lookSensitivity);
 
         // 커서 초기 상태 설정
         Cursor.lockState = CursorLockMode.Locked;

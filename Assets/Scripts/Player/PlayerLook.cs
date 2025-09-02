@@ -11,7 +11,8 @@ public class PlayerLook : MonoBehaviour
     [SerializeField] private Camera mainCam;
 
     [Header("Fixed View Settings")]
-    [SerializeField] private float cameraTransitionSpeed = 5f;
+    [SerializeField] private float cameraEnterSpeed = 5f; // 고정 시점으로 전환하는 속도
+    [SerializeField] private float cameraReturnSpeed = 5f; // 플레이어 시점으로 복귀하는 속도
     [SerializeField] private Vector2 edgePanDeadZone = new Vector2(0.7f, 0.7f); // 화면 중앙의 데드존 크기 (0~1)
     [SerializeField] private float edgePanMaxAngleX = 5f; // 상하 시야 이동 최대 각도
     [SerializeField] private float edgePanMaxAngleY = 10f; // 좌우 시야 이동 최대 각도
@@ -48,7 +49,7 @@ public class PlayerLook : MonoBehaviour
     void Update()
     {
         // 시점이 고정된 상태에서 ESC 키를 누르면 시점 고정 해제
-        if (isViewFixed && Input.GetKeyDown(KeyCode.Escape))
+        if (isViewFixed && Input.GetKeyDown(KeyCode.Q))
         {
             UnfixViewPoint();
         }
@@ -107,13 +108,13 @@ public class PlayerLook : MonoBehaviour
     private void HandleFixedView()
     {
         // 부드럽게 이동
-        mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, cameraTarget.position, Time.deltaTime * cameraTransitionSpeed);
+        mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, cameraTarget.position, Time.deltaTime * cameraEnterSpeed);
 
         // 마우스 위치 따라서 추가적인 회전 담당
         Quaternion finalTargetRotation = CalculateEdgePanRotation();
 
         // 부드럽게 회전
-        mainCam.transform.rotation = Quaternion.Slerp(mainCam.transform.rotation, finalTargetRotation, Time.deltaTime * cameraTransitionSpeed);
+        mainCam.transform.rotation = Quaternion.Slerp(mainCam.transform.rotation, finalTargetRotation, Time.deltaTime * cameraEnterSpeed);
     }
 
     /// <summary>
@@ -165,8 +166,8 @@ public class PlayerLook : MonoBehaviour
         Vector3 targetPosition = transform.TransformPoint(originalCamPosition);
         Quaternion targetRotation = transform.rotation; // 플레이어 회전 따라감
 
-        mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, targetPosition, Time.deltaTime * cameraTransitionSpeed);
-        mainCam.transform.rotation = Quaternion.Slerp(mainCam.transform.rotation, targetRotation, Time.deltaTime * cameraTransitionSpeed);
+        mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, targetPosition, Time.deltaTime * cameraReturnSpeed);
+        mainCam.transform.rotation = Quaternion.Slerp(mainCam.transform.rotation, targetRotation, Time.deltaTime * cameraReturnSpeed);
 
         // 복귀 완료(거의 도착하면 댐ㅇㅇ)
         if (Vector3.Distance(mainCam.transform.position, targetPosition) < 0.01f)
@@ -195,7 +196,30 @@ public class PlayerLook : MonoBehaviour
         isReturningToPlayer = true; // 복귀 전환 시작
         cameraTarget = null;
 
+        // 시점 고정 해제 즉시 커서를 잠그고 숨깁니다.
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    /// <summary>
+    /// 고정 시점으로 전환하는 속도
+    /// </summary>
+    public void SetCameraEnterSpeed(float newSpeed)
+    {
+        if (newSpeed > 0)
+        {
+            cameraEnterSpeed = newSpeed;
+        }
+    }
+
+    /// <summary>
+    /// 플레이어 시점으로 복귀하는 속도
+    /// </summary>
+    public void SetCameraReturnSpeed(float newSpeed)
+    {
+        if (newSpeed > 0)
+        {
+            cameraReturnSpeed = newSpeed;
+        }
     }
 }

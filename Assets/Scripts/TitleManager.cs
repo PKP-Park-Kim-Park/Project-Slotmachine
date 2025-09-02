@@ -1,20 +1,57 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class TitleManager : MonoBehaviour
 {
-    // 게임 시작 버튼
-    public void OnStartButtonClicked()
+    // 설정 패널을 연결할 변수
+    public GameObject settingsPanel;
+
+    // 새 게임 버튼
+    public void OnNewGameButtonClicked()
     {
         // 메인 씬 로드
         SceneManager.LoadScene("MainScene");
-        Debug.Log("게임 시작!");
+        Debug.Log("새 게임 시작!");
+    }
+
+    // 불러오기 버튼
+    public void OnLoadGameButtonClicked()
+    {
+        // TODO: 저장된 게임 데이터 로드
+        Debug.Log("게임 불러오기! (구현 필요)");
+    }
+
+    // 설정 버튼
+    public void OnSettingsButtonClicked()
+    {
+        // 설정 패널이 연결되어 있는지 확인하고 활성화
+        if (settingsPanel != null)
+        {
+            settingsPanel.SetActive(true);
+            Debug.Log("설정 창 열기");
+        }
+        else
+        {
+            Debug.LogWarning("설정 패널이 연결되지 않았습니다.");
+        }
+    }
+
+    // 설정 창 닫기 버튼
+    public void OnCloseSettingsButtonClicked()
+    {
+        // 설정 패널이 연결되어 있는지 확인하고 비활성화
+        if (settingsPanel != null)
+        {
+            settingsPanel.SetActive(false);
+            Debug.Log("설정 창 닫기");
+        }
     }
 
     // 게임 종료 버튼
     public void OnQuitButtonClicked()
     {
-        Debug.Log("게임 끝..");
+        Debug.Log("게임 종료..");
 
         // 에디터에서 실행 중일 경우, 플레이 모드 중지
 #if UNITY_EDITOR

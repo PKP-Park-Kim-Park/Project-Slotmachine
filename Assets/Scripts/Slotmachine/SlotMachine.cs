@@ -8,6 +8,7 @@ public class SlotMachine : MonoBehaviour
     public event System.Action OnActivationStart;
     public event System.Action OnActivationEnd;
     private int bettingGold;
+    public int BettingGold => bettingGold;
     private int rewardGold;
     private int[,] matrix;
     private bool isActivating;

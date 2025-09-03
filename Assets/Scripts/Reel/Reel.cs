@@ -66,7 +66,7 @@ public class Reel : MonoBehaviour
         isSpinning = false;
         // 최종 심볼 배열을 릴에 적용
         row = finalRow;
-        Debug.Log("릴 회전 중지!");
+        // Debug.Log("릴 회전 중지!");
 
         // int -> Sprite 변환
         Sprite[] finalSprites = new Sprite[3];

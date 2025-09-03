@@ -43,6 +43,13 @@ public class LeverMotion : MonoBehaviour, IInteractable
             Debug.LogError("LeverMotion 스크립트에 SlotMachine 컴포넌트가 할당되지 않았습니다. Inspector에서 할당해주세요.");
         }
 
+        // SlotMachine의 상태 변경 이벤트에 구독합니다.
+        if (slotMachine != null)
+        {
+            slotMachine.OnActivationStart += HandleActivationStart;
+            slotMachine.OnActivationEnd += HandleActivationEnd;
+        }
+
         if (outline != null)
         {
             originalOutlineColor = outline.OutlineColor;
@@ -52,19 +59,13 @@ public class LeverMotion : MonoBehaviour, IInteractable
         pullTriggerHash = Animator.StringToHash("Pull");
     }
 
-    void Update()
+    private void OnDestroy()
     {
-        // 매 프레임 슬롯머신의 상태를 확인하여 아웃라인 색상을 업데이트합니다.
-        if (outline != null)
+        // 컴포넌트가 파괴될 때 이벤트 구독을 해제하여 메모리 누수를 방지합니다.
+        if (slotMachine != null)
         {
-            if (IsInteractable)
-            {
-                outline.OutlineColor = originalOutlineColor;
-            }
-            else
-            {
-                outline.OutlineColor = Color.red;
-            }
+            slotMachine.OnActivationStart -= HandleActivationStart;
+            slotMachine.OnActivationEnd -= HandleActivationEnd;
         }
     }
     public void Interact()
@@ -93,5 +94,23 @@ public class LeverMotion : MonoBehaviour, IInteractable
 
         // UnityEvent를 호출하여 연결된 모든 함수를 실행 => 현재는 Spin()만 연결
         OnLeverPulled?.Invoke();
+    }
+
+    // 슬롯 활성
+    private void HandleActivationStart()
+    {
+        if (outline != null)
+        {
+            outline.OutlineColor = Color.red;
+        }
+    }
+
+    // 슬롯 비활성
+    private void HandleActivationEnd()
+    {
+        if (outline != null)
+        {
+            outline.OutlineColor = originalOutlineColor;
+        }
     }
 }

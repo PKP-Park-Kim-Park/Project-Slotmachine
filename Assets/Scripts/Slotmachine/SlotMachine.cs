@@ -1,14 +1,28 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SlotMachine : MonoBehaviour
 {
+    public event System.Action OnActivationStart;
+    public event System.Action OnActivationEnd;
     private int bettingGold;
     private int rewardGold;
     private int[,] matrix; // [row, column]
     private bool isActivating;
-    public bool IsActivating {get {return isActivating;} }
+    public bool IsActivating
+    {
+        get { return isActivating; }
+        private set
+        {
+            if (isActivating == value) return;
+            isActivating = value;
+
+            if (isActivating) OnActivationStart?.Invoke();
+            else OnActivationEnd?.Invoke();
+        } 
+    }
     [SerializeField] private Reel[] reels; // 릴들을 관리할 배열
     [SerializeField] private float spinTime = 3f;
 

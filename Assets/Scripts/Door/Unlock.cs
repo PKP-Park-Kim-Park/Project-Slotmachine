@@ -7,7 +7,7 @@ public class Unlock : MonoBehaviour, IInteractable
     [Tooltip("이 열쇠로 열 수 있는 문")]
     public Door targetDoor;
 
-    public string InteractionPrompt => "열쇠 줍기";
+    // public string InteractionPrompt => "열쇠 줍기";
 
     public void Interact()
     {

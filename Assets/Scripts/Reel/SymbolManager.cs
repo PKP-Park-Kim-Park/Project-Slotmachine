@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
-/// Symbols 열거형과 실제 Sprite를 매핑하고 관리하는 싱글톤 클래스입니다.
+/// Symbols 열거형과 실제 Sprite를 매핑하고 관리하는 싱글톤 클래스
 /// </summary>
 public class SymbolManager : MonoBehaviour
 {
@@ -20,7 +20,6 @@ public class SymbolManager : MonoBehaviour
     [Tooltip("인스펙터에서 심볼과 스프라이트를 연결합니다.")]
     [SerializeField] private List<SymbolSpritePair> symbolSpritePairs;
 
-    // 빠른 조회를 위한 딕셔너리
     private Dictionary<Symbols, Sprite> _symbolSpriteMap;
 
     private void Awake()
@@ -32,13 +31,10 @@ public class SymbolManager : MonoBehaviour
         }
         Instance = this;
 
-        // 리스트를 딕셔너리로 변환하여 조회 성능을 높입니다.
         _symbolSpriteMap = symbolSpritePairs.ToDictionary(pair => pair.symbol, pair => pair.sprite);
     }
 
-    /// <summary>
-    /// Symbols 열거형에 해당하는 Sprite를 반환합니다.
-    /// </summary>
+    /// Symbols 열거형에 해당하는 Sprite를 반환
     public Sprite GetSprite(Symbols symbol)
     {
         if (_symbolSpriteMap.TryGetValue(symbol, out Sprite sprite))
@@ -49,9 +45,7 @@ public class SymbolManager : MonoBehaviour
         return null;
     }
 
-    /// <summary>
     /// 관리되는 모든 심볼 스프라이트 목록을 반환
-    /// </summary>
     public List<Sprite> GetAllSprites()
     {
         return _symbolSpriteMap.Values.ToList();

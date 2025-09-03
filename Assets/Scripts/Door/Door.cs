@@ -15,9 +15,7 @@ public class Door : MonoBehaviour, IInteractable
     [SerializeField]
     private bool doorLock = false;
 
-    /// <summary>
-    /// 상호작용 텍스트(이건 인터페이스 땜시 냅둠)
-    /// </summary>
+    /*
     public string InteractionPrompt
     {
         get
@@ -26,7 +24,8 @@ public class Door : MonoBehaviour, IInteractable
             return isOpen ? "문 닫기" : "문 열기";
         }
     }
-
+    */
+    
     // 내부 상태 변수
     private bool isOpen = false;
     private Color originalOutlineColor;

@@ -18,8 +18,9 @@ public class TitleManager : MonoBehaviour
     // 불러오기 버튼
     public void OnLoadGameButtonClicked()
     {
-        // TODO: 저장된 게임 데이터 로드
-        Debug.Log("게임 불러오기! (구현 필요)");
+        DataManager.instance.LoadGameData();
+        SceneManager.LoadScene("MainScene");
+        Debug.Log("게임 불러오기!");
     }
 
     // 설정 버튼

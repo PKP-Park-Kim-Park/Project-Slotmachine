@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.instance.OnPlayerPosChanged += ChangePosition;
         }
+
+        myRigid.MovePosition(GameManager.instance.LoadPlayerPos());
     }
     void FixedUpdate()
     {

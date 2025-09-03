@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eddfdf79b504fd46b2bbead533cff5d, type: 3}
+  m_Name: SymbolWeight
+  m_EditorClassIdentifier: 
+  weightedSymbols:
+  - symbol: 1
+    probability: 19.4
+  - symbol: 2
+    probability: 19.4
+  - symbol: 3
+    probability: 14.9
+  - symbol: 4
+    probability: 14.9
+  - symbol: 5
+    probability: 11.9
+  - symbol: 6
+    probability: 11.9
+  - symbol: 7
+    probability: 7.6

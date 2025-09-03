@@ -26,6 +26,17 @@ public class GameManager : MonoBehaviour
 
         levelData = new LevelData(1);
         money = new Money(100_000, 0);
+
+        // 레벨 변경 시 잠금해제
+        levelData.OnLevelChanged += HandleLevelChange;
+    }
+
+    private void OnDestroy()
+    {
+        if (levelData != null)
+        {
+            levelData.OnLevelChanged -= HandleLevelChange;
+        }
     }
 
     public void Init()
@@ -33,7 +44,7 @@ public class GameManager : MonoBehaviour
         levelData.SetLevel(1);
         money.ConvertToken();
         OnPlayerPosChanged?.Invoke(new Vector3(1f, 1f, 0f));
-        // TODO : 문 초기화
+        // Init() 시점에 문 잠금 해제 이벤트를 발생시킵니다.
         OnUnlockDoor?.Invoke();
     }
 
@@ -62,5 +73,11 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1f;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void HandleLevelChange()
+    {
+        Debug.Log($"레벨이 {levelData._level}(으)로 변경되었습니다. 문 잠금 해제를 시도합니다.");
+        OnUnlockDoor?.Invoke();
     }
 }

@@ -4,20 +4,29 @@ using UnityEngine.UI;
 
 public class BetScreen : MonoBehaviour
 {
-    public SlotMachine slotMachine; // SlotMachine 오브젝트를 연결
+    public SlotMachine slotMachine;
     private TextMeshProUGUI bettingGoldText;
+    private int lastBettingGold = -1; // 이전 베팅 금액을 저장할 변수
 
     void Start()
     {
         bettingGoldText = GetComponent<TextMeshProUGUI>();
+        // 초기 텍스트 업데이트
+        UpdateBettingGoldText();
     }
 
     void Update()
     {
-        if (slotMachine != null && bettingGoldText != null)
+        // bettingGold 값이 변경되었는지 확인
+        if (slotMachine != null && slotMachine.BettingGold != lastBettingGold)
         {
-            // 값을 텍스트로 표시
-            bettingGoldText.text = slotMachine.BettingGold.ToString() + " $";
+            UpdateBettingGoldText();
         }
+    }
+
+    private void UpdateBettingGoldText()
+    {
+        lastBettingGold = slotMachine.BettingGold;
+        bettingGoldText.text = lastBettingGold.ToString() + " $";
     }
 }

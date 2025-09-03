@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using System;
 
 public class LevelData
 {
+    public event Action OnLevelChanged;
     public int _level { get; private set; }
     public int _minGold { get; private set; }
     public int _maxGold { get; private set; }
@@ -11,17 +13,20 @@ public class LevelData
 
     public LevelData(int level)
     {
-        _level = level;
-        _minGold = level * CONVERT_SIZE;
-        _maxGold = level * MAX_SIZE * CONVERT_SIZE;
-        _unitGold = _minGold * level;
+        SetLevel(level);
     }
 
     public void SetLevel(int level)
     {
+        if (_level == level && _level != 0) return;
+
         _level = level;
         _minGold = level * CONVERT_SIZE;
         _maxGold = level * MAX_SIZE * CONVERT_SIZE;
         _unitGold = _minGold * level;
+
+        // 레벨 변경
+        Debug.Log($"레벨을 {level}(으)로 올립니다.");
+        OnLevelChanged?.Invoke();
     }
 }

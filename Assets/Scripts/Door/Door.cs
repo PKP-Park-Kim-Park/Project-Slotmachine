@@ -45,6 +45,13 @@ public class Door : MonoBehaviour, IInteractable
         }
 
         InitializeAnimatorHashes();
+
+        // GameManager가 존재하면, OnUnlockDoor 이벤트가 발생할 때 Unlock 메서드를 실행하도록 등록합니다.
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.OnUnlockDoor += Unlock;
+        }
+
         InitializeOutline();
     }
 
@@ -61,6 +68,14 @@ public class Door : MonoBehaviour, IInteractable
         if (lockTrigger != null)
         {
             lockTrigger.OnInteracted.RemoveListener(AutoCloseAndLock);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.OnUnlockDoor -= Unlock;
         }
     }
 

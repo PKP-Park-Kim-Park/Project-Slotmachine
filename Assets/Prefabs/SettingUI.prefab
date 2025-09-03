@@ -1887,8 +1887,8 @@ MonoBehaviour:
   bgmSlider: {fileID: 2714875616594805237}
   sfxSlider: {fileID: 2121873792600077270}
   mouseSensitivityInputField: {fileID: 7089436688560514489}
-  bgmText: {fileID: 0}
-  sfxText: {fileID: 0}
+  bgmText: {fileID: 6894937941204708443}
+  sfxText: {fileID: 5913108257071326717}
 --- !u!1 &4749733500898118951
 GameObject:
   m_ObjectHideFlags: 0

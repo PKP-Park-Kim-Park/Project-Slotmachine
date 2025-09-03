@@ -6,10 +6,11 @@ using UnityEngine;
 
 public class SlotMachine : MonoBehaviour
 {
-    public event Action OnActivationStart;
-    public event Action OnActivationEnd;
-    public event Action<int> OnBetGoldChanged;
-    public event Action<int> OnRewardGold;
+    public event Action OnActivationStart;  // 슬롯머신 동작 시작
+    public event Action OnActivationEnd;    // 슬롯머신 동작 종료
+    public event Action<int> OnBetGoldChanged; // 베팅 골드 변경 시
+    public event Action OnBetAttemptFailed; // 베팅 +/- 실패 시
+    public event Action<int> OnRewardGold;  // 보상 골드 변경 시
     //===============================================
     private bool isActivating;
     public bool IsActivating
@@ -85,7 +86,8 @@ public class SlotMachine : MonoBehaviour
         {
             if (GameManager.instance.levelData._maxGold < bettingGold + GameManager.instance.levelData._unitGold)
             {
-                // 배팅가능한 최대치이다.
+                OnBetAttemptFailed?.Invoke();
+                // 배팅가능한 최대치
                 return;
             }
 
@@ -95,7 +97,8 @@ public class SlotMachine : MonoBehaviour
         {
             if (GameManager.instance.levelData._minGold > bettingGold - GameManager.instance.levelData._unitGold)
             {
-                // 배팅가능한 최소치이다.
+                OnBetAttemptFailed?.Invoke();
+                // 배팅가능한 최소치
                 return;
             }
 

@@ -7,22 +7,23 @@ public class LeverMotion : MonoBehaviour, IInteractable
     [Tooltip("레버와 상호작용 시 색상을 변경할 Outline 컴포넌트")]
     public Outline outline;
 
-    [Tooltip("레버를 당긴 후 다시 당길 수 있을 때까지의 대기 시간 (초)")]
-    [SerializeField] private float cooldownSeconds = 3f;
-
     [Tooltip("레버를 당겼을 때 호출될 이벤트")]
     public UnityEvent OnLeverPulled;
 
+    [Tooltip("레버의 상태를 제어할 SlotMachine 컴포넌트")]
+    [SerializeField] private SlotMachine slotMachine;
+
     private Animator leverAnim;
-    private bool isInteractable = true;
     private Color originalOutlineColor;
     private int pullTriggerHash;
 
+    // isInteractable 프로퍼티를 SlotMachine의 상태와 직접 연동합니다.
+    public bool IsInteractable { get { return slotMachine != null && !slotMachine.IsActivating; } }
     public string InteractionPrompt
     {
         get
         {
-            if (isInteractable)
+            if (IsInteractable)
                 return "레버 당기기";
             else
                 return "당기기 실패"; // 상호작용 불가 상태
@@ -36,6 +37,11 @@ public class LeverMotion : MonoBehaviour, IInteractable
         {
             Debug.LogError("LeverMotion 스크립트가 있는 오브젝트에 Animator 컴포넌트 추가 바람...");
         }
+        
+        if (slotMachine == null)
+        {
+            Debug.LogError("LeverMotion 스크립트에 SlotMachine 컴포넌트가 할당되지 않았습니다. Inspector에서 할당해주세요.");
+        }
 
         if (outline != null)
         {
@@ -46,10 +52,25 @@ public class LeverMotion : MonoBehaviour, IInteractable
         pullTriggerHash = Animator.StringToHash("Pull");
     }
 
+    void Update()
+    {
+        // 매 프레임 슬롯머신의 상태를 확인하여 아웃라인 색상을 업데이트합니다.
+        if (outline != null)
+        {
+            if (IsInteractable)
+            {
+                outline.OutlineColor = originalOutlineColor;
+            }
+            else
+            {
+                outline.OutlineColor = Color.red;
+            }
+        }
+    }
     public void Interact()
     {
         // 상호작용이 불가능한 상태이면 아무것도 않음
-        if (!isInteractable)
+        if (!IsInteractable)
         {
             return;
         }
@@ -64,7 +85,6 @@ public class LeverMotion : MonoBehaviour, IInteractable
         {
             Debug.Log("레버 당김...");
             leverAnim.SetTrigger(pullTriggerHash);
-            StartCoroutine(LeverCooldown());
         }
         else
         {
@@ -73,27 +93,5 @@ public class LeverMotion : MonoBehaviour, IInteractable
 
         // UnityEvent를 호출하여 연결된 모든 함수를 실행 => 현재는 Spin()만 연결
         OnLeverPulled?.Invoke();
-    }
-
-    private IEnumerator LeverCooldown()
-    {
-        // 상호작용 비활성화
-        isInteractable = false;
-
-        // 아웃라인 색상을 빨간색
-        if (outline != null)
-        {
-            outline.OutlineColor = Color.red;
-        }
-
-        // 설정된 쿨타임만큼 대기
-        yield return new WaitForSeconds(cooldownSeconds);
-
-        // 아웃라인 색상을 원래대로
-        if (outline != null)
-        {
-            outline.OutlineColor = originalOutlineColor;
-        }
-        isInteractable = true;
     }
 }

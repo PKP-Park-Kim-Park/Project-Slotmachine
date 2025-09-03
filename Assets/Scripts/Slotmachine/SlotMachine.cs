@@ -8,6 +8,7 @@ public class SlotMachine : MonoBehaviour
     private int rewardGold;
     private int[,] matrix; // [row, column]
     private bool isActivating;
+    public bool IsActivating {get {return isActivating;} }
     [SerializeField] private Reel[] reels; // 릴들을 관리할 배열
     [SerializeField] private float spinTime = 3f;
 
@@ -96,9 +97,9 @@ public class SlotMachine : MonoBehaviour
         {
             StartCoroutine(reel.StartSpin());
         }
-        isActivating = true;
 
         GameManager.instance.money.SpendGold(bettingGold);
+        isActivating = true;
 
         // 일정 시간 후 릴을 정지시키는 코루틴 시작
         StartCoroutine(IStopSpin());
@@ -171,8 +172,8 @@ public class SlotMachine : MonoBehaviour
             if (patternAnimator != null)
             {
                 patternAnimator.AnimateWinning(winningLines);
-                // 애니메이션이 끝날 때까지 대기 (애니메이션 길이에 맞게 조절 필요)
-                yield return new WaitForSeconds(winningLines.Count * 0.5f + 1.0f);
+                // 애니메이션이 끝날 때까지 대기
+                yield return new WaitUntil(() => !patternAnimator.IsAnimating);
             }
 
             // 4. 최종 보상 계산 및 지급

@@ -20,13 +20,9 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
 
-    private void Start()
-    {
         levelData = new LevelData(1);
-        money = new Money();
-
+        money = new Money(100_000, 0);
     }
 
     public void Init()

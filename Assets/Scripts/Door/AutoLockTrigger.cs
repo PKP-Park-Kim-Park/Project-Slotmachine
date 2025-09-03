@@ -5,13 +5,8 @@ public class AutoLockTrigger : MonoBehaviour, IInteractable
     [Tooltip("상호작용 시 발생할 이벤트입니다.")]
     public UnityEvent OnInteracted;
 
-    [Tooltip("상호작용 시 표시될 메시지입니다.")]
-    public string interactionPrompt = "조사하기";
-
-    [Tooltip("한 번만 상호작용 가능하게 할지 여부입니다.")]
+    [Tooltip("한 번만")]
     public bool interactOnce = true;
-
-    public string InteractionPrompt => interactionPrompt;
 
     public void Interact()
     {

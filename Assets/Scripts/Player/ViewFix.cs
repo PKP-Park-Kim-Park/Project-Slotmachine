@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 상호작용 시 카메라 시점을 고정해야 하는 오브젝트에 추가하는 컴포넌트입니다.
+/// 상호작용 시 카메라 시점을 고정해야 하는 오브젝트에 추가
 /// </summary>
 public class ViewFixObject : MonoBehaviour
 {

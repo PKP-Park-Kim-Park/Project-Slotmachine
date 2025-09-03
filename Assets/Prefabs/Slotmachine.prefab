@@ -644,7 +644,6 @@ MonoBehaviour:
   OnInteracted:
     m_PersistentCalls:
       m_Calls: []
-  interactionPrompt: "\uC0C1\uD638\uC791\uC6A9"
   interactOnce: 1
 --- !u!114 &1915947200027476442
 MonoBehaviour:
@@ -738,7 +737,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0d1eb05badc0884e852ff994ce82548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outline: {fileID: 7064599352814805392}
   OnLeverPulled:
     m_PersistentCalls:
       m_Calls:
@@ -792,6 +790,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
+      propertyPath: probabilities
+      value: 
+      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
     - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: weightedSymbols.Array.data[0].probability
       value: 19.4
@@ -1121,6 +1123,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
+      propertyPath: probabilities
+      value: 
+      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
+    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: weightedSymbols.Array.data[0].probability
       value: 19.4
       objectReference: {fileID: 0}
@@ -1448,6 +1454,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
+      propertyPath: probabilities
+      value: 
+      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
     - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: weightedSymbols.Array.data[0].probability
       value: 19.4
@@ -1777,6 +1787,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
+      propertyPath: probabilities
+      value: 
+      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
+    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: weightedSymbols.Array.data[0].probability
       value: 19.4
       objectReference: {fileID: 0}
@@ -2104,6 +2118,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
+      propertyPath: probabilities
+      value: 
+      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
     - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: weightedSymbols.Array.data[0].probability
       value: 19.4

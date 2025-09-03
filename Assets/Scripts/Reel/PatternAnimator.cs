@@ -28,7 +28,8 @@ public class PatternAnimator : MonoBehaviour
     private readonly List<GameObject> borderPool = new List<GameObject>();
     private int poolIndex = 0;
     private Coroutine animationCoroutine;
-    
+    public bool IsAnimating { get{ return animationCoroutine != null; }}
+
     private const int numColumns = 5;
 
     private void Awake()

@@ -7,22 +7,23 @@ public class LeverMotion : MonoBehaviour, IInteractable
     [Tooltip("레버와 상호작용 시 색상을 변경할 Outline 컴포넌트")]
     public Outline outline;
 
-    [Tooltip("레버를 당긴 후 다시 당길 수 있을 때까지의 대기 시간 (초)")]
-    [SerializeField] private float cooldownSeconds = 3f;
-
     [Tooltip("레버를 당겼을 때 호출될 이벤트")]
     public UnityEvent OnLeverPulled;
 
+    [Tooltip("레버의 상태를 제어할 SlotMachine 컴포넌트")]
+    [SerializeField] private SlotMachine slotMachine;
+
     private Animator leverAnim;
-    private bool isInteractable = true;
     private Color originalOutlineColor;
     private int pullTriggerHash;
 
+    // isInteractable 프로퍼티를 SlotMachine의 상태와 직접 연동합니다.
+    public bool IsInteractable { get { return slotMachine != null && !slotMachine.IsActivating; } }
     public string InteractionPrompt
     {
         get
         {
-            if (isInteractable)
+            if (IsInteractable)
                 return "레버 당기기";
             else
                 return "당기기 실패"; // 상호작용 불가 상태
@@ -36,6 +37,18 @@ public class LeverMotion : MonoBehaviour, IInteractable
         {
             Debug.LogError("LeverMotion 스크립트가 있는 오브젝트에 Animator 컴포넌트 추가 바람...");
         }
+        
+        if (slotMachine == null)
+        {
+            Debug.LogError("LeverMotion 스크립트에 SlotMachine 컴포넌트가 할당되지 않았습니다. Inspector에서 할당해주세요.");
+        }
+
+        // SlotMachine의 상태 변경 이벤트에 구독합니다.
+        if (slotMachine != null)
+        {
+            slotMachine.OnActivationStart += HandleActivationStart;
+            slotMachine.OnActivationEnd += HandleActivationEnd;
+        }
 
         if (outline != null)
         {
@@ -46,10 +59,19 @@ public class LeverMotion : MonoBehaviour, IInteractable
         pullTriggerHash = Animator.StringToHash("Pull");
     }
 
+    private void OnDestroy()
+    {
+        // 컴포넌트가 파괴될 때 이벤트 구독을 해제하여 메모리 누수를 방지합니다.
+        if (slotMachine != null)
+        {
+            slotMachine.OnActivationStart -= HandleActivationStart;
+            slotMachine.OnActivationEnd -= HandleActivationEnd;
+        }
+    }
     public void Interact()
     {
         // 상호작용이 불가능한 상태이면 아무것도 않음
-        if (!isInteractable)
+        if (!IsInteractable)
         {
             return;
         }
@@ -64,7 +86,6 @@ public class LeverMotion : MonoBehaviour, IInteractable
         {
             Debug.Log("레버 당김...");
             leverAnim.SetTrigger(pullTriggerHash);
-            StartCoroutine(LeverCooldown());
         }
         else
         {
@@ -75,25 +96,21 @@ public class LeverMotion : MonoBehaviour, IInteractable
         OnLeverPulled?.Invoke();
     }
 
-    private IEnumerator LeverCooldown()
+    // 슬롯 활성
+    private void HandleActivationStart()
     {
-        // 상호작용 비활성화
-        isInteractable = false;
-
-        // 아웃라인 색상을 빨간색
         if (outline != null)
         {
             outline.OutlineColor = Color.red;
         }
+    }
 
-        // 설정된 쿨타임만큼 대기
-        yield return new WaitForSeconds(cooldownSeconds);
-
-        // 아웃라인 색상을 원래대로
+    // 슬롯 비활성
+    private void HandleActivationEnd()
+    {
         if (outline != null)
         {
             outline.OutlineColor = originalOutlineColor;
         }
-        isInteractable = true;
     }
 }

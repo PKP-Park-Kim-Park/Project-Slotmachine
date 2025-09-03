@@ -52,15 +52,12 @@ public class Reel : MonoBehaviour
         {
             weightedSymbols.Add(new WeightedSymbol { symbol = (Symbols)i, probability = equalProbability });
         }
-
-        Debug.Log("기본 확률이 코드에서 균등하게 설정되었습니다.");
     }
 
     // 모든 심볼의 총 확률을 재계산합니다.
     private void RecalculateTotalProbability()
     {
         totalProbability = weightedSymbols.Sum(s => s.probability);
-        Debug.Log($"보정 후 총 확률 = {totalProbability:F2}%");
     }
 
     // 특정 심볼의 확률을 조정하고 나머지 심볼들의 확률을 보정합니다.
@@ -81,7 +78,6 @@ public class Reel : MonoBehaviour
         // 변화가 없다면 조기 종료
         if (Mathf.Abs(actualChange) < 0.0001f)
         {
-            Debug.Log($"'{symbol}' 심볼 확률 변경 없음. (현재: {targetSymbol.probability:F2}%)");
             return;
         }
 

@@ -23,9 +23,14 @@ public class PlayerController : MonoBehaviour
     private Transform currentHitTransform;
     private Vector3 moveInput;
 
-    void Start()
+    private void Start()
     {
         myRigid = GetComponent<Rigidbody>();
+
+        if(GameManager.instance != null )
+        {
+            GameManager.instance.OnPlayerPosChanged += ChangePosition;
+        }
     }
     void FixedUpdate()
     {
@@ -137,5 +142,10 @@ public class PlayerController : MonoBehaviour
         currentLookAtOutline = null;
         currentLookAtInteractable = null;
         currentHitTransform = null;
+    }
+
+    public void ChangePosition(Vector3 pos)
+    {
+        myRigid.MovePosition(pos);
     }
 }

@@ -1,9 +1,8 @@
 using UnityEngine;
-using System.Collections;
 
 public class BtnMotion : MonoBehaviour, IInteractable
 {
-    public string InteractionPrompt => "버튼 누르기";
+    // public string InteractionPrompt => "버튼 누르기";
     private Animator btnAnim;
     [SerializeField] private bool isIncreaseButton;
 

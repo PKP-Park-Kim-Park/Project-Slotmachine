@@ -32,10 +32,6 @@ public class PlayerLook : MonoBehaviour
     /// 현재 시점이 고정된 상태인지 여부
     /// </summary>
     public bool IsViewFixed => isViewFixed;
-
-    /// <summary>
-    /// 플레이어의 메인 카메라
-    /// </summary>
     public Camera PlayerCamera => mainCam;
 
     void Start()
@@ -43,7 +39,6 @@ public class PlayerLook : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         originalCamPosition = mainCam.transform.localPosition;
 
-        // PlayerPrefs에서 저장된 마우스 감도를 불러와 적용합니다.
         lookSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", lookSensitivity);
 
         // 커서 초기 상태 설정
@@ -98,41 +93,29 @@ public class PlayerLook : MonoBehaviour
         mainCam.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
     }
 
-    /// <summary>
-    /// 일반 플레이 모드 시 시점 처리
-    /// </summary>
+    // 일반 플레이 모드 시 시점 처리
     private void HandleNormalView()
     {
         CharacterRotation();
         CameraRotation();
     }
 
-    /// <summary>
     /// 고정 모드일 때 카메라 움직임 처리
-    /// </summary>
     private void HandleFixedView()
     {
         // 크로스헤어 비활성
         crosshair.SetActive(false);
 
-        // 부드럽게 이동
         mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, cameraTarget.position, Time.deltaTime * cameraEnterSpeed);
 
-        // 마우스 위치 따라서 추가적인 회전 담당
         Quaternion finalTargetRotation = CalculateEdgePanRotation();
 
-        // 부드럽게 회전
         mainCam.transform.rotation = Quaternion.Slerp(mainCam.transform.rotation, finalTargetRotation, Time.deltaTime * cameraEnterSpeed);
     }
 
-    /// <summary>
-    /// HandleFixedView에서 사용(읽지마)
-    /// 고정 모드일 때 마우스 위치에 따라 카메라를 추가로 회전시키는 것을 계산
-    /// </summary>
-    /// <returns> 최종 쿼터니언 값 반환</returns>
+    /// HandleFixedView에서 호출(계산)
     private Quaternion CalculateEdgePanRotation()
     {
-        // 마우스 위치를 중앙 기준 오프셋 값으로 계산
         float mouseOffsetX = (Input.mousePosition.x / Screen.width) - 0.5f;
         float mouseOffsetY = (Input.mousePosition.y / Screen.height) - 0.5f;
 
@@ -142,7 +125,6 @@ public class PlayerLook : MonoBehaviour
         float deadZoneHalfWidth = edgePanDeadZone.x / 2f;
         float deadZoneHalfHeight = edgePanDeadZone.y / 2f;
 
-        // 데드존을 벗어났는지 확인하고 회전 각도 계산 (좌우)
         if (Mathf.Abs(mouseOffsetX) > deadZoneHalfWidth)
         {
             float panRangeX = 0.5f - deadZoneHalfWidth;
@@ -151,36 +133,30 @@ public class PlayerLook : MonoBehaviour
             targetAngleY = normalizedPanX * edgePanMaxAngleY;
         }
 
-        // 데드존을 벗어났는지 확인하고 회전 각도 계산 (상하)
         if (Mathf.Abs(mouseOffsetY) > deadZoneHalfHeight)
         {
             float panRangeY = 0.5f - deadZoneHalfHeight;
             float panInputY = Mathf.Sign(mouseOffsetY) * (Mathf.Abs(mouseOffsetY) - deadZoneHalfHeight);
             float normalizedPanY = Mathf.Clamp(panInputY / panRangeY, -1f, 1f);
-            targetAngleX = normalizedPanY * edgePanMaxAngleX * -1f; // Y축은 반전
+            targetAngleX = normalizedPanY * edgePanMaxAngleX * -1f;
         }
 
-        // 원래 목표 회전값에 오프셋 회전을 추가
         Quaternion panOffset = Quaternion.Euler(targetAngleX, targetAngleY, 0f);
         return cameraTarget.rotation * panOffset;
     }
 
-    /// <summary>
-    /// 고정 모드 해제 시 플레이어에게 카메라 복귀
-    /// </summary>
+    // 고정 모드 해제 시 플레이어에게 카메라 복귀
     private void ReturnNomalView()
     {
         // 크로스헤어 활성
         crosshair.SetActive(true);
 
-        // 원래 위치로 부드럽게 복귀
         Vector3 targetPosition = transform.TransformPoint(originalCamPosition);
         Quaternion targetRotation = transform.rotation; // 플레이어 회전 따라감
 
         mainCam.transform.position = Vector3.Lerp(mainCam.transform.position, targetPosition, Time.deltaTime * cameraReturnSpeed);
         mainCam.transform.rotation = Quaternion.Slerp(mainCam.transform.rotation, targetRotation, Time.deltaTime * cameraReturnSpeed);
 
-        // 복귀 완료(거의 도착하면 댐ㅇㅇ)
         if (Vector3.Distance(mainCam.transform.position, targetPosition) < 0.01f)
         {
             isReturningToPlayer = false;
@@ -193,10 +169,9 @@ public class PlayerLook : MonoBehaviour
     public void FixViewPoint(Transform target)
     {
         isViewFixed = true;
-        isReturningToPlayer = false; // 복귀 중이었다면 중단
+        isReturningToPlayer = false;
         cameraTarget = target;
 
-        // UI 조작을 위해 커서 잠금 해제
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -207,14 +182,11 @@ public class PlayerLook : MonoBehaviour
         isReturningToPlayer = true; // 복귀 전환 시작
         cameraTarget = null;
 
-        // 시점 고정 해제 즉시 커서를 잠그고 숨깁니다.
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    /// <summary>
     /// 고정 시점으로 전환하는 속도
-    /// </summary>
     public void SetCameraEnterSpeed(float newSpeed)
     {
         if (newSpeed > 0)
@@ -223,9 +195,7 @@ public class PlayerLook : MonoBehaviour
         }
     }
 
-    /// <summary>
     /// 플레이어 시점으로 복귀하는 속도
-    /// </summary>
     public void SetCameraReturnSpeed(float newSpeed)
     {
         if (newSpeed > 0)

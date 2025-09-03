@@ -189,19 +189,3 @@ public class PatternAnimator : MonoBehaviour
         return index >= 0 && index < slotPositions.Length && slotPositions[index] != null;
     }
 }
-
-
-/*
- 체리 2배
-
- 세로 5개 x1 =5 10점
- 가로 3개 x3 =9 18점
- 대각 6개 x2 =12 24점
- 지그재그 2개 x3 = 6 12점
- 업 1개 x4 = 4 8점
- 다운 1개 x4 =4 8점
- 눈 1개 x5 =5 10점
- 잭팟 1개 x6 =6 12점
-
- total = 102
-*/

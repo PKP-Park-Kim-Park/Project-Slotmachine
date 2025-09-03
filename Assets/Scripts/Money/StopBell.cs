@@ -2,7 +2,7 @@
 
 public class StopBell : MonoBehaviour, IInteractable
 {
-    public string InteractionPrompt => "StopBell";
+    // public string InteractionPrompt => "StopBell";
 
     private bool stop = false;
 
@@ -18,7 +18,7 @@ public class StopBell : MonoBehaviour, IInteractable
         // 게임 정지 상태를 확인합니다.
         if (stop)
         {
-            Debug.LogWarning("게임이 정지 상태입니다.");
+            Debug.LogWarning("게임 초기화/토큰 발행");
 
             if (GameManager.instance.money != null)
             {
@@ -32,7 +32,7 @@ public class StopBell : MonoBehaviour, IInteractable
         }
         else
         {
-            Debug.LogWarning("게임이 정지 상태가 아닙니다.");
+            Debug.LogWarning("게임 초기화 실패");
         }
     }
 }

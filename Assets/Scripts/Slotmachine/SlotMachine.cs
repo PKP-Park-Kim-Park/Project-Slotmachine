@@ -1,16 +1,25 @@
 ﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SlotMachine : MonoBehaviour
 {
-    public event System.Action OnActivationStart;
-    public event System.Action OnActivationEnd;
+    public event Action OnActivationStart;
+    public event Action OnActivationEnd;
+    public event Action<int> OnBetGoldChanged;
+    //===============================================
     private int bettingGold;
-    public int BettingGold => bettingGold;
-    private int rewardGold;
-    private int[,] matrix;
+    public int BettingGold {
+        get { return bettingGold; }
+        private set
+        {
+            if (bettingGold == value) return;
+            bettingGold = value;
+            OnBetGoldChanged?.Invoke(value);
+        }
+    }
     private bool isActivating;
     public bool IsActivating
     {
@@ -24,6 +33,8 @@ public class SlotMachine : MonoBehaviour
             else OnActivationEnd?.Invoke();
         } 
     }
+    private int rewardGold;
+    private int[,] matrix;
     [SerializeField] private Reel[] reels; // 릴들을 관리할 배열
     [SerializeField] private float spinTime = 3f;
 
@@ -66,7 +77,7 @@ public class SlotMachine : MonoBehaviour
                 return;
             }
 
-            bettingGold += GameManager.instance.levelData._unitGold;
+            BettingGold += GameManager.instance.levelData._unitGold;
         }
         else if (isIncrease == false)
         {
@@ -76,7 +87,7 @@ public class SlotMachine : MonoBehaviour
                 return;
             }
 
-            bettingGold -= GameManager.instance.levelData._unitGold;
+            BettingGold -= GameManager.instance.levelData._unitGold;
         }
     }
     public void Spin()
@@ -201,7 +212,7 @@ public class SlotMachine : MonoBehaviour
         }
 
         // 초기화
-        bettingGold = 0;
+        BettingGold = 0;
         rewardGold = 0;
         isActivating = false;
     }

@@ -6,27 +6,32 @@ public class BetScreen : MonoBehaviour
 {
     public SlotMachine slotMachine;
     private TextMeshProUGUI bettingGoldText;
-    private int lastBettingGold = -1; // 이전 베팅 금액을 저장할 변수
 
-    void Start()
+    private void Awake()
     {
         bettingGoldText = GetComponent<TextMeshProUGUI>();
-        // 초기 텍스트 업데이트
-        UpdateBettingGoldText();
     }
 
-    void Update()
+    private void OnEnable()
     {
-        // bettingGold 값이 변경되었는지 확인
-        if (slotMachine != null && slotMachine.BettingGold != lastBettingGold)
+        if (slotMachine != null)
         {
-            UpdateBettingGoldText();
+            slotMachine.OnBetGoldChanged += BetGoldChanged;
+            BetGoldChanged(slotMachine.BettingGold);
         }
     }
 
-    private void UpdateBettingGoldText()
+    private void OnDisable()
     {
-        lastBettingGold = slotMachine.BettingGold;
-        bettingGoldText.text = lastBettingGold.ToString() + " $";
+        if (slotMachine != null)
+        {
+            slotMachine.OnBetGoldChanged -= BetGoldChanged;
+        }
+    }
+
+    private void BetGoldChanged(int newBettingGold)
+    {
+        // 1,000 단위 쉼표 추가
+        bettingGoldText.text = newBettingGold.ToString("N0") + " $";
     }
 }

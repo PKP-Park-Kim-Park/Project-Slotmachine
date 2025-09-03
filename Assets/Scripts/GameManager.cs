@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class GameManager : MonoBehaviour
 {
@@ -7,10 +8,13 @@ public class GameManager : MonoBehaviour
 
     public event Action<Vector3> OnPlayerPosChanged;
     public event Action OnUnlockDoor;
+    public event Func<int> OnRequestDoorLock;
 
     private bool isGaimng;
     public LevelData levelData { get; private set; }
     public Money money { get; private set; }
+
+    private GameData _gameData;
 
     private void Awake()
     {
@@ -37,6 +41,35 @@ public class GameManager : MonoBehaviour
         {
             levelData.OnLevelChanged -= HandleLevelChange;
         }
+    }
+
+    public GameData SaveData()
+    {
+        GameData gameData = new GameData();
+        gameData.gold = money._gold;
+        gameData.token = money._token;
+        gameData.level = levelData._level;
+
+        GameObject playerObject = GameObject.FindWithTag("Player");
+        if (playerObject != null)
+        {
+            gameData.playerPos = playerObject.transform.position;
+        }
+
+        return gameData;
+    }
+
+    public void LoadData(GameData gameData)
+    {
+        _gameData = gameData;
+        money.AddGold(_gameData.gold - 100_000);
+        money.AddToken(_gameData.token);
+        levelData.SetLevel(_gameData.level);
+    }
+
+    public Vector3 LoadPlayerPos()
+    {
+        return _gameData.playerPos;
     }
 
     public void Init()

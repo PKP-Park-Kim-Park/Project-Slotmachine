@@ -1,19 +1,25 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
-public class CheckRewardParttern
+public class CheckRewardPattern
 {
     private int[,] matrix = new int[3, 5]; // 가져온 배열 결과값
     private const int ROW = 3;
     private const int COLUMN = 5;
-    private float totalOdds; // 총 배율
+    private float totalOdds;
 
     private Dictionary<Symbols, float> symbolOdds = new Dictionary<Symbols, float>(); // 심볼 배율
     private Dictionary<Patterns, float> partternOdds = new Dictionary<Patterns, float>(); // 패턴 배율
 
+    private List<WinningLine> winningLines = new List<WinningLine>();
+    public List<WinningLine> WinningLines { get { return winningLines; } }
+
     public float CheckReward(int[,] _matrix, PatternRewardOdds sheet, SymbolRewardOdds sheet2)
     {
         totalOdds = 0;
-
+        
+        winningLines.Clear();
         partternOdds.Clear();
         symbolOdds.Clear();
 
@@ -36,19 +42,31 @@ public class CheckRewardParttern
 
     private void CalculatePattern()
     {
-        CheckColumn();
-        CheckRow();
-        CheckLowerDiagonal();
-        CheckUpperDiagonal();
-        CheckZig();
-        CheckZag();
-        CheckUp();
-        CheckDown();
-        CheckEyes();
-        CheckJackpot();
+        if (IsJackpot())
+        {
+            // 잭팟 보상 실행
+            CheckVertical();
+            CheckHorizontal();
+            CheckUp();
+            CheckDown();
+            CheckEyes();
+            CheckJackpot();
+        }
+        else
+        {
+            CheckVertical();
+            CheckHorizontal();
+            CheckLowerDiagonal();
+            CheckUpperDiagonal();
+            CheckZig();
+            CheckZag();
+            CheckUp();
+            CheckDown();
+            CheckEyes();
+        }
     }
 
-    private void CheckColumn()
+    private void CheckHorizontal()
     {
         // 가로
         for (int y = 0; y < ROW; y++)
@@ -58,6 +76,7 @@ public class CheckRewardParttern
 
             int highCount = 0;
             int highSymbolNum = 0;
+            int highCountStartX = -1;
 
             for (int x = 0; x < COLUMN; x++)
             {
@@ -84,9 +103,21 @@ public class CheckRewardParttern
                 {
                     highCount = count + 1;
                     highSymbolNum = symbolNum;
+                    highCountStartX = x - count;
                 }
             }
 
+            // 요기 조건문이 좌표 리스트 더하기
+            if (highCount > 0)
+            {
+                List<Vector2Int> coords = new List<Vector2Int>();
+                for (int i = 0; i < highCount; i++)
+                {
+                    coords.Add(new Vector2Int(y, highCountStartX + i));
+                }
+                winningLines.Add(new WinningLine(coords));
+            }
+            
             // 결과 반환
             switch (highCount)
             {
@@ -108,7 +139,7 @@ public class CheckRewardParttern
         }
     }
 
-    private void CheckRow()
+    private void CheckVertical()
     {
         // 세로
         for (int x = 0; x < COLUMN; x++)
@@ -140,6 +171,12 @@ public class CheckRewardParttern
             {
                 // 총 배율 += 심볼 배율 * 패턴 배율
                 CalculateReward(Patterns.Row_3, (Symbols)symbolNum);
+                List<Vector2Int> coords = new List<Vector2Int>();
+                for (int i = 0; i < ROW; i++)
+                {
+                    coords.Add(new Vector2Int(i, x));
+                }
+                winningLines.Add(new WinningLine(coords));
             }
         }
     }
@@ -165,6 +202,12 @@ public class CheckRewardParttern
             {
                 // 총 배율 += 심볼 배율 * 패턴 배율
                 CalculateReward(Patterns.LowerDiagonal, (Symbols)symbolNum);
+                List<Vector2Int> coords = new List<Vector2Int>();
+                for (int i = 0; i < 3; i++)
+                {
+                    coords.Add(new Vector2Int(i, x + i));
+                }
+                winningLines.Add(new WinningLine(coords));
             }
         }
     }
@@ -190,6 +233,12 @@ public class CheckRewardParttern
             {
                 // 총 배율 += 심볼 배율 * 패턴 배율
                 CalculateReward(Patterns.UpperDiagonal, (Symbols)symbolNum);
+                List<Vector2Int> coords = new List<Vector2Int>();
+                for (int i = 0; i < 3; i++)
+                {
+                    coords.Add(new Vector2Int(2 - i, x + i));
+                }
+                winningLines.Add(new WinningLine(coords));
             }
         }
     }
@@ -208,6 +257,11 @@ public class CheckRewardParttern
 
         // 총 배율 += 심볼 배율 * 패턴 배율
         CalculateReward(Patterns.Zig, (Symbols)symbolNum);
+        List<Vector2Int> coords = new List<Vector2Int> {
+            new Vector2Int(2, 0), new Vector2Int(1, 1), new Vector2Int(0, 2),
+            new Vector2Int(1, 3), new Vector2Int(2, 4)
+        };
+        winningLines.Add(new WinningLine(coords));
     }
 
     private void CheckZag()
@@ -224,6 +278,11 @@ public class CheckRewardParttern
 
         // 총 배율 += 심볼 배율 * 패턴 배율
         CalculateReward(Patterns.Zag, (Symbols)symbolNum);
+        List<Vector2Int> coords = new List<Vector2Int> {
+            new Vector2Int(0, 0), new Vector2Int(1, 1), new Vector2Int(2, 2),
+            new Vector2Int(1, 3), new Vector2Int(0, 4)
+        };
+        winningLines.Add(new WinningLine(coords));
     }
 
     private void CheckUp()
@@ -243,6 +302,11 @@ public class CheckRewardParttern
 
         // 총 배율 += 심볼 배율 * 패턴 배율
         CalculateReward(Patterns.Up, (Symbols)symbolNum);
+        List<Vector2Int> coords = new List<Vector2Int> {
+            new Vector2Int(2, 0), new Vector2Int(1, 1), new Vector2Int(0, 2), new Vector2Int(1, 3),
+            new Vector2Int(2, 4), new Vector2Int(2, 1), new Vector2Int(2, 2), new Vector2Int(2, 3)
+        };
+        winningLines.Add(new WinningLine(coords));
     }
 
     private void CheckDown()
@@ -263,6 +327,11 @@ public class CheckRewardParttern
 
         // 총 배율 += 심볼 배율 * 패턴 배율
         CalculateReward(Patterns.Down, (Symbols)symbolNum);
+        List<Vector2Int> coords = new List<Vector2Int> {
+            new Vector2Int(0, 0), new Vector2Int(1, 1), new Vector2Int(2, 2), new Vector2Int(1, 3),
+            new Vector2Int(0, 4), new Vector2Int(0, 1), new Vector2Int(0, 2), new Vector2Int(0, 3)
+        };
+        winningLines.Add(new WinningLine(coords));
     }
 
     private void CheckEyes()
@@ -284,38 +353,60 @@ public class CheckRewardParttern
 
         // 총 배율 += 심볼 배율 * 패턴 배율
         CalculateReward(Patterns.Eyes, (Symbols)symbolNum);
+        List<Vector2Int> coords = new List<Vector2Int> {
+            new Vector2Int(1, 0), new Vector2Int(0, 1), new Vector2Int(1, 1), new Vector2Int(2, 1),
+            new Vector2Int(0, 2), new Vector2Int(2, 2), new Vector2Int(0, 3), new Vector2Int(1, 3),
+            new Vector2Int(2, 3), new Vector2Int(1, 4)
+        };
+        winningLines.Add(new WinningLine(coords));
     }
 
     private void CheckJackpot()
     {
         int symbolNum = matrix[0, 0];
+        CalculateReward(Patterns.Jackpot, (Symbols)symbolNum);
 
+        List<Vector2Int> coords = new List<Vector2Int>();
         for (int y = 0; y < ROW; y++)
         {
             for (int x = 0; x < COLUMN; x++)
             {
-                // 심볼 체크
-                if (symbolNum != matrix[y, x])
+                coords.Add(new Vector2Int(y, x));
+            }
+        }
+        winningLines.Add(new WinningLine(coords));
+    }
+
+    /// <summary>
+    /// 잭팟 조건인지 확인
+    /// </summary>
+    private bool IsJackpot()
+    {
+        int firstSymbol = matrix[0, 0];
+        for (int y = 0; y < ROW; y++)
+        {
+            for (int x = 0; x < COLUMN; x++)
+            {
+                if (matrix[y, x] != firstSymbol)
                 {
-                    return;
+                    return false; // 하나라도 다르면 X
                 }
             }
         }
-
-        CalculateReward(Patterns.Jackpot, (Symbols)symbolNum);
+        return true; // 모든 심볼 동일
     }
-
+    
     private void CalculateReward(Patterns pattern, Symbols symbol)
     {
         float symbolOdd;
         float patternOdd;
 
-        if(symbolOdds.ContainsKey(symbol) && partternOdds.ContainsKey(pattern))
+        if (symbolOdds.ContainsKey(symbol) && partternOdds.ContainsKey(pattern))
         {
             symbolOdd = symbolOdds[symbol];
             patternOdd = partternOdds[pattern];
 
-            totalOdds += patternOdd * patternOdd;
+            totalOdds += symbolOdd * patternOdd;
         }
     }
 }

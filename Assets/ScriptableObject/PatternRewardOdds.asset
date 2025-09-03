@@ -35,5 +35,5 @@ MonoBehaviour:
     rewardOddsMultiplier: 4
   - patternType: 10
     rewardOddsMultiplier: 5
-  - patternType: 10
+  - patternType: 11
     rewardOddsMultiplier: 6

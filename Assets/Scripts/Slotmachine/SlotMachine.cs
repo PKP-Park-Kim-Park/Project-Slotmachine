@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SlotMachine : MonoBehaviour
@@ -10,6 +11,14 @@ public class SlotMachine : MonoBehaviour
     [SerializeField] private Reel[] reels; // 릴들을 관리할 배열
     [SerializeField] private float spinTime = 3f;
 
+    [Header("Reward System")]
+    [Tooltip("당첨 패턴 애니메이션을 담당하는 컴포넌트")]
+    [SerializeField] private PatternAnimator patternAnimator;
+    [Tooltip("패턴별 배율 정보가 담긴 ScriptableObject")]
+    [SerializeField] private PatternRewardOdds patternOddsData;
+    [Tooltip("심볼별 배율 정보가 담긴 ScriptableObject")]
+    [SerializeField] private SymbolRewardOdds symbolOddsData;
+    private CheckRewardPattern rewardChecker;
     private void Awake()
     {
         bettingGold = 0;
@@ -18,10 +27,12 @@ public class SlotMachine : MonoBehaviour
 
         if (reels == null || reels.Length == 0)
         {
-            Debug.LogError("Reels are not assigned in the SlotMachine.", this);
+            Debug.LogError("슬롯머신에 릴이 없습니다.", this);
             return;
         }
         matrix = new int[3, reels.Length]; // 3행, reel 개수만큼의 열
+
+        rewardChecker = new CheckRewardPattern();
     }
     public void Bet(bool isIncrease)
     {
@@ -74,6 +85,12 @@ public class SlotMachine : MonoBehaviour
         }
         */
 
+        // 이전 스핀의 당첨 테두리 제거
+        if (patternAnimator != null)
+        {
+            patternAnimator.ClearBorders();
+        }
+
         // 모든 릴의 회전 애니메이션 시작
         foreach (var reel in reels)
         {
@@ -95,23 +112,19 @@ public class SlotMachine : MonoBehaviour
         // 각 릴을 순차적으로 멈춤
         for (int i = 0; i < reels.Length; i++)
         {
-            // 1. 릴의 최종 결과를 결정 (RelocateSymbols가 내부적으로 호출됨)
             reels[i].RelocateSymbols();
 
-            // 2. 릴의 정지 애니메이션을 실행하고 끝날 때까지 대기
             yield return StartCoroutine(reels[i].StopSpin(reels[i].row));
 
-            // 3. 릴의 최종 결과(중앙 3개 심볼)를 가져옴
             int[] resultRow = reels[i].GetResultSymbols();
-
             // 4. 결과를 matrix에 저장
             ConvertMatrix(i, resultRow);
 
-            // 릴 순차적으로 멈추는 딜레이
             yield return new WaitForSeconds(0.3f);
         }
 
         // 결과 로그 출력 (디버깅용)
+        /*
         string resultLog = "Spin Result Matrix:\n";
         for (int row = 0; row < matrix.GetLength(0); row++)
         {
@@ -122,12 +135,13 @@ public class SlotMachine : MonoBehaviour
             resultLog += "\n";
         }
         Debug.Log(resultLog);
+        */
 
-        // 스핀 종료 및 보상/초기화 처리
-        DropGold();
+        // 스핀 종료 후 애니메이션과 당첨 보상 처리
+        StartCoroutine(IDropGold());
     }
 
-    // 릴에서 반환된 1차원 배열(행)을 2차원 결과 매트릭스의 열에 저장
+    // 3X5 행렬로 변환
     private void ConvertMatrix(int column, int[] inputRow)
     {
         for (int row = 0; row < inputRow.Length; row++)
@@ -139,22 +153,36 @@ public class SlotMachine : MonoBehaviour
         }
     }
 
-    // 스핀 종료 후 보상 처리
-    private void DropGold()
+    // 스핀 종료 후 애니메이션 및 보상 처리 코루틴
+    private IEnumerator IDropGold()
     {
-        // TODO: CheckRewardPattern 의 CheckReward 호출
-        // rewardGold = CheckReward(matrix) * bettingGold;
-        // GameManager.instance.money.AddGold(rewardGold);
+        // 1. 보상 패턴 확인 및 배율 계산
+        float totalOdds = rewardChecker.CheckReward(matrix, patternOddsData, symbolOddsData);
 
+        // 2. 당첨 라인 정보 가져오기
+        List<WinningLine> winningLines = rewardChecker.WinningLines;
 
-        //결과 처리
-        // money.AddGold(rewardGold)
-        // bool isGameover = GameManager.CheckGameOver()
-        // if(isGameover == true)
-        // {
-        // money.ConvertToken()
-        // GameManager.Init()
-        // }
+        // 3. 당첨 라인이 있으면 애니메이션 실행
+        if (winningLines.Count > 0)
+        {
+            Debug.Log($"{winningLines.Count}개의 라인 당첨! 총 배율: {totalOdds}");
+
+            // 애니메이터에게 당첨 라인 목록을 전달하여 애니메이션 실행
+            if (patternAnimator != null)
+            {
+                patternAnimator.AnimateWinning(winningLines);
+                // 애니메이션이 끝날 때까지 대기 (애니메이션 길이에 맞게 조절 필요)
+                yield return new WaitForSeconds(winningLines.Count * 0.5f + 1.0f);
+            }
+
+            // 4. 최종 보상 계산 및 지급
+            rewardGold = (int)(totalOdds * bettingGold);
+            GameManager.instance.money.AddGold(rewardGold);
+        }
+        else
+        {
+            Debug.Log("당첨된 라인이 없습니다.");
+        }
 
         // 초기화
         bettingGold = 0;

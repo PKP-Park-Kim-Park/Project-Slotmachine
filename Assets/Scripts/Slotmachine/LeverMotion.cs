@@ -2,17 +2,10 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
 
-
 public class LeverMotion : MonoBehaviour, IInteractable
 {
     [Tooltip("레버를 당겼을 때 호출될 이벤트")]
     public UnityEvent OnLeverPulled;
-
-    [Header("Outline Settings")]
-    [Tooltip("상호작용 가능/불가능 상태를 표시할 Outline 컴포넌트")]
-    [SerializeField] private Outline outline;
-    [SerializeField] private Color enabledColor = Color.yellow;
-    [SerializeField] private Color disabledColor = Color.red;
 
     [Tooltip("레버의 상태를 제어할 SlotMachine 컴포넌트")]
     [SerializeField] private SlotMachine slotMachine;
@@ -35,7 +28,7 @@ public class LeverMotion : MonoBehaviour, IInteractable
         }
     }
     */
-
+    
     void Awake()
     {
         leverAnim = GetComponent<Animator>();
@@ -43,7 +36,7 @@ public class LeverMotion : MonoBehaviour, IInteractable
         {
             Debug.LogError("LeverMotion 스크립트가 있는 오브젝트에 Animator 컴포넌트 추가 바람...");
         }
-
+        
         if (slotMachine == null)
         {
             Debug.LogError("LeverMotion 스크립트에 SlotMachine 컴포넌트가 할당되지 않았습니다. Inspector에서 할당해주세요.");
@@ -51,28 +44,6 @@ public class LeverMotion : MonoBehaviour, IInteractable
 
         // 애니메이션 트리거 문자열을 해시값으로 변환
         pullTriggerHash = Animator.StringToHash("Pull");
-    }
-
-    private void OnEnable()
-    {
-        if (slotMachine != null)
-        {
-            // SlotMachine의 상태 변경 이벤트에 메서드를 연결합니다.
-            slotMachine.OnActivationStart += SetDisabledColor;
-            slotMachine.OnActivationEnd += SetEnabledColor;
-        }
-        // 스크립트가 활성화될 때 현재 상태에 맞는 색상으로 초기화합니다.
-        UpdateOutlineColor();
-    }
-
-    private void OnDisable()
-    {
-        if (slotMachine != null)
-        {
-            // 메모리 누수를 방지하기 위해 이벤트 연결을 해제합니다.
-            slotMachine.OnActivationStart -= SetDisabledColor;
-            slotMachine.OnActivationEnd -= SetEnabledColor;
-        }
     }
 
     public void Interact()
@@ -101,30 +72,5 @@ public class LeverMotion : MonoBehaviour, IInteractable
 
         // UnityEvent를 호출하여 연결된 모든 함수를 실행 => 현재는 Spin()만 연결
         OnLeverPulled?.Invoke();
-    }
-
-    /// <summary>
-    /// 아웃라인 색전환
-    /// </summary>
-    private void SetEnabledColor()
-    {
-        if (outline != null)
-        {
-            outline.OutlineColor = enabledColor;
-        }
-    }
-
-    private void SetDisabledColor()
-    {
-        if (outline != null)
-        {
-            outline.OutlineColor = disabledColor;
-        }
-    }
-
-    private void UpdateOutlineColor()
-    {
-        if (IsInteractable) SetEnabledColor();
-        else SetDisabledColor();
     }
 }

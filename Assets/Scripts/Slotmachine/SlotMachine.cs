@@ -1,17 +1,15 @@
 ﻿
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SlotMachine : MonoBehaviour
 {
-    public event Action OnActivationStart;  // 슬롯머신 동작 시작
-    public event Action OnActivationEnd;    // 슬롯머신 동작 종료
-    public event Action<int> OnBetGoldChanged; // 베팅 골드 변경 시
-    public event Action OnBetAttemptFailed; // 베팅 +/- 실패 시
-    public event Action<int> OnRewardGold;  // 보상 골드 변경 시
-    //===============================================
+    public event System.Action OnActivationStart;
+    public event System.Action OnActivationEnd;
+    private int bettingGold;
+    private int rewardGold;
+    private int[,] matrix;
     private bool isActivating;
     public bool IsActivating
     {
@@ -23,31 +21,8 @@ public class SlotMachine : MonoBehaviour
 
             if (isActivating) OnActivationStart?.Invoke();
             else OnActivationEnd?.Invoke();
-        }
+        } 
     }
-    private int bettingGold;
-    public int BettingGold
-    {
-        get { return bettingGold; }
-        private set
-        {
-            if (bettingGold == value) return;
-            bettingGold = value;
-            OnBetGoldChanged?.Invoke(value);
-        }
-    }
-    private int rewardGold;
-    public int RewardGold
-    {
-        get { return rewardGold; }
-        private set
-        {
-            if (rewardGold == value) return;
-            rewardGold = value;
-            OnRewardGold?.Invoke(value);
-        }
-    }
-    private int[,] matrix;
     [SerializeField] private Reel[] reels; // 릴들을 관리할 배열
     [SerializeField] private float spinTime = 3f;
 
@@ -61,7 +36,7 @@ public class SlotMachine : MonoBehaviour
     private CheckRewardPattern rewardChecker;
     private void Awake()
     {
-        BettingGold = GameManager.instance.levelData._minGold;
+        bettingGold = 0;
         rewardGold = 0;
         isActivating = false;
 
@@ -86,23 +61,21 @@ public class SlotMachine : MonoBehaviour
         {
             if (GameManager.instance.levelData._maxGold < bettingGold + GameManager.instance.levelData._unitGold)
             {
-                OnBetAttemptFailed?.Invoke();
-                // 배팅가능한 최대치
+                // 배팅가능한 최대치이다.
                 return;
             }
 
-            BettingGold += GameManager.instance.levelData._unitGold;
+            bettingGold += GameManager.instance.levelData._unitGold;
         }
         else if (isIncrease == false)
         {
             if (GameManager.instance.levelData._minGold > bettingGold - GameManager.instance.levelData._unitGold)
             {
-                OnBetAttemptFailed?.Invoke();
-                // 배팅가능한 최소치
+                // 배팅가능한 최소치이다.
                 return;
             }
 
-            BettingGold -= GameManager.instance.levelData._unitGold;
+            bettingGold -= GameManager.instance.levelData._unitGold;
         }
     }
     public void Spin()
@@ -113,6 +86,7 @@ public class SlotMachine : MonoBehaviour
             return;
         }
 
+        /*
         if (bettingGold < GameManager.instance.levelData._minGold)
         {
             // 배팅액 부족!
@@ -124,6 +98,7 @@ public class SlotMachine : MonoBehaviour
             // 소지한 골드 부족
             return;
         }
+        */
 
         // 이전 스핀의 당첨 테두리 제거
         if (patternAnimator != null)
@@ -138,7 +113,7 @@ public class SlotMachine : MonoBehaviour
         }
 
         GameManager.instance.money.SpendGold(bettingGold);
-        IsActivating = true;
+        isActivating = true;
 
         // 일정 시간 후 릴을 정지시키는 코루틴 시작
         StartCoroutine(IStopSpin());
@@ -216,9 +191,7 @@ public class SlotMachine : MonoBehaviour
             }
 
             // 4. 최종 보상 계산 및 지급
-            RewardGold = (int)(totalOdds * bettingGold);
-
-            yield return new WaitForSeconds(2.0f);
+            rewardGold = (int)(totalOdds * bettingGold);
             GameManager.instance.money.AddGold(rewardGold);
         }
         else
@@ -227,8 +200,8 @@ public class SlotMachine : MonoBehaviour
         }
 
         // 초기화
-        BettingGold = GameManager.instance.levelData._minGold;
-        RewardGold = 0;
-        IsActivating = false;
+        bettingGold = 0;
+        rewardGold = 0;
+        isActivating = false;
     }
 }

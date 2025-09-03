@@ -367,7 +367,13 @@ public class CheckRewardPattern
         CalculateReward(Patterns.Jackpot, (Symbols)symbolNum);
 
         List<Vector2Int> coords = new List<Vector2Int>();
-        for (int y = 0; y < ROW; y++) for (int x = 0; x < COLUMN; x++) coords.Add(new Vector2Int(y, x));
+        for (int y = 0; y < ROW; y++)
+        {
+            for (int x = 0; x < COLUMN; x++)
+            {
+                coords.Add(new Vector2Int(y, x));
+            }
+        }
         winningLines.Add(new WinningLine(coords));
     }
 

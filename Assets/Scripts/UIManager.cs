@@ -1,4 +1,4 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -7,13 +7,13 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI tokenText;
     private void Start()
     {
-        // GameManager ÀÎ½ºÅÏ½º°¡ À¯È¿ÇÑÁö È®ÀÎÇÕ´Ï´Ù.
+        // GameManager ì¸ìŠ¤í„´ìŠ¤ê°€ ìœ íš¨í•œì§€ í™•ì¸í•©ë‹ˆë‹¤.
         if (GameManager.instance != null && GameManager.instance.money != null)
         {
-            // Money Å¬·¡½ºÀÇ OnMoneyChanged ÀÌº¥Æ®¿¡ UpdateUI ¸Ş¼­µå¸¦ µî·ÏÇÕ´Ï´Ù.
+            // Money í´ë˜ìŠ¤ì˜ OnMoneyChanged ì´ë²¤íŠ¸ì— UpdateUI ë©”ì„œë“œë¥¼ ë“±ë¡í•©ë‹ˆë‹¤.
             GameManager.instance.money.OnMoneyChanged += UpdateUI;
 
-            // ÃÊ±â UI¸¦ ¾÷µ¥ÀÌÆ®ÇÏ¿© ½ÃÀÛ ½Ã ¿Ã¹Ù¸¥ °ªÀÌ Ç¥½ÃµÇµµ·Ï ÇÕ´Ï´Ù.
+            // ì´ˆê¸° UIë¥¼ ì—…ë°ì´íŠ¸í•˜ì—¬ ì‹œì‘ ì‹œ ì˜¬ë°”ë¥¸ ê°’ì´ í‘œì‹œë˜ë„ë¡ í•©ë‹ˆë‹¤.
             UpdateUI();
         }
     }
@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        // ¿ÀºêÁ§Æ®°¡ ÆÄ±«µÉ ¶§ ÀÌº¥Æ® ±¸µ¶À» ÇØÁ¦ÇÏ¿© ¸Ş¸ğ¸® ´©¼ö¸¦ ¹æÁöÇÕ´Ï´Ù.
+        // ì˜¤ë¸Œì íŠ¸ê°€ íŒŒê´´ë  ë•Œ ì´ë²¤íŠ¸ êµ¬ë…ì„ í•´ì œí•˜ì—¬ ë©”ëª¨ë¦¬ ëˆ„ìˆ˜ë¥¼ ë°©ì§€í•©ë‹ˆë‹¤.
         if (GameManager.instance != null && GameManager.instance.money != null)
         {
             GameManager.instance.money.OnMoneyChanged -= UpdateUI;

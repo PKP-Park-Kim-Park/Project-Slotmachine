@@ -1,15 +1,16 @@
 ﻿using System;
-using UnityEngine;
 public class Money
 {
     public event Action OnMoneyChanged;
     public int _token { get; private set; }
     public int _gold { get; private set; }
+    private int _startGold;
     private const int CONVERT_SIZE = 100_000;
 
     public Money(int startGold = 0, int startToken = 0)
     {
         _gold = startGold;
+        _startGold = startGold;
         _token = startToken;
     }
 
@@ -51,7 +52,7 @@ public class Money
     public void ConvertToken()
     {
         _token += _gold / CONVERT_SIZE;
-        _gold = 0;
+        _gold = _startGold;
         OnMoneyChanged?.Invoke();
     }
 }

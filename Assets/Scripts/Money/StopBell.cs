@@ -20,10 +20,9 @@ public class StopBell : MonoBehaviour, IInteractable
         {
             Debug.LogWarning("게임 초기화/토큰 발행");
 
-            if (GameManager.instance.money != null)
+            if (GameManager.instance != null)
             {
-                Debug.LogWarning("ConvertToken 실행.");
-                GameManager.instance.money.ConvertToken();
+                GameManager.instance.Init();
             }
             else
             {

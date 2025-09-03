@@ -1,9 +1,12 @@
-﻿using TMPro;
+﻿using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance; // 싱글톤
+
+    public event Action<Vector3> OnPlayerPosChanged;
+    public event Action OnUnlockDoor;
 
     private bool isGaimng;
     public LevelData levelData { get; private set; }
@@ -20,19 +23,18 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
 
-    private void Start()
-    {
         levelData = new LevelData(1);
-        money = new Money();
-
+        money = new Money(100_000, 0);
     }
 
     public void Init()
     {
         levelData.SetLevel(1);
-        // todo: 플레이어 위치이동
+        money.ConvertToken();
+        OnPlayerPosChanged?.Invoke(new Vector3(1f, 1f, 0f));
+        // TODO : 문 초기화
+        OnUnlockDoor?.Invoke();
     }
 
     public bool CheckGameOver()

@@ -440,6 +440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 755effb3ead44c0498a938f6bc777c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isIncreaseButton: 1
 --- !u!4 &1688498214517732109 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
@@ -583,6 +584,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 755effb3ead44c0498a938f6bc777c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isIncreaseButton: 0
 --- !u!1 &3900211170555374534 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6429965755936260320, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}

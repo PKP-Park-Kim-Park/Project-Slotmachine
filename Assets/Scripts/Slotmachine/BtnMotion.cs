@@ -1,10 +1,12 @@
 using UnityEngine;
-using System.Collections;
 
 public class BtnMotion : MonoBehaviour, IInteractable
 {
-    public string InteractionPrompt => "버튼 누르기";
+    // public string InteractionPrompt => "버튼 누르기";
     private Animator btnAnim;
+    [SerializeField] private bool isIncreaseButton;
+
+    private SlotMachine slotMachine;
 
     void Awake()
     {
@@ -13,6 +15,11 @@ public class BtnMotion : MonoBehaviour, IInteractable
         {
             Debug.LogError("BtnMotion 스크립트가 있는 오브젝트에 Animator 컴포넌트 추가 바람...");
         }
+    }
+
+    private void Start()
+    {
+        slotMachine = GetComponentInParent<SlotMachine>();
     }
 
     public void Interact()
@@ -35,5 +42,6 @@ public class BtnMotion : MonoBehaviour, IInteractable
 
         // TODO
         // 버튼 누를 시 Increase(), Decrease()
+        slotMachine.Bet(isIncreaseButton);
     }
 }

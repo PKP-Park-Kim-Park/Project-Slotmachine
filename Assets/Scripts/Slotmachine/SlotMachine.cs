@@ -9,17 +9,8 @@ public class SlotMachine : MonoBehaviour
     public event Action OnActivationStart;
     public event Action OnActivationEnd;
     public event Action<int> OnBetGoldChanged;
+    public event Action<int> OnRewardGold;
     //===============================================
-    private int bettingGold;
-    public int BettingGold {
-        get { return bettingGold; }
-        private set
-        {
-            if (bettingGold == value) return;
-            bettingGold = value;
-            OnBetGoldChanged?.Invoke(value);
-        }
-    }
     private bool isActivating;
     public bool IsActivating
     {
@@ -31,9 +22,30 @@ public class SlotMachine : MonoBehaviour
 
             if (isActivating) OnActivationStart?.Invoke();
             else OnActivationEnd?.Invoke();
-        } 
+        }
+    }
+    private int bettingGold;
+    public int BettingGold
+    {
+        get { return bettingGold; }
+        private set
+        {
+            if (bettingGold == value) return;
+            bettingGold = value;
+            OnBetGoldChanged?.Invoke(value);
+        }
     }
     private int rewardGold;
+    public int RewardGold
+    {
+        get { return rewardGold; }
+        private set
+        {
+            if (rewardGold == value) return;
+            rewardGold = value;
+            OnRewardGold?.Invoke(value);
+        }
+    }
     private int[,] matrix;
     [SerializeField] private Reel[] reels; // 릴들을 관리할 배열
     [SerializeField] private float spinTime = 3f;
@@ -48,7 +60,7 @@ public class SlotMachine : MonoBehaviour
     private CheckRewardPattern rewardChecker;
     private void Awake()
     {
-        bettingGold = 0;
+        BettingGold = GameManager.instance.levelData._minGold;
         rewardGold = 0;
         isActivating = false;
 
@@ -98,7 +110,6 @@ public class SlotMachine : MonoBehaviour
             return;
         }
 
-        /*
         if (bettingGold < GameManager.instance.levelData._minGold)
         {
             // 배팅액 부족!
@@ -110,7 +121,6 @@ public class SlotMachine : MonoBehaviour
             // 소지한 골드 부족
             return;
         }
-        */
 
         // 이전 스핀의 당첨 테두리 제거
         if (patternAnimator != null)
@@ -125,7 +135,7 @@ public class SlotMachine : MonoBehaviour
         }
 
         GameManager.instance.money.SpendGold(bettingGold);
-        isActivating = true;
+        IsActivating = true;
 
         // 일정 시간 후 릴을 정지시키는 코루틴 시작
         StartCoroutine(IStopSpin());
@@ -203,7 +213,9 @@ public class SlotMachine : MonoBehaviour
             }
 
             // 4. 최종 보상 계산 및 지급
-            rewardGold = (int)(totalOdds * bettingGold);
+            RewardGold = (int)(totalOdds * bettingGold);
+
+            yield return new WaitForSeconds(2.0f);
             GameManager.instance.money.AddGold(rewardGold);
         }
         else
@@ -212,8 +224,8 @@ public class SlotMachine : MonoBehaviour
         }
 
         // 초기화
-        BettingGold = 0;
-        rewardGold = 0;
-        isActivating = false;
+        BettingGold = GameManager.instance.levelData._minGold;
+        RewardGold = 0;
+        IsActivating = false;
     }
 }

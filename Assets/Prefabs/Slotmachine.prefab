@@ -265,12 +265,7 @@ MonoBehaviour:
   - {fileID: 297088384487749990}
   - {fileID: 7767932875951262045}
   spinTime: 0.75
-  reelProbabilities:
-  - {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
-  - {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
-  - {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
-  - {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
-  - {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
+  reelProbability: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
   patternAnimator: {fileID: 8867468335312443799}
   patternOddsData: {fileID: 11400000, guid: 70910bfa3fef46148b6e89179a31bc85, type: 2}
   symbolOddsData: {fileID: 11400000, guid: a02a11a4a1b0b9a448dac5767ae7800a, type: 2}

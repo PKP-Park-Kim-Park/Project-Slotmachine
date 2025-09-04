@@ -51,8 +51,8 @@ public class SlotMachine : MonoBehaviour
     [SerializeField] private float spinTime = 3f;
 
     [Header("Probabilities")]
-    [Tooltip("각 릴에 대한 SymbolWeight 에셋 배열 (5개)")]
-    [SerializeField] private SymbolWeight[] reelProbabilities;
+    [Tooltip("SymbolWeight 에셋")]
+    [SerializeField] private SymbolWeight reelProbability;
 
     [Header("Reward System")]
     [Tooltip("당첨 패턴 애니메이션 담당")]
@@ -77,9 +77,9 @@ public class SlotMachine : MonoBehaviour
             return;
         }
 
-        if (reelProbabilities == null || reelProbabilities.Length != reels.Length)
+        if (reelProbability == null)
         {
-            Debug.LogError($"릴 개수({reels.Length})와 확률 설정 개수({reelProbabilities?.Length ?? 0})가 일치하지 않습니다.", this);
+            Debug.LogError("공용 SymbolWeight 에셋(Common Reel Probability)이 할당되지 않았습니다.", this);
             return;
         }
 
@@ -87,9 +87,9 @@ public class SlotMachine : MonoBehaviour
 
         rewardChecker = new CheckRewardPattern();
 
-        // 각 릴에 대한 SymbolWeightProcessor를 초기화합니다.
+        // 각 릴에 대한 SymbolWeightProcessor를 공통 확률 에셋으로 초기화합니다.
         reelWeightProcessors = new SymbolWeightProcessor[reels.Length];
-        for (int i = 0; i < reels.Length; i++) reelWeightProcessors[i] = new SymbolWeightProcessor(reelProbabilities[i]);
+        for (int i = 0; i < reels.Length; i++) reelWeightProcessors[i] = new SymbolWeightProcessor(reelProbability);
     }
     private void Start()
     {

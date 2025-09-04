@@ -10,7 +10,7 @@ public class SettingManager : MonoBehaviour
     public GameObject settingsPanel;
     public Button xButton;
     public Slider mouseSensitivitySlider; // 마우스 감도 슬라이더 추가
-    public PlayerLook playerLook; // PlayerLook 스크립트 참조 추가
+    private PlayerLook playerLook; // PlayerLook 스크립트 참조 추가
 
     // 사운드 조절 관련 변수
     public AudioMixer mixer; // 오디오 믹서 변수 추가
@@ -40,7 +40,7 @@ public class SettingManager : MonoBehaviour
         mouseSensitivitySlider.onValueChanged.AddListener(OnSensitivityChangedFromSlider);
         mouseSensitivityInputField.onEndEdit.AddListener(OnSensitivityChangedFromInputField);
         // 시작 시 초기값 설정
-        UpdateSensitivityDisplay(savedSensitivity);
+        UpdateSensitivityValue(savedSensitivity);
 
         // BGM 슬라이더 설정
         float savedBgmVolume = PlayerPrefs.GetFloat(BgmVolumeKey, 0.75f);
@@ -52,8 +52,12 @@ public class SettingManager : MonoBehaviour
         sfxSlider.value = savedSfxVolume;
         sfxSlider.onValueChanged.AddListener(SetSfxVolume);
         // 초기 텍스트 값 설정
-        UpdateBgmText(savedBgmVolume);
-        UpdateSfxText(savedSfxVolume);
+
+        SetBgmVolume(savedBgmVolume);
+        SetSfxVolume(savedSfxVolume);
+
+        GameObject playerObject = GameObject.FindWithTag("Player");
+        playerLook = playerObject.GetComponent<PlayerLook>();
     }
 
     void Update()

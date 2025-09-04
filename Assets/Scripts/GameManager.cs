@@ -63,7 +63,11 @@ public class GameManager : MonoBehaviour
     public void LoadData(GameData gameData)
     {
         _gameData = gameData;
-        money.AddGold(_gameData.gold - 100_000);
+        // 값 초기화
+        money.SpendToken(money._token);
+        money.SpendGold(money._gold);
+
+        money.AddGold(_gameData.gold);
         money.AddToken(_gameData.token);
         levelData.SetLevel(_gameData.level);
     }
@@ -72,7 +76,9 @@ public class GameManager : MonoBehaviour
     {
         if(_gameData != null)
         {
-            return _gameData.playerPos;
+            Vector3 playerPos = _gameData.playerPos;
+            _gameData = null;
+            return playerPos;
         }
 
         return new Vector3(1f, 1f, 0f);

@@ -40,7 +40,7 @@ public class DataManager : MonoBehaviour
         Debug.Log("게임 데이터 저장 완료: " + dataFilePath);
     }
 
-    public void LoadGameData()
+    public bool LoadGameData()
     {
         if (File.Exists(dataFilePath))
         {
@@ -49,10 +49,20 @@ public class DataManager : MonoBehaviour
             Debug.Log("게임 데이터 로드 완료.");
 
             GameManager.instance.LoadData(gameData);
+
+            return true;
         }
         else
         {
             Debug.Log("저장된 파일이 없어");
+
+            return false;
         }
+    }
+
+    public void LoadNewData()
+    {
+        GameData newGameData = new GameData();
+        GameManager.instance.LoadData(newGameData);
     }
 }

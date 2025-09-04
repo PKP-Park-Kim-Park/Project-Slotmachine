@@ -29,6 +29,7 @@ public class SettingManager : MonoBehaviour
     private const string BgmVolumeKey = "BgmVolume";
     private const string SfxVolumeKey = "SfxVolume";
 
+    private bool isSlotmachineState = false;
     void Start()
     {
         // 게임 시작 시 설정 패널을 비활성화(숨기기)합니다.
@@ -63,12 +64,14 @@ public class SettingManager : MonoBehaviour
 
         saveButton.onClick.AddListener(OnclickSaveButton);
         exitButton.onClick.AddListener(OnclickExitButton);
+
+        GameManager.instance.OnSlotMachineStateChanged += HandleSlotStateChange;
     }
 
     void Update()
     {
-        // 'P' 키를 누를 때마다 'ToggleSettings' 함수를 호출합니다.
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (isSlotmachineState &&
+            Input.GetKeyDown(KeyCode.Escape))
         {
             ToggleSettings();
         }
@@ -206,5 +209,10 @@ public class SettingManager : MonoBehaviour
         GameData gameData = GameManager.instance.SaveData();
         DataManager.instance.SaveGameData(gameData);
         SceneManager.LoadScene("Title");
+    }
+
+    private void HandleSlotStateChange(bool newState)
+    {
+        isSlotmachineState = newState;
     }
 }

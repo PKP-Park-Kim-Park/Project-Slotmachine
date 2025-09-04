@@ -169,7 +169,7 @@ public class ProbabilityScreen : MonoBehaviour
             container.SetActive(true);
         }
 
-        probabilityText.text = $"총합\n+ {totalOdds:F1}";
+        probabilityText.text = $"총합\n{totalOdds:F1}";
 
         yield return StartCoroutine(PopAnimation());
 

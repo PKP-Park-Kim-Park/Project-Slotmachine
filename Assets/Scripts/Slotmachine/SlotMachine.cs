@@ -61,6 +61,8 @@ public class SlotMachine : MonoBehaviour
     [SerializeField] private PatternRewardOdds patternOddsData;
     [Tooltip("심볼별 배율 정보가 담긴 ScriptableObject")]
     [SerializeField] private SymbolRewardOdds symbolOddsData;
+    [Tooltip("배율 표시 UI")]
+    [SerializeField] private ProbabilityScreen probabilityScreen;
     private CheckRewardPattern rewardChecker;
 
     private int[,] matrix;
@@ -79,7 +81,7 @@ public class SlotMachine : MonoBehaviour
 
         if (reelProbability == null)
         {
-            Debug.LogError("공용 SymbolWeight 에셋(Common Reel Probability)이 할당되지 않았습니다.", this);
+            Debug.LogError("공용 SymbolWeight 에셋(Reel Probability)이 할당되지 않았습니다.", this);
             return;
         }
 
@@ -87,7 +89,7 @@ public class SlotMachine : MonoBehaviour
 
         rewardChecker = new CheckRewardPattern();
 
-        // 각 릴에 대한 SymbolWeightProcessor를 공통 확률 에셋으로 초기화합니다.
+        // 각 릴에 대한 SymbolWeightProcessor를 공통 확률 에셋으로 초기화
         reelWeightProcessors = new SymbolWeightProcessor[reels.Length];
         for (int i = 0; i < reels.Length; i++) reelWeightProcessors[i] = new SymbolWeightProcessor(reelProbability);
     }
@@ -232,6 +234,12 @@ public class SlotMachine : MonoBehaviour
                 patternAnimator.AnimateWinning(winningLines);
                 // 애니메이션이 끝날 때까지 대기
                 yield return new WaitUntil(() => !patternAnimator.IsAnimating);
+            }
+
+            // 모든 라인 애니메이션 종료 후 총 배율 표시
+            if (probabilityScreen != null)
+            {
+                probabilityScreen.ShowTotalOdds(totalOdds);
             }
 
             // 4. 최종 보상 계산 및 지급

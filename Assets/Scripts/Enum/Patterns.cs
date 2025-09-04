@@ -1,5 +1,6 @@
 public enum Patterns
 {
+    None,
     Column_3,
     Column_4,
     Column_5,

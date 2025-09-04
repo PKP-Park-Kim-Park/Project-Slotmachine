@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class PatternAnimator : MonoBehaviour
 {
@@ -23,9 +24,9 @@ public class PatternAnimator : MonoBehaviour
     [Header("Particle Effect")]
     [Tooltip("각 당첨 라인에 표시될 파티클 프리팹")]
     [SerializeField] private GameObject winningParticlePrefab;
+    public event Action<float> OnLineAnimate;
 
-    // 오브젝트 풀링을 위한 리스트와 코루틴 관리 변수
-    private readonly List<GameObject> borderPool = new List<GameObject>();
+    private readonly List<GameObject> borderPool = new();
     private int poolIndex = 0;
     private Coroutine animationCoroutine;
     public bool IsAnimating { get{ return animationCoroutine != null; }}
@@ -37,12 +38,10 @@ public class PatternAnimator : MonoBehaviour
         InitializePool();
     }
 
-    // 미리 테두리 오브젝트를 생성하여 풀에 저장
     private void InitializePool()
     {
         if (borderPrefab == null) return;
 
-        // 최대 15개의 테두리가 동시에 필요할 수 있음
         for (int i = 0; i < 15; i++)
         {
             GameObject border = Instantiate(borderPrefab, transform);
@@ -52,17 +51,14 @@ public class PatternAnimator : MonoBehaviour
     }
 
     /// <summary>
-    /// 외부에서 호출 하쇼. 당첨 애니매이션 시작
+    /// 당첨 라인 애니메이션 시작
     /// </summary>
     public void AnimateWinning(List<WinningLine> winningLines)
     {
-        // 기존 애니메이션이 실행 중이면 중지
         if (animationCoroutine != null)
         {
             StopCoroutine(animationCoroutine);
         }
-
-        // 기존 테두리 정리
         ClearBorders();
         animationCoroutine = StartCoroutine(AnimateSeq(winningLines));
     }
@@ -70,14 +66,14 @@ public class PatternAnimator : MonoBehaviour
     private IEnumerator AnimateSeq(List<WinningLine> winningLines)
     {
         // 각 당첨 라인을 순서대로 보여줌
-        foreach (var line in winningLines)
+        foreach (WinningLine line in winningLines)
         {
-            List<Transform> transformsToAnimate = new List<Transform>();
+            List<Transform> transformsToAnimate = new();
 
-            // 현재 라인의 심볼에 테두리 표시
+            OnLineAnimate?.Invoke(line.Odds);
+
             foreach (var coord in line.Coordinates)
             {
-                // coord.x == 행(row), coord.y == 열(column)
                 if (IsValidCoordinate(coord.x, coord.y))
                 {
                     ShowBorderAt(coord.x, coord.y);
@@ -86,7 +82,6 @@ public class PatternAnimator : MonoBehaviour
                 }
             }
 
-            // 현재 라인의 심볼들 위에 파티클 효과 재생
             if (winningParticlePrefab != null)
             {
                 foreach (var coord in line.Coordinates)
@@ -99,7 +94,6 @@ public class PatternAnimator : MonoBehaviour
                 }
             }
 
-            // 튀나오는 애니메이션
             if (transformsToAnimate.Count > 0)
             {
                 yield return StartCoroutine(AnimatePop(transformsToAnimate, popScale, popDuration / 2f));
@@ -107,17 +101,14 @@ public class PatternAnimator : MonoBehaviour
 
             yield return new WaitForSeconds(animationDelay);
 
-            // 튀들어가는 애니메이션
             if (transformsToAnimate.Count > 0)
             {
                 yield return StartCoroutine(AnimatePop(transformsToAnimate, 1.0f, popDuration / 2f));
             }
-
-            // 현재 테두리 제거
             ClearBorders();
         }
 
-        animationCoroutine = null; // 코루틴 완료
+        animationCoroutine = null;
     }
 
     private IEnumerator AnimatePop(List<Transform> targets, float targetScale, float duration)
@@ -127,7 +118,7 @@ public class PatternAnimator : MonoBehaviour
             yield break;
         }
 
-        List<Vector3> originalScales = new List<Vector3>();
+        List<Vector3> originalScales = new();
         foreach (var t in targets)
         {
             originalScales.Add(t.localScale);
@@ -152,7 +143,6 @@ public class PatternAnimator : MonoBehaviour
         }
     }
 
-    // 지정된 위치에 풀에서 테두리를 가져와 표시
     private void ShowBorderAt(int row, int col)
     {
         if (poolIndex >= borderPool.Count) return; // 풀이 부족한 경우 방지
@@ -168,19 +158,18 @@ public class PatternAnimator : MonoBehaviour
     }
 
     /// <summary>
-    /// 표시된 모든 테두리를 풀로 반환
+    /// 표시된 모든 테두리를 비활성화하고 풀로 반환
     /// </summary>
     public void ClearBorders()
     {
         for (int i = 0; i < poolIndex; i++)
         {
             borderPool[i].SetActive(false);
-            borderPool[i].transform.SetParent(transform, false); // 다시 원래 부모로
+            borderPool[i].transform.SetParent(transform, false);
         }
         poolIndex = 0;
     }
 
-    // 좌표 유효성 검사
     private bool IsValidCoordinate(int row, int col)
     {
         if (slotPositions == null || slotPositions.Length != 15) return false;

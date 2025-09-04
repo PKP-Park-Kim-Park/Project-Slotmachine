@@ -16,24 +16,26 @@ MonoBehaviour:
   - patternType: 0
     rewardOddsMultiplier: 1
   - patternType: 1
-    rewardOddsMultiplier: 2
-  - patternType: 2
-    rewardOddsMultiplier: 3
-  - patternType: 3
     rewardOddsMultiplier: 1
+  - patternType: 2
+    rewardOddsMultiplier: 2
+  - patternType: 3
+    rewardOddsMultiplier: 3
   - patternType: 4
-    rewardOddsMultiplier: 2
+    rewardOddsMultiplier: 1
   - patternType: 5
-    rewardOddsMultiplier: 2
+    rewardOddsMultiplier: 1
   - patternType: 6
-    rewardOddsMultiplier: 3
+    rewardOddsMultiplier: 1
   - patternType: 7
-    rewardOddsMultiplier: 3
+    rewardOddsMultiplier: 4
   - patternType: 8
     rewardOddsMultiplier: 4
   - patternType: 9
-    rewardOddsMultiplier: 4
-  - patternType: 10
-    rewardOddsMultiplier: 5
-  - patternType: 11
     rewardOddsMultiplier: 6
+  - patternType: 10
+    rewardOddsMultiplier: 6
+  - patternType: 11
+    rewardOddsMultiplier: 8
+  - patternType: 12
+    rewardOddsMultiplier: 10

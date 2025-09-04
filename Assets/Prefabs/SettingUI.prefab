@@ -776,7 +776,7 @@ GameObject:
   - component: {fileID: 2601500971310265082}
   - component: {fileID: 7825262664982678449}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: Button - Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -897,7 +897,7 @@ GameObject:
   - component: {fileID: 942965871216427832}
   - component: {fileID: 6005120779471784011}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Button - Save
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2142,6 +2142,8 @@ MonoBehaviour:
   mouseSensitivityInputField: {fileID: 7089436688560514489}
   bgmText: {fileID: 3270130292013561642}
   sfxText: {fileID: 6080830892517717406}
+  saveButton: {fileID: 6005120779471784011}
+  exitButton: {fileID: 7825262664982678449}
 --- !u!1 &4749733500898118951
 GameObject:
   m_ObjectHideFlags: 0

@@ -32,6 +32,9 @@ public class PlayerController : MonoBehaviour
             GameManager.instance.OnPlayerPosChanged += ChangePosition;
 
             myRigid.MovePosition(GameManager.instance.LoadPlayerPos());
+
+            GameManager.instance.Resume();
+            playerLook.enabled = true;
         }
     }
     void FixedUpdate()

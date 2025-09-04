@@ -29,7 +29,7 @@ public class SettingManager : MonoBehaviour
     private const string BgmVolumeKey = "BgmVolume";
     private const string SfxVolumeKey = "SfxVolume";
 
-    private bool isSlotmachineState = false;
+    private bool isSlotmachineState = true;
     void Start()
     {
         // 게임 시작 시 설정 패널을 비활성화(숨기기)합니다.

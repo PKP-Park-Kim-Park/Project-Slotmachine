@@ -8,44 +8,33 @@ public class Reel : MonoBehaviour
     [Tooltip("릴의 애니메이션을 담당하는 컴포넌트")]
     [SerializeField] private ReelAnimator reelAnimator;
 
-    [Header("Probabilities")]
-    [Tooltip("이 릴에서 사용할 심볼 확률 설정 에셋")]
-    [SerializeField] private SymbolWeight probabilities;
-
     public bool isSpinning { get; private set; }
     public int[] row { get; private set; } = new int[7];
 
-    private void Awake()
-    {
-        if (probabilities == null)
-        {
-            Debug.LogError("SymbolWeight 에셋이 할당되지 않았습니다!", this);
-        }
-    }
-
     // 확률에 따라 나온 심볼을 릴에 재배치
-    public void RelocateSymbols()
+    public void RelocateSymbols(SymbolWeightProcessor processor)
     {
-        if (probabilities == null) return;
-
-        SymbolWeightProcessor processor = new SymbolWeightProcessor(probabilities);
+        if (processor == null) return;
+        
         processor.NormalizeProbabilities(); // 확률을 100%로 보정
 
         for (int i = 0; i < row.Length; i++)
         {
             row[i] = processor.GetRandomWeightedSymbol();
         }
-        // Debug.Log("릴 심볼이 확률에 따라 재배치되었습니다.");
     }
 
     // 릴 회전 시작
-    public IEnumerator StartSpin()
+    public IEnumerator StartSpin(SymbolWeightProcessor processor)
     {
         if (isSpinning)
         {
             yield break;
         }
         isSpinning = true;
+
+        // 스핀 시작 시점에 전달받은 확률로 릴의 심볼들을 재배치
+        RelocateSymbols(processor);
 
         // ReelAnimator에 start 넘김
         reelAnimator.StartSpin();

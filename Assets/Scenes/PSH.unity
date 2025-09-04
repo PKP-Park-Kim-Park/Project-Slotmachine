@@ -1020,6 +1020,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 212369539458902850, guid: 3781d9cbfa3180f459531695abb39ed8, type: 3}
+      propertyPath: reelProbabilities.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 212369539458902850, guid: 3781d9cbfa3180f459531695abb39ed8, type: 3}
+      propertyPath: 'reelProbabilities.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
+    - target: {fileID: 212369539458902850, guid: 3781d9cbfa3180f459531695abb39ed8, type: 3}
+      propertyPath: 'reelProbabilities.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
+    - target: {fileID: 212369539458902850, guid: 3781d9cbfa3180f459531695abb39ed8, type: 3}
+      propertyPath: 'reelProbabilities.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
+    - target: {fileID: 212369539458902850, guid: 3781d9cbfa3180f459531695abb39ed8, type: 3}
+      propertyPath: 'reelProbabilities.Array.data[4]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
     - target: {fileID: 653664348278060160, guid: 3781d9cbfa3180f459531695abb39ed8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

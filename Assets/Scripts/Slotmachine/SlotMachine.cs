@@ -46,18 +46,25 @@ public class SlotMachine : MonoBehaviour
             OnRewardGold?.Invoke(value);
         }
     }
-    private int[,] matrix;
+    
     [SerializeField] private Reel[] reels; // 릴들을 관리할 배열
     [SerializeField] private float spinTime = 3f;
 
+    [Header("Probabilities")]
+    [Tooltip("각 릴에 대한 SymbolWeight 에셋 배열 (5개)")]
+    [SerializeField] private SymbolWeight[] reelProbabilities;
+
     [Header("Reward System")]
-    [Tooltip("당첨 패턴 애니메이션을 담당하는 컴포넌트")]
+    [Tooltip("당첨 패턴 애니메이션 담당")]
     [SerializeField] private PatternAnimator patternAnimator;
     [Tooltip("패턴별 배율 정보가 담긴 ScriptableObject")]
     [SerializeField] private PatternRewardOdds patternOddsData;
     [Tooltip("심볼별 배율 정보가 담긴 ScriptableObject")]
     [SerializeField] private SymbolRewardOdds symbolOddsData;
     private CheckRewardPattern rewardChecker;
+
+    private int[,] matrix;
+    private SymbolWeightProcessor[] reelWeightProcessors;
     private void Awake()
     {
         bettingGold = 0;
@@ -69,9 +76,20 @@ public class SlotMachine : MonoBehaviour
             Debug.LogError("슬롯머신에 릴이 없습니다.", this);
             return;
         }
+
+        if (reelProbabilities == null || reelProbabilities.Length != reels.Length)
+        {
+            Debug.LogError($"릴 개수({reels.Length})와 확률 설정 개수({reelProbabilities?.Length ?? 0})가 일치하지 않습니다.", this);
+            return;
+        }
+
         matrix = new int[3, reels.Length]; // 3행, reel 개수만큼의 열
 
         rewardChecker = new CheckRewardPattern();
+
+        // 각 릴에 대한 SymbolWeightProcessor를 초기화합니다.
+        reelWeightProcessors = new SymbolWeightProcessor[reels.Length];
+        for (int i = 0; i < reels.Length; i++) reelWeightProcessors[i] = new SymbolWeightProcessor(reelProbabilities[i]);
     }
     private void Start()
     {
@@ -135,9 +153,9 @@ public class SlotMachine : MonoBehaviour
         }
 
         // 모든 릴의 회전 애니메이션 시작
-        foreach (var reel in reels)
+        for (int i = 0; i < reels.Length; i++)
         {
-            StartCoroutine(reel.StartSpin());
+            StartCoroutine(reels[i].StartSpin(reelWeightProcessors[i]));
         }
 
         GameManager.instance.money.SpendGold(bettingGold);
@@ -155,8 +173,6 @@ public class SlotMachine : MonoBehaviour
         // 각 릴을 순차적으로 멈춤
         for (int i = 0; i < reels.Length; i++)
         {
-            reels[i].RelocateSymbols();
-
             yield return StartCoroutine(reels[i].StopSpin(reels[i].row));
 
             int[] resultRow = reels[i].GetResultSymbols();

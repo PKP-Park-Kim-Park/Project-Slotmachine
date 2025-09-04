@@ -230,7 +230,7 @@ public class SlotMachine : MonoBehaviour
         }
 
         // 초기화
-        BettingGold = GameManager.instance.levelData._minGold;
+        // BettingGold = GameManager.instance.levelData._minGold;
         RewardGold = 0;
         IsActivating = false;
     }

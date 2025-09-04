@@ -11,6 +11,7 @@ public class TitleManager : MonoBehaviour
     public void OnNewGameButtonClicked()
     {
         // 메인 씬 로드
+        DataManager.instance.LoadNewData();
         SceneManager.LoadScene("MainScene");
         Debug.Log("새 게임 시작!");
     }
@@ -18,9 +19,13 @@ public class TitleManager : MonoBehaviour
     // 불러오기 버튼
     public void OnLoadGameButtonClicked()
     {
-        DataManager.instance.LoadGameData();
-        SceneManager.LoadScene("MainScene");
-        Debug.Log("게임 불러오기!");
+        bool canLoad = DataManager.instance.LoadGameData();
+
+        if (canLoad)
+        {
+            SceneManager.LoadScene("MainScene");
+            Debug.Log("게임 불러오기!");
+        }
     }
 
     // 설정 버튼

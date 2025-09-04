@@ -37,6 +37,12 @@ public class PlayerController : MonoBehaviour
             playerLook.enabled = true;
         }
     }
+
+    private void OnDestroy()
+    {
+        GameManager.instance.OnPlayerPosChanged -= ChangePosition;
+    }
+
     void FixedUpdate()
     {
         // 시점이 고정되어 있지 않을 때만 이동

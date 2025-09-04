@@ -69,7 +69,12 @@ public class GameManager : MonoBehaviour
 
     public Vector3 LoadPlayerPos()
     {
-        return _gameData.playerPos;
+        if(_gameData != null)
+        {
+            return _gameData.playerPos;
+        }
+
+        return new Vector3(1f, 1f, 0f);
     }
 
     public void Init()

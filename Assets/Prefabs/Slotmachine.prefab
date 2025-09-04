@@ -490,7 +490,7 @@ Transform:
   m_GameObject: {fileID: 2495882243247680339}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.3, y: -0.7, z: 0.7}
+  m_LocalPosition: {x: -0.7, y: -0.7, z: 0.7}
   m_LocalScale: {x: 100, y: 100, z: 35}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -737,7 +737,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4136989696398882806}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.000033259214}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -746,7 +746,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 40}
+  m_SizeDelta: {x: 0, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6163969941407395456
 CanvasRenderer:
@@ -778,8 +778,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Betting!!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: cef2bf285f463cd4f8b22b42005ab49b, type: 2}
+  m_sharedMaterial: {fileID: 442448111083167660, guid: cef2bf285f463cd4f8b22b42005ab49b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -809,8 +809,8 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 1
   m_fontSizeMax: 15
-  m_fontStyle: 1
-  m_HorizontalAlignment: 2
+  m_fontStyle: 0
+  m_HorizontalAlignment: 32
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1104,7 +1104,7 @@ Transform:
   m_GameObject: {fileID: 6017811045087342615}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.7, y: -0.7, z: 0.7}
+  m_LocalPosition: {x: -0.3, y: -0.7, z: 0.7}
   m_LocalScale: {x: 100, y: 100, z: 35}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1303,10 +1303,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: ^ o ^
+  m_text: ^o^
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: cef2bf285f463cd4f8b22b42005ab49b, type: 2}
+  m_sharedMaterial: {fileID: 442448111083167660, guid: cef2bf285f463cd4f8b22b42005ab49b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1330,17 +1330,17 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15
+  m_fontSize: 20
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 1
-  m_fontSizeMax: 15
-  m_fontStyle: 1
+  m_fontSizeMax: 20
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: 5
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -1416,7 +1416,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8325915968935002804}
   m_LocalRotation: {x: -0, y: -0.9988061, z: -0.04884994, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -0.0075600003}
+  m_LocalPosition: {x: 0, y: 0, z: -0.00757}
   m_LocalScale: {x: 0.00010000003, y: 0.00009999999, z: 0.00010000001}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -1425,8 +1425,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: -174.4, y: 0, z: -180}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.0055100005, y: 0.01253}
-  m_SizeDelta: {x: 95, y: 40}
+  m_AnchoredPosition: {x: 0.0055100005, y: 0.01243}
+  m_SizeDelta: {x: 95, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2733464220398459666
 Canvas:
@@ -1503,9 +1503,9 @@ GameObject:
   - component: {fileID: 8756068486281358966}
   - component: {fileID: 5836057649635054840}
   - component: {fileID: 1169180115358066225}
-  - component: {fileID: 8115972233779033671}
   - component: {fileID: 5740442735399861802}
   - component: {fileID: 1003121614683125055}
+  - component: {fileID: 3113831013996491532}
   m_Layer: 7
   m_Name: Lever
   m_TagString: Interactable
@@ -1603,28 +1603,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!64 &8115972233779033671
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9152571643390080422}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4224193870148154796, guid: 7ba33be8e84e6224091a254ce93436f7, type: 3}
 --- !u!114 &5740442735399861802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1674,6 +1652,27 @@ MonoBehaviour:
   enabledColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   disabledColor: {r: 1, g: 0, b: 0, a: 1}
   slotMachine: {fileID: 212369539458902850}
+--- !u!65 &3113831013996491532
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9152571643390080422}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0033999986, y: 0.0033999998, z: 0.010699997}
+  m_Center: {x: 0.0000000021449638, y: 0.000000004292186, z: 0.0053499984}
 --- !u!1001 &1450459794957553107
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1706,38 +1705,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: probabilities
-      value: 
-      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[0].probability
-      value: 19.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[1].probability
-      value: 19.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[2].probability
-      value: 14.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[3].probability
-      value: 14.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[4].probability
-      value: 11.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[5].probability
-      value: 11.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[6].probability
-      value: 7.6
-      objectReference: {fileID: 0}
     - target: {fileID: 2368450176089745104, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1809,10 +1776,6 @@ PrefabInstance:
     - target: {fileID: 5933222636575580481, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7094279273316669886, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: settleDuration
-      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 7477093714815585796, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2038,38 +2001,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: probabilities
-      value: 
-      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[0].probability
-      value: 19.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[1].probability
-      value: 19.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[2].probability
-      value: 14.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[3].probability
-      value: 14.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[4].probability
-      value: 11.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[5].probability
-      value: 11.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[6].probability
-      value: 7.6
-      objectReference: {fileID: 0}
     - target: {fileID: 2368450176089745104, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2141,10 +2072,6 @@ PrefabInstance:
     - target: {fileID: 5933222636575580481, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7094279273316669886, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: settleDuration
-      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 7477093714815585796, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2370,38 +2297,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: probabilities
-      value: 
-      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[0].probability
-      value: 19.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[1].probability
-      value: 19.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[2].probability
-      value: 14.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[3].probability
-      value: 14.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[4].probability
-      value: 11.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[5].probability
-      value: 11.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[6].probability
-      value: 7.6
-      objectReference: {fileID: 0}
     - target: {fileID: 2368450176089745104, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2473,10 +2368,6 @@ PrefabInstance:
     - target: {fileID: 5933222636575580481, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7094279273316669886, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: settleDuration
-      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 7477093714815585796, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2702,38 +2593,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: probabilities
-      value: 
-      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[0].probability
-      value: 19.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[1].probability
-      value: 19.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[2].probability
-      value: 14.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[3].probability
-      value: 14.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[4].probability
-      value: 11.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[5].probability
-      value: 11.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[6].probability
-      value: 7.6
-      objectReference: {fileID: 0}
     - target: {fileID: 2368450176089745104, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2805,10 +2664,6 @@ PrefabInstance:
     - target: {fileID: 5933222636575580481, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7094279273316669886, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: settleDuration
-      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 7477093714815585796, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3034,38 +2889,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: probabilities
-      value: 
-      objectReference: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[0].probability
-      value: 19.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[1].probability
-      value: 19.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[2].probability
-      value: 14.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[3].probability
-      value: 14.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[4].probability
-      value: 11.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[5].probability
-      value: 11.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1170488609907094709, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: weightedSymbols.Array.data[6].probability
-      value: 7.6
-      objectReference: {fileID: 0}
     - target: {fileID: 2368450176089745104, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -3137,10 +2960,6 @@ PrefabInstance:
     - target: {fileID: 5933222636575580481, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7094279273316669886, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
-      propertyPath: settleDuration
-      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 7477093714815585796, guid: d91fb536963d1784a94cc3bb6547a040, type: 3}
       propertyPath: m_AnchorMax.y

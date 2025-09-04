@@ -18,7 +18,7 @@ public class RewardScreen : MonoBehaviour
     private void Awake()
     {
         rewardGoldText = GetComponent<TextMeshProUGUI>();
-        rewardGoldText.text = "^ o ^";
+        rewardGoldText.text = "^o^";
     }
 
     private void OnEnable()
@@ -60,7 +60,7 @@ public class RewardScreen : MonoBehaviour
             StopCoroutine(countUpCoroutine);
             countUpCoroutine = null;
         }
-        rewardGoldText.text = "^ o ^";
+        rewardGoldText.text = "^o^";
     }
 
     private IEnumerator CountUpAnimation(int targetGold)

@@ -765,7 +765,7 @@ MonoBehaviour:
   - {fileID: 7488991865526389686}
   - {fileID: 3798189220486809423}
   spinSpeed: 1750
-  settleDuration: 0.3
+  settleDuration: 0.15
   settleCurve:
     serializedVersion: 2
     m_Curve:
@@ -812,21 +812,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reelAnimator: {fileID: 7094279273316669886}
-  weightedSymbols:
-  - symbol: 1
-    probability: 19.4
-  - symbol: 2
-    probability: 19.4
-  - symbol: 3
-    probability: 14.9
-  - symbol: 4
-    probability: 14.9
-  - symbol: 5
-    probability: 11.9
-  - symbol: 6
-    probability: 11.9
-  - symbol: 7
-    probability: 7.6
+  probabilities: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
 --- !u!1 &8522720149703538295
 GameObject:
   m_ObjectHideFlags: 0

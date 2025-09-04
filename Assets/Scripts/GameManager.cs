@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public event Action<Vector3> OnPlayerPosChanged;
     public event Action OnUnlockDoor;
     public event Func<int> OnRequestDoorLock;
+    public event Action<bool> OnSlotMachineStateChanged;
 
     private bool isGaimng;
     public LevelData levelData { get; private set; }
@@ -117,5 +118,10 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log($"레벨이 {levelData._level}(으)로 변경되었습니다. 문 잠금 해제를 시도합니다.");
         OnUnlockDoor?.Invoke();
+    }
+
+    public void CheckSlotMachineStateChanged(bool newState)
+    {
+        OnSlotMachineStateChanged?.Invoke(newState);
     }
 }

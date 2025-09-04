@@ -174,6 +174,7 @@ public class PlayerLook : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        GameManager.instance.CheckSlotMachineStateChanged(false);
     }
 
     public void UnfixViewPoint()
@@ -184,6 +185,7 @@ public class PlayerLook : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        GameManager.instance.CheckSlotMachineStateChanged(true);
     }
 
     /// 고정 시점으로 전환하는 속도

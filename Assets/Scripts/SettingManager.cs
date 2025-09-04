@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using TMPro;
-using UnityEditor.Rendering;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 public class SettingManager : MonoBehaviour
 {
@@ -22,6 +21,9 @@ public class SettingManager : MonoBehaviour
     // 텍스트 변수 추가
     public TextMeshProUGUI bgmText;
     public TextMeshProUGUI sfxText;
+
+    public Button saveButton;
+    public Button exitButton;
 
     private const string MouseSensitivityKey = "MouseSensitivity";
     private const string BgmVolumeKey = "BgmVolume";
@@ -58,6 +60,9 @@ public class SettingManager : MonoBehaviour
 
         GameObject playerObject = GameObject.FindWithTag("Player");
         playerLook = playerObject.GetComponent<PlayerLook>();
+
+        saveButton.onClick.AddListener(OnclickSaveButton);
+        exitButton.onClick.AddListener(OnclickExitButton);
     }
 
     void Update()
@@ -190,4 +195,16 @@ public class SettingManager : MonoBehaviour
         }
     }
 
+    public void OnclickSaveButton()
+    {
+        GameData gameData = GameManager.instance.SaveData();
+        DataManager.instance.SaveGameData(gameData);
+    }
+
+    public void OnclickExitButton()
+    {
+        GameData gameData = GameManager.instance.SaveData();
+        DataManager.instance.SaveGameData(gameData);
+        SceneManager.LoadScene("Title");
+    }
 }

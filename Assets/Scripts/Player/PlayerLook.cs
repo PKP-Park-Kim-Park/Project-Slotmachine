@@ -17,6 +17,9 @@ public class PlayerLook : MonoBehaviour
     [SerializeField] private float edgePanMaxAngleX = 5f; // 상하 시야 이동 최대 각도
     [SerializeField] private float edgePanMaxAngleY = 10f; // 좌우 시야 이동 최대 각도
 
+    [Header("Dependencies")]
+    [SerializeField] private SlotMachine slotMachine; // 슬롯머신 상태 참조
+
     private float currentCameraRotationX = 0f;
     private Rigidbody rb;
 
@@ -48,8 +51,8 @@ public class PlayerLook : MonoBehaviour
 
     void Update()
     {
-        // 시점이 고정된 상태에서 Q 키를 누르면 시점 고정 해제
-        if (isViewFixed && Input.GetKeyDown(KeyCode.Q))
+        // 시점이 고정된 상태이고, 슬롯머신이 작동 중이 아닐 때 Q 키를 누르면 시점 고정 해제
+        if (isViewFixed && Input.GetKeyDown(KeyCode.Q) && (slotMachine == null || !slotMachine.IsActivating))
         {
             UnfixViewPoint();
         }

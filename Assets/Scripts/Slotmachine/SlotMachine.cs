@@ -1,27 +1,42 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class SlotMachine : MonoBehaviour
 {
+    // 슬롯머신의 상태를 나타내는 열거형
+    public enum SlotMachineState
+    {
+        Idle,           // 대기
+        Spinning,       // 릴 회전 중
+        Stopping,       // 릴 정지 중
+        ShowingResults  // 결과 표시 중
+    }
+
     public event Action OnActivationStart;  // 슬롯머신 동작 시작
     public event Action OnActivationEnd;    // 슬롯머신 동작 종료
     public event Action<int> OnBetGoldChanged; // 베팅 골드 변경 시
     public event Action OnBetAttemptFailed; // 베팅 +/- 실패 시
     public event Action<int> OnRewardGold;  // 보상 골드 변경 시
     //===============================================
-    private bool isActivating;
-    public bool IsActivating
+    private SlotMachineState _currentState;
+    public SlotMachineState CurrentState
     {
-        get { return isActivating; }
+        get { return _currentState; }
         private set
         {
-            if (isActivating == value) return;
-            isActivating = value;
+            if (_currentState == value) return;
+            
+            var previousState = _currentState;
+            _currentState = value;
 
-            if (isActivating) OnActivationStart?.Invoke();
-            else OnActivationEnd?.Invoke();
+            // 슬롯머신이 활성화되거나 비활성화되는 시점에 이벤트 호출
+            bool wasActivating = IsActivatingState(previousState);
+            bool isActivating = IsActivatingState(_currentState);
+            if (!wasActivating && isActivating) OnActivationStart?.Invoke();
+            else if (wasActivating && !isActivating) OnActivationEnd?.Invoke();
         }
     }
     private int bettingGold;
@@ -46,6 +61,12 @@ public class SlotMachine : MonoBehaviour
             OnRewardGold?.Invoke(value);
         }
     }
+
+    // IsActivating 프로퍼티를 상태 기반으로 계산하여 제공
+    public bool IsActivating
+    {
+        get { return IsActivatingState(CurrentState); }
+    }
     
     [SerializeField] private Reel[] reels; // 릴들을 관리할 배열
     [SerializeField] private float spinTime = 3f;
@@ -67,11 +88,13 @@ public class SlotMachine : MonoBehaviour
 
     private int[,] matrix;
     private SymbolWeightProcessor[] reelWeightProcessors;
+    private Coroutine spinCoroutine;
+
     private void Awake()
     {
         bettingGold = 0;
         rewardGold = 0;
-        isActivating = false;
+        _currentState = SlotMachineState.Idle; // 초기 상태는 이벤트 트리거 없이 직접 설정
 
         if (reels == null || reels.Length == 0)
         {
@@ -99,11 +122,10 @@ public class SlotMachine : MonoBehaviour
     }
     public void Bet(bool isIncrease)
     {
-        // 슬롯머신 작동중
-        if (isActivating)
-        {
-            return;
-        }
+        // 대기 상태가 아니면 베팅 불가
+        if (CurrentState != SlotMachineState.Idle) return;
+
+        int unitGold = GameManager.instance.levelData._unitGold;
 
         if (isIncrease == true)
         {
@@ -114,7 +136,7 @@ public class SlotMachine : MonoBehaviour
                 return;
             }
 
-            BettingGold += GameManager.instance.levelData._unitGold;
+            BettingGold += unitGold;
         }
         else if (isIncrease == false)
         {
@@ -125,17 +147,16 @@ public class SlotMachine : MonoBehaviour
                 return;
             }
 
-            BettingGold -= GameManager.instance.levelData._unitGold;
+            BettingGold -= unitGold;
         }
     }
     public void Spin()
     {
-        // 슬롯머신 작동중
-        if (isActivating)
-        {
-            return;
-        }
+        // 대기 상태가 아니면 스핀 불가
+        if (CurrentState != SlotMachineState.Idle) return;
 
+        // 스핀 코루틴이 이미 실행 중이면 중복 실행 방지
+        if (spinCoroutine != null) return;
         if (bettingGold < GameManager.instance.levelData._minGold)
         {
             // 배팅액 부족!
@@ -154,52 +175,51 @@ public class SlotMachine : MonoBehaviour
             patternAnimator.ClearBorders();
         }
 
-        // 모든 릴의 회전 애니메이션 시작
+        spinCoroutine = StartCoroutine(SpinSequence());
+    }
+
+    /// <summary>
+    /// 스핀 시작부터 결과 처리까지의 전체 과정을 관리하는 메인 코루틴
+    /// </summary>
+    private IEnumerator SpinSequence()
+    {
+        CurrentState = SlotMachineState.Spinning;
+        GameManager.instance.money.SpendGold(bettingGold);
+
+        // 1. 모든 릴 회전 시작
         for (int i = 0; i < reels.Length; i++)
         {
             StartCoroutine(reels[i].StartSpin(reelWeightProcessors[i]));
         }
 
-        GameManager.instance.money.SpendGold(bettingGold);
-        IsActivating = true;
-
-        // 일정 시간 후 릴을 정지시키는 코루틴 시작
-        StartCoroutine(IStopSpin());
-    }
-
-    // 릴들을 순차적으로 멈추고 결과를 처리하는 코루틴
-    private IEnumerator IStopSpin()
-    {
+        // 2. 지정된 시간만큼 대기
         yield return new WaitForSeconds(spinTime);
+        CurrentState = SlotMachineState.Stopping;
 
-        // 각 릴을 순차적으로 멈춤
+        // 3. 각 릴을 순차적으로 정지하고 결과 매트릭스 구성
         for (int i = 0; i < reels.Length; i++)
         {
             yield return StartCoroutine(reels[i].StopSpin(reels[i].row));
 
             int[] resultRow = reels[i].GetResultSymbols();
-            // 4. 결과를 matrix에 저장
             ConvertMatrix(i, resultRow);
 
             yield return new WaitForSeconds(0.3f);
         }
 
-        // 결과 로그 출력 (디버깅용)
-        /*
-        string resultLog = "Spin Result Matrix:\n";
-        for (int row = 0; row < matrix.GetLength(0); row++)
-        {
-            for (int col = 0; col < matrix.GetLength(1); col++)
-            {
-                resultLog += ((Symbols)matrix[row, col]).ToString().PadRight(10);
-            }
-            resultLog += "\n";
-        }
-        Debug.Log(resultLog);
-        */
+        // 4. 결과 처리 및 애니메이션 시작
+        CurrentState = SlotMachineState.ShowingResults;
+        yield return StartCoroutine(ProcessResults());
 
-        // 스핀 종료 후 애니메이션과 당첨 보상 처리
-        StartCoroutine(IDropGold());
+        // 5. 모든 과정 종료 후 초기화
+        RewardGold = 0;
+        CurrentState = SlotMachineState.Idle;
+        spinCoroutine = null;
+    }
+
+    private bool IsActivatingState(SlotMachineState state)
+    {
+        return state != SlotMachineState.Idle;
     }
 
     // 3X5 행렬로 변환
@@ -214,8 +234,11 @@ public class SlotMachine : MonoBehaviour
         }
     }
 
-    // 스핀 종료 후 애니메이션 및 보상 처리 코루틴
-    private IEnumerator IDropGold()
+    /// <summary>
+    /// 스핀 종료 후 당첨 확인, 애니메이션, 보상 지급을 처리하는 코루틴
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator ProcessResults()
     {
         // 1. 보상 패턴 확인 및 배율 계산
         float totalOdds = rewardChecker.CheckReward(matrix, patternOddsData, symbolOddsData);
@@ -252,10 +275,5 @@ public class SlotMachine : MonoBehaviour
         {
             Debug.Log("당첨된 라인이 없습니다.");
         }
-
-        // 초기화
-        // BettingGold = GameManager.instance.levelData._minGold;
-        RewardGold = 0;
-        IsActivating = false;
     }
 }

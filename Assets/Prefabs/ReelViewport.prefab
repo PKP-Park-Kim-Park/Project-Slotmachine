@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2534437092708051881}
   - component: {fileID: 3492391981678103148}
   - component: {fileID: 1161628842158338486}
+  - component: {fileID: 187166473891261230}
   m_Layer: 5
   m_Name: SymbolImg2
   m_TagString: Untagged
@@ -96,6 +97,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &187166473891261230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690283623584837233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a848e098ea3c5114fb8f22faff07b2fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameRate: 0.088
 --- !u!1 &1342768137640798786
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,6 +122,7 @@ GameObject:
   - component: {fileID: 8605656372993921717}
   - component: {fileID: 3498130636073469792}
   - component: {fileID: 8326647120405902788}
+  - component: {fileID: 8494112109802723110}
   m_Layer: 5
   m_Name: SymbolImg1
   m_TagString: Untagged
@@ -192,6 +207,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &8494112109802723110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1342768137640798786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a848e098ea3c5114fb8f22faff07b2fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameRate: 0.088
 --- !u!1 &1393575964666448191
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,6 +232,7 @@ GameObject:
   - component: {fileID: 2327848939054675393}
   - component: {fileID: 9116406024081285897}
   - component: {fileID: 8420286054815591713}
+  - component: {fileID: 8077892797149399621}
   m_Layer: 5
   m_Name: SymbolImg4
   m_TagString: Untagged
@@ -288,6 +317,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &8077892797149399621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393575964666448191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a848e098ea3c5114fb8f22faff07b2fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameRate: 0.088
 --- !u!1 &1809530835408066649
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,6 +342,7 @@ GameObject:
   - component: {fileID: 8692611942282157084}
   - component: {fileID: 7488991865526389686}
   - component: {fileID: 3545210306254889631}
+  - component: {fileID: 1066880853914629381}
   m_Layer: 5
   m_Name: SymbolImg6
   m_TagString: Untagged
@@ -384,6 +427,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &1066880853914629381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809530835408066649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a848e098ea3c5114fb8f22faff07b2fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameRate: 0.088
 --- !u!1 &3769955634350015238
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,6 +452,7 @@ GameObject:
   - component: {fileID: 8651176534143084876}
   - component: {fileID: 3798189220486809423}
   - component: {fileID: 1935079765014158629}
+  - component: {fileID: 3090445047501018359}
   m_Layer: 5
   m_Name: SymbolImg7
   m_TagString: Untagged
@@ -480,6 +537,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &3090445047501018359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3769955634350015238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a848e098ea3c5114fb8f22faff07b2fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameRate: 0.088
 --- !u!1 &3780083466313832208
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,6 +562,7 @@ GameObject:
   - component: {fileID: 6908804984534291324}
   - component: {fileID: 1544273808484365279}
   - component: {fileID: 5423991343056129201}
+  - component: {fileID: 2219125376149500046}
   m_Layer: 5
   m_Name: SymbolImg5
   m_TagString: Untagged
@@ -576,6 +647,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &2219125376149500046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3780083466313832208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a848e098ea3c5114fb8f22faff07b2fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameRate: 0.088
 --- !u!1 &4521130265886318296
 GameObject:
   m_ObjectHideFlags: 0
@@ -588,6 +672,7 @@ GameObject:
   - component: {fileID: 2762521212999230820}
   - component: {fileID: 5450904359531847294}
   - component: {fileID: 231237472570932342}
+  - component: {fileID: 7680038770448587585}
   m_Layer: 5
   m_Name: SymbolImg3
   m_TagString: Untagged
@@ -672,6 +757,19 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &7680038770448587585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4521130265886318296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a848e098ea3c5114fb8f22faff07b2fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frameRate: 0.088
 --- !u!1 &6584514636745988636
 GameObject:
   m_ObjectHideFlags: 0
@@ -812,6 +910,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reelAnimator: {fileID: 7094279273316669886}
+  resultSymbolsUI:
+  - {fileID: 7680038770448587585}
+  - {fileID: 8077892797149399621}
+  - {fileID: 2219125376149500046}
 --- !u!1 &8522720149703538295
 GameObject:
   m_ObjectHideFlags: 0

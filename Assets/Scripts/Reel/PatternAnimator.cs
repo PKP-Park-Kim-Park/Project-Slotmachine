@@ -69,6 +69,7 @@ public class PatternAnimator : MonoBehaviour
         foreach (WinningLine line in winningLines)
         {
             List<Transform> transformsToAnimate = new();
+            List<SymbolAnimator> symbolsToAnimate = new();
 
             OnLineAnimate?.Invoke(line.Odds);
 
@@ -79,6 +80,11 @@ public class PatternAnimator : MonoBehaviour
                     ShowBorderAt(coord.x, coord.y);
                     int index = coord.x * numColumns + coord.y;
                     transformsToAnimate.Add(slotPositions[index]);
+                    // slotPositions에 있는 Symbol 컴포넌트를 찾아서 리스트에 추가
+                    if (slotPositions[index].TryGetComponent<SymbolAnimator>(out var symbol))
+                    {
+                        symbolsToAnimate.Add(symbol);
+                    }
                 }
             }
 
@@ -94,6 +100,9 @@ public class PatternAnimator : MonoBehaviour
                 }
             }
 
+            // 당첨된 심볼 애니메이션 재생
+            symbolsToAnimate.ForEach(s => s.PlayAnimation());
+
             if (transformsToAnimate.Count > 0)
             {
                 yield return StartCoroutine(AnimatePop(transformsToAnimate, popScale, popDuration / 2f));
@@ -105,6 +114,9 @@ public class PatternAnimator : MonoBehaviour
             {
                 yield return StartCoroutine(AnimatePop(transformsToAnimate, 1.0f, popDuration / 2f));
             }
+
+            // 심볼 애니메이션 정지 및 테두리 제거
+            symbolsToAnimate.ForEach(s => s.StopAnimation());
             ClearBorders();
         }
 

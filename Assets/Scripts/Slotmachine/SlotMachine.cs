@@ -70,6 +70,8 @@ public class SlotMachine : MonoBehaviour
     
     [SerializeField] private Reel[] reels; // 릴들을 관리할 배열
     [SerializeField] private float spinTime = 3f;
+    [Tooltip("릴이 순차적으로 정지할 때의 시간 간격 (초)")]
+    [SerializeField] private float reelStopDelay = 0.3f;
 
     [Header("Probabilities")]
     [Tooltip("SymbolWeight 에셋")]
@@ -204,7 +206,7 @@ public class SlotMachine : MonoBehaviour
             int[] resultRow = reels[i].GetResultSymbols();
             ConvertMatrix(i, resultRow);
 
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(reelStopDelay);
         }
 
         // 4. 결과 처리 및 애니메이션 시작

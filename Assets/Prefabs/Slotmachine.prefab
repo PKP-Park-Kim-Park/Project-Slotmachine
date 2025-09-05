@@ -266,6 +266,7 @@ MonoBehaviour:
   - {fileID: 297088384487749990}
   - {fileID: 7767932875951262045}
   spinTime: 0.75
+  reelStopDelay: 0.35
   reelProbability: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
   patternAnimator: {fileID: 8867468335312443799}
   patternOddsData: {fileID: 11400000, guid: 70910bfa3fef46148b6e89179a31bc85, type: 2}
@@ -300,7 +301,7 @@ MonoBehaviour:
   - {fileID: 3972875361668141414}
   - {fileID: 8350492166175179735}
   - {fileID: 2031314632997860332}
-  animationDelay: 0.4
+  animationDelay: 0.35
   popScale: 1.2
   popDuration: 0.1
   winningParticlePrefab: {fileID: 8285728651733986772, guid: 90e68639f4b7ce14a81744647c23fd0d, type: 3}

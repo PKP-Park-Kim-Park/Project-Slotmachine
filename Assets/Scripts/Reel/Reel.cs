@@ -8,6 +8,10 @@ public class Reel : MonoBehaviour
     [Tooltip("릴의 애니메이션을 담당하는 컴포넌트")]
     [SerializeField] private ReelAnimator reelAnimator;
 
+    [Tooltip("릴에 표시될 실제 Symbol 컴포넌트들 (위->아래 순서)")]
+    [SerializeField] private SymbolAnimator[] resultSymbolsUI;
+
+
     public bool isSpinning { get; private set; }
     public int[] row { get; private set; } = new int[7];
 
@@ -47,17 +51,17 @@ public class Reel : MonoBehaviour
         isSpinning = false;
         // 최종 심볼 배열을 릴에 적용
         row = finalRow;
-        // Debug.Log("릴 회전 중지!");
 
-        // int -> Sprite 변환
-        Sprite[] finalSprites = new Sprite[3];
+        // 최종 결과 심볼들을 UI에 설정
+        Sprite[] finalStaticSprites = new Sprite[3];
         for (int i = 0; i < 3; i++)
         {
-            // 중앙 3개 심볼(인덱스 2, 3, 4)을 결과로 사용
-            finalSprites[i] = SymbolManager.Instance.GetSprite((Symbols)row[i + 2]);
+            Symbols symbolEnum = (Symbols)row[i + 2];
+            resultSymbolsUI[i].SetSprites(SymbolManager.Instance.GetSprites(symbolEnum));
+            finalStaticSprites[i] = SymbolManager.Instance.GetStaticSprite(symbolEnum);
         }
 
-        yield return reelAnimator.StopSpin(finalSprites);
+        yield return reelAnimator.StopSpin(finalStaticSprites);
     }
 
     // SlotMachine에서 최종 결과 가져가기

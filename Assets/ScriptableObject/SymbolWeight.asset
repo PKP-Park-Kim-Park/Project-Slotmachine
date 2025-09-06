@@ -22,8 +22,8 @@ MonoBehaviour:
   - symbol: 4
     probability: 0
   - symbol: 5
-    probability: 100
-  - symbol: 6
     probability: 0
+  - symbol: 6
+    probability: 100
   - symbol: 7
     probability: 0

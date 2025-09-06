@@ -16,13 +16,13 @@ MonoBehaviour:
   - symbol: 1
     probability: 0
   - symbol: 2
-    probability: 100
+    probability: 0
   - symbol: 3
     probability: 0
   - symbol: 4
     probability: 0
   - symbol: 5
-    probability: 0
+    probability: 100
   - symbol: 6
     probability: 0
   - symbol: 7

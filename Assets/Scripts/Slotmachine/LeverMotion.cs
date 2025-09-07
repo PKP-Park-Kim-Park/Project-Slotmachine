@@ -15,12 +15,17 @@ public class LeverMotion : MonoBehaviour, IInteractable
     [SerializeField] private Color disabledColor = Color.red;
 
     [Tooltip("레버의 상태를 제어할 SlotMachine 컴포넌트")]
+    // TODO: SlotMachine 컴포넌트를 찾지 못했을 때의 예외 처리를 강화할 필요가 있습니다.
     [SerializeField] private SlotMachine slotMachine;
 
+    [Header("Effects")]
+    [Tooltip("레버를 당길 때 재생될 스파크 스프라이트 애니메이터")]
+    [SerializeField] private Animator sparkAnimator;
+
     private Animator leverAnim;
+    private Coroutine sparkCoroutine;
     private int pullTriggerHash;
 
-    // isInteractable 프로퍼티를 SlotMachine의 상태와 직접 연동합니다.
     public bool IsInteractable { get { return slotMachine != null && !slotMachine.IsActivating; } }
 
     /*
@@ -57,11 +62,9 @@ public class LeverMotion : MonoBehaviour, IInteractable
     {
         if (slotMachine != null)
         {
-            // SlotMachine의 상태 변경 이벤트에 메서드를 연결합니다.
             slotMachine.OnActivationStart += SetDisabledColor;
             slotMachine.OnActivationEnd += SetEnabledColor;
         }
-        // 스크립트가 활성화될 때 현재 상태에 맞는 색상으로 초기화합니다.
         UpdateOutlineColor();
     }
 
@@ -69,7 +72,6 @@ public class LeverMotion : MonoBehaviour, IInteractable
     {
         if (slotMachine != null)
         {
-            // 메모리 누수를 방지하기 위해 이벤트 연결을 해제합니다.
             slotMachine.OnActivationStart -= SetDisabledColor;
             slotMachine.OnActivationEnd -= SetEnabledColor;
         }
@@ -98,8 +100,6 @@ public class LeverMotion : MonoBehaviour, IInteractable
         {
             Debug.LogWarning("레버 애니메이션을 실행할 수 없음..");
         }
-
-        // UnityEvent를 호출하여 연결된 모든 함수를 실행 => 현재는 Spin()만 연결
         OnLeverPulled?.Invoke();
     }
 
@@ -126,5 +126,35 @@ public class LeverMotion : MonoBehaviour, IInteractable
     {
         if (IsInteractable) SetEnabledColor();
         else SetDisabledColor();
+    }
+
+    /// <summary>
+    /// 레버 당길때 스파크
+    /// </summary>
+    public void PlaySparkEffect()
+    {
+        if (sparkAnimator == null) return;
+
+        if (sparkCoroutine != null)
+        {
+            StopCoroutine(sparkCoroutine);
+        }
+        sparkCoroutine = StartCoroutine(SparkEffectSequence());
+    }
+
+    private IEnumerator SparkEffectSequence()
+    {
+        Debug.Log("스파크 효과 재생!");
+
+        sparkAnimator.gameObject.SetActive(true);
+        sparkAnimator.Play(0, -1, 0f);
+
+        AnimatorClipInfo[] clipInfo = sparkAnimator.GetCurrentAnimatorClipInfo(0);
+        float animationLength = clipInfo.Length > 0 ? clipInfo[0].clip.length : 1.0f;
+
+        yield return new WaitForSeconds(animationLength);
+
+        sparkAnimator.gameObject.SetActive(false);
+        sparkCoroutine = null;
     }
 }

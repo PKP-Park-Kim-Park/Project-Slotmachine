@@ -2,20 +2,6 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public enum ItemType
-{
-    None,
-    CanUseItem,
-    Skill
-}
-
-public enum Goods
-{
-    None,
-    Gold,
-    Tokken
-}
-
 public enum UseType
 {
     None,
@@ -94,9 +80,7 @@ public struct ItemEffetModel
 public struct ItemDataModel
 {
     public int id;
-    public ItemType itemType;
     public string name;
-    public Goods goods;
     public int price;
     public Rarity rarity;
     public HasRisk hasRisk;
@@ -107,25 +91,5 @@ public struct ItemDataModel
 [CreateAssetMenu(fileName = "ItmeData", menuName = "Scriptable Objects/ItmeData")]
 public class ItmeData : ScriptableObject
 {
-    public List<ItemDataModel> canUseItemDataModels;
-    public List<ItemDataModel> SkillDataModels;
-
-    private void OnValidate()
-    {
-        for (int i = 0; i < canUseItemDataModels.Count; i++)
-        {
-            ItemDataModel item = canUseItemDataModels[i];
-            item.itemType = ItemType.CanUseItem; 
-            item.goods = Goods.Gold;
-            canUseItemDataModels[i] = item;  
-        }
-
-        for (int i = 0; i < SkillDataModels.Count; i++)
-        {
-            ItemDataModel item = SkillDataModels[i];
-            item.itemType = ItemType.Skill;
-            item.goods = Goods.Tokken;
-            SkillDataModels[i] = item;
-        }
-    }
+    public List<ItemDataModel> itemDataModels;
 }

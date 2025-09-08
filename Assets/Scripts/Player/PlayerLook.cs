@@ -7,7 +7,7 @@ public class PlayerLook : MonoBehaviour
 {
     [Header("Camera Settings")]
     [SerializeField] public float lookSensitivity = 3f;
-    [SerializeField] private float cameraRotationLimit = 80f;
+    [SerializeField] private float maxTilt = 80f;
     [SerializeField] private Camera mainCam;
 
     [Header("Fixed View Settings")]
@@ -17,7 +17,7 @@ public class PlayerLook : MonoBehaviour
     [SerializeField] private float edgePanMaxAngleX = 5f; // 상하 시야 이동 최대 각도
     [SerializeField] private float edgePanMaxAngleY = 10f; // 좌우 시야 이동 최대 각도
 
-    private float currentCameraRotationX = 0f;
+    private float currentTilt = 0f;
     private Rigidbody rb;
 
     public GameObject crosshair;
@@ -85,13 +85,15 @@ public class PlayerLook : MonoBehaviour
 
     private void CameraRotation()
     {
-        float xRotation = Input.GetAxisRaw("Mouse Y");
-        float cameraRotationX = xRotation * lookSensitivity;
+        float mouseY = Input.GetAxis("Mouse Y");
+        float tiltAmount = mouseY * lookSensitivity;
 
-        currentCameraRotationX -= cameraRotationX;
-        currentCameraRotationX = Mathf.Clamp(currentCameraRotationX, -cameraRotationLimit, cameraRotationLimit);
+        currentTilt -= tiltAmount;
+        currentTilt = Mathf.Clamp(currentTilt, -maxTilt, maxTilt);
 
-        mainCam.transform.localEulerAngles = new Vector3(currentCameraRotationX, 0f, 0f);
+        Vector3 angles = mainCam.transform.localEulerAngles;
+        angles.x = currentTilt;
+        mainCam.transform.localEulerAngles = angles;
     }
 
     // 일반 플레이 모드 시 시점 처리
@@ -163,7 +165,7 @@ public class PlayerLook : MonoBehaviour
             isReturningToPlayer = false;
             mainCam.transform.localPosition = originalCamPosition;
             mainCam.transform.localRotation = Quaternion.identity;
-            currentCameraRotationX = 0f;
+            currentTilt = 0f;
         }
     }
 

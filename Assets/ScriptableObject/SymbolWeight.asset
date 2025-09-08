@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weightedSymbols:
   - symbol: 1
-    probability: 100
+    probability: 19.4
   - symbol: 2
-    probability: 0
+    probability: 19.4
   - symbol: 3
-    probability: 0
+    probability: 14.9
   - symbol: 4
-    probability: 0
+    probability: 14.9
   - symbol: 5
-    probability: 0
+    probability: 11.9
   - symbol: 6
-    probability: 0
+    probability: 11.9
   - symbol: 7
-    probability: 0
+    probability: 7.6
   - symbol: 8
     probability: 0

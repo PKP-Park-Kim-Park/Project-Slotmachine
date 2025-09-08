@@ -8,12 +8,14 @@ public class GameManager : MonoBehaviour
 
     public event Action<Vector3> OnPlayerPosChanged;
     public event Action OnUnlockDoor;
+    public event Action OnLockAllDoors;
     public event Func<int> OnRequestDoorLock;
     public event Action<bool> OnSlotMachineStateChanged;
 
     private bool isGaimng;
     public LevelData levelData { get; private set; }
     public Money money { get; private set; }
+    public LevelManager levelManager { get; private set; }
 
     private GameData _gameData;
 
@@ -31,17 +33,8 @@ public class GameManager : MonoBehaviour
 
         levelData = new LevelData(1);
         money = new Money(100_000, 0);
-
-        // 레벨 변경 시 잠금해제
-        levelData.OnLevelChanged += HandleLevelChange;
-    }
-
-    private void OnDestroy()
-    {
-        if (levelData != null)
-        {
-            levelData.OnLevelChanged -= HandleLevelChange;
-        }
+        levelManager = gameObject.AddComponent<LevelManager>();
+        levelManager.Initialize(money, levelData);
     }
 
     public GameData SaveData()
@@ -89,7 +82,6 @@ public class GameManager : MonoBehaviour
         levelData.SetLevel(1);
         money.ConvertToken();
         OnPlayerPosChanged?.Invoke(new Vector3(1f, 1f, 0f));
-        // Init() 시점에 문 잠금 해제 이벤트를 발생시킵니다.
         OnUnlockDoor?.Invoke();
     }
 
@@ -120,14 +112,33 @@ public class GameManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void HandleLevelChange()
-    {
-        Debug.Log($"레벨이 {levelData._level}(으)로 변경되었습니다. 문 잠금 해제를 시도합니다.");
-        OnUnlockDoor?.Invoke();
-    }
-
     public void CheckSlotMachineStateChanged(bool newState)
     {
         OnSlotMachineStateChanged?.Invoke(newState);
+    }
+
+    /// <summary>
+    /// OnUnlockDoor 이벤트를 외부에서 발생시키기 위한 public 메서드입니다.
+    /// </summary>
+    public void TriggerUnlockDoor()
+    {
+        OnUnlockDoor?.Invoke();
+    }
+
+    /// <summary>
+    /// 모든 문을 잠그는 OnLockAllDoors 이벤트를 발생시킵니다.
+    /// </summary>
+    public void TriggerLockAllDoors()
+    {
+        OnLockAllDoors?.Invoke();
+    }
+
+    /// <summary>
+    /// SlotMachine에 필요한 의존성을 주입하여 초기화합니다.
+    /// </summary>
+    /// <param name="slotMachine">초기화할 SlotMachine 인스턴스</param>
+    public void InitializeSlotMachine(SlotMachine slotMachine)
+    {
+        slotMachine.Initialize(this.money, this.levelData);
     }
 }

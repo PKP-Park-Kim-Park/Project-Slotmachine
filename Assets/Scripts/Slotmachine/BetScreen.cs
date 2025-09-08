@@ -51,13 +51,13 @@ public class BetScreen : MonoBehaviour
         bettingGoldText.text = newBettingGold.ToString("N0") + " $";
 
         // 베팅 금액에 따라 텍스트 색상 변경
-        if (GameManager.instance != null)
+        if (slotMachine != null)
         {
-            if (newBettingGold >= GameManager.instance.levelData._maxGold)
+            if (newBettingGold >= slotMachine.MaxBettingGold)
             {
                 bettingGoldText.color = maxBetColor;
             }
-            else if (newBettingGold <= GameManager.instance.levelData._minGold)
+            else if (newBettingGold <= slotMachine.MinBettingGold)
             {
                 bettingGoldText.color = minBetColor;
             }

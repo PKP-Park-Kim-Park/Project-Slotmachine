@@ -27,3 +27,5 @@ MonoBehaviour:
     probability: 11.9
   - symbol: 7
     probability: 7.6
+  - symbol: 8
+    probability: 0

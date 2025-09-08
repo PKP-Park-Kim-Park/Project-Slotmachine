@@ -21,9 +21,9 @@ public class LevelData
         if (_level == level && _level != 0) return;
 
         _level = level;
-        _minGold = level * CONVERT_SIZE;
-        _maxGold = level * MAX_SIZE * CONVERT_SIZE;
-        _unitGold = _minGold * level;
+        _minGold = level * CONVERT_SIZE; // 베팅 시 최소 골드
+        _maxGold = level * MAX_SIZE * CONVERT_SIZE; // 베팅 시 최대 골드
+        _unitGold = _minGold; // 베팅 시 단위 골드
 
         // 레벨 변경
         Debug.Log($"레벨을 {level}(으)로 올립니다.");

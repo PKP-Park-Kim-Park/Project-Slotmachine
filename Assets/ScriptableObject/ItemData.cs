@@ -39,7 +39,8 @@ public enum FlagSymbols
     Bell = 8,
     Diamond = 16,
     Star = 32,
-    Seven = 64
+    Seven = 64,
+    Skull = 128
 }
 
 public enum StressType
@@ -67,13 +68,13 @@ public enum HasRisk
 }
 
 [Serializable]
-public struct ItemEffetModel
+public struct ItemEffectModel
 {
     public UseType useType;
     public FlagSymbols flagSymbols;
     public FlagPatterns flagPatterns;
     public StressType stressType;
-    public int amount;
+    public float amount;
 }
 
 [Serializable]
@@ -84,11 +85,11 @@ public struct ItemDataModel
     public int price;
     public Rarity rarity;
     public HasRisk hasRisk;
-    public ItemEffetModel itmeEffect;
-    public ItemEffetModel itmeRiskEffect;
+    public ItemEffectModel itemEffect;
+    public ItemEffectModel itemRiskEffect;
 }
 
-[CreateAssetMenu(fileName = "ItmeData", menuName = "Scriptable Objects/ItmeData")]
+[CreateAssetMenu(fileName = "ItemData", menuName = "Scriptable Objects/ItemData")]
 public class ItmeData : ScriptableObject
 {
     public List<ItemDataModel> itemDataModels;

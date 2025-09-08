@@ -15,7 +15,6 @@ public class LeverMotion : MonoBehaviour, IInteractable
     [SerializeField] private Color disabledColor = Color.red;
 
     [Tooltip("레버의 상태를 제어할 SlotMachine 컴포넌트")]
-    // TODO: SlotMachine 컴포넌트를 찾지 못했을 때의 예외 처리를 강화할 필요가 있습니다.
     [SerializeField] private SlotMachine slotMachine;
 
     [Header("Effects")]
@@ -144,7 +143,7 @@ public class LeverMotion : MonoBehaviour, IInteractable
 
     private IEnumerator SparkEffectSequence()
     {
-        Debug.Log("스파크 효과 재생!");
+        // Debug.Log("스파크 효과 재생!");
 
         sparkAnimator.gameObject.SetActive(true);
         sparkAnimator.Play(0, -1, 0f);

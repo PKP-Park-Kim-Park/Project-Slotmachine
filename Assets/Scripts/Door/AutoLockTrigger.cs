@@ -1,20 +1,12 @@
 using UnityEngine;
-using UnityEngine.Events;
 public class AutoLockTrigger : MonoBehaviour, IInteractable
 {
-    [Tooltip("상호작용 시 발생할 이벤트입니다.")]
-    public UnityEvent OnInteracted;
-
-    [Tooltip("한 번만")]
-    public bool interactOnce = true;
-
     public void Interact()
     {
-        OnInteracted?.Invoke();
-
-        if (interactOnce)
+        if (GameManager.instance != null)
         {
-            this.enabled = false;
+            Debug.Log("AutoLockTrigger 발동! 모든 문을 잠급니다.");
+            GameManager.instance.TriggerLockAllDoors();
         }
     }
 }

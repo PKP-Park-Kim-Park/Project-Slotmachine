@@ -7,9 +7,6 @@ public class Door : MonoBehaviour, IInteractable
     [Tooltip("상호작용 시 색상을 변경할 Outline 컴포넌트")]
     public Outline outline;
 
-    [Tooltip("이 오브젝트와 상호작용 시 문이 자동 잠김")]
-    public AutoLockTrigger lockTrigger;
-
     [Header("상태")]
     [Tooltip("문이 잠겼는지 여부")]
     [SerializeField]
@@ -46,10 +43,10 @@ public class Door : MonoBehaviour, IInteractable
 
         InitializeAnimatorHashes();
 
-        // GameManager가 존재하면, OnUnlockDoor 이벤트가 발생할 때 Unlock 메서드를 실행하도록 등록합니다.
         if (GameManager.instance != null)
         {
             GameManager.instance.OnUnlockDoor += Unlock;
+            GameManager.instance.OnLockAllDoors += Lock;
         }
 
         InitializeOutline();
@@ -57,18 +54,6 @@ public class Door : MonoBehaviour, IInteractable
 
     private void OnEnable()
     {
-        if (lockTrigger != null)
-        {
-            lockTrigger.OnInteracted.AddListener(AutoCloseAndLock);
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (lockTrigger != null)
-        {
-            lockTrigger.OnInteracted.RemoveListener(AutoCloseAndLock);
-        }
     }
 
     private void OnDestroy()
@@ -76,6 +61,7 @@ public class Door : MonoBehaviour, IInteractable
         if (GameManager.instance != null)
         {
             GameManager.instance.OnUnlockDoor -= Unlock;
+            GameManager.instance.OnLockAllDoors -= Lock;
         }
     }
 
@@ -107,6 +93,12 @@ public class Door : MonoBehaviour, IInteractable
     public void Lock()
     {
         if (doorLock) return;
+
+        // 문이 열려있으면 먼저 닫습니다.
+        if (isOpen)
+        {
+            Close();
+        }
 
         SetLockedState(true);
         Debug.Log("문이 잠겼습니다.");
@@ -143,20 +135,6 @@ public class Door : MonoBehaviour, IInteractable
 
         animator.SetTrigger(closeTriggerHash);
         isOpen = false;
-    }
-
-    /// <summary>
-    /// 문 자동 잠금. lockTrigger에 의해 호출
-    /// </summary>
-    public void AutoCloseAndLock()
-    {
-        if (isOpen)
-        {
-            Close();
-        }
-
-        SetLockedState(true);
-        Debug.Log("문이 자동으로 닫히고 잠겼습니다.");
     }
 
     /// <summary>

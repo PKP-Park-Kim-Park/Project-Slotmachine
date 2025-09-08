@@ -32,7 +32,7 @@ public class BtnMotion : MonoBehaviour, IInteractable
         // leverAnim이 할당되었는지 확인 후 애니메이션 실행
         if (btnAnim != null)
         {
-            Debug.Log("버튼 누름...");
+            // Debug.Log("버튼 누름...");
             btnAnim.SetTrigger("Press");
         }
         else

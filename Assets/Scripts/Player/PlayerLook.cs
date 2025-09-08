@@ -17,9 +17,6 @@ public class PlayerLook : MonoBehaviour
     [SerializeField] private float edgePanMaxAngleX = 5f; // 상하 시야 이동 최대 각도
     [SerializeField] private float edgePanMaxAngleY = 10f; // 좌우 시야 이동 최대 각도
 
-    [Header("Dependencies")]
-    [SerializeField] private SlotMachine slotMachine; // 슬롯머신 상태 참조
-
     private float currentCameraRotationX = 0f;
     private Rigidbody rb;
 
@@ -30,6 +27,7 @@ public class PlayerLook : MonoBehaviour
     private bool isReturningToPlayer = false; // 카메라 복귀 상태
     private Transform cameraTarget;
     private Vector3 originalCamPosition; // 카메라 원래 위치
+    private SlotMachine currentSlotMachine; // 현재 상호작용 중인 슬롯머신
 
     /// <summary>
     /// 현재 시점이 고정된 상태인지 여부
@@ -52,7 +50,7 @@ public class PlayerLook : MonoBehaviour
     void Update()
     {
         // 시점이 고정된 상태이고, 슬롯머신이 작동 중이 아닐 때 Q 키를 누르면 시점 고정 해제
-        if (isViewFixed && Input.GetKeyDown(KeyCode.Q) && (slotMachine == null || !slotMachine.IsActivating))
+        if (isViewFixed && Input.GetKeyDown(KeyCode.Q) && (currentSlotMachine == null || !currentSlotMachine.IsActivating))
         {
             UnfixViewPoint();
         }
@@ -174,6 +172,7 @@ public class PlayerLook : MonoBehaviour
         isViewFixed = true;
         isReturningToPlayer = false;
         cameraTarget = target;
+        currentSlotMachine = target.GetComponentInParent<SlotMachine>(); // 상호작용한 슬롯머신 참조
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -185,6 +184,7 @@ public class PlayerLook : MonoBehaviour
         isViewFixed = false;
         isReturningToPlayer = true; // 복귀 전환 시작
         cameraTarget = null;
+        currentSlotMachine = null; // 슬롯머신 참조 해제
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

@@ -12,6 +12,7 @@ public class KeySpawner : MonoBehaviour
     public int targetLevel = 2;
 
     private GameObject _spawnedKey;
+    private PlayerLook _playerLook;
 
     private void Start()
     {
@@ -20,6 +21,8 @@ public class KeySpawner : MonoBehaviour
         {
             levelManager.OnLevelUp += SpawnKeyIfLevelMatches;
         }
+
+        _playerLook = FindObjectOfType<PlayerLook>();
 
         if (keyPrefab == null)
         {
@@ -54,6 +57,12 @@ public class KeySpawner : MonoBehaviour
             {
                 // 열쇠 생성기가 붙어있는 문 찾기
                 unlockScript.targetDoor = GetComponent<Door>();
+            }
+
+            // 플레이어 시점이 고정된 상태라면 해제하고 생성된 키를 바라보게 함
+            if (_playerLook != null && _playerLook.IsViewFixed)
+            {
+                _playerLook.UnfixViewAndLookAt(_spawnedKey.transform);
             }
 
             Debug.Log($"레벨 {newLevel} 달성! '{gameObject.name}' 문 앞에 열쇠가 생성되었습니다.");

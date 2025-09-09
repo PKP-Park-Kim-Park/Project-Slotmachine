@@ -26,6 +26,7 @@ public class PlayerLook : MonoBehaviour
     private bool isViewFixed = false;
     private bool isReturningToPlayer = false; // 카메라 복귀 상태
     private Transform cameraTarget;
+    private Transform lookAtTargetOnReturn; // 복귀 시 바라볼 타겟
     private Vector3 originalCamPosition; // 카메라 원래 위치
     private SlotMachine currentSlotMachine; // 현재 상호작용 중인 슬롯머신
 
@@ -152,7 +153,16 @@ public class PlayerLook : MonoBehaviour
     private void ReturnNomalView()
     {
         // 크로스헤어 활성
-        crosshair.SetActive(true);
+        if (crosshair != null)
+        {
+            crosshair.SetActive(true);
+        }
+
+        // 복귀 시 특정 타겟을 바라보는 로직
+        if (lookAtTargetOnReturn != null)
+        {
+            HandleLookAtTargetOnReturn();
+        }
 
         Vector3 targetPosition = transform.TransformPoint(originalCamPosition);
         Quaternion targetRotation = transform.rotation; // 플레이어 회전 따라감
@@ -166,7 +176,20 @@ public class PlayerLook : MonoBehaviour
             mainCam.transform.localPosition = originalCamPosition;
             mainCam.transform.localRotation = Quaternion.identity;
             currentTilt = 0f;
+            lookAtTargetOnReturn = null; // 타겟 바라보기 종료
         }
+    }
+
+    /// <summary>
+    /// 시점 복귀 시 특정 대상을 잠시 바라보도록 처리합니다.
+    /// </summary>
+    private void HandleLookAtTargetOnReturn()
+    {
+        // 플레이어의 몸 전체를 타겟 방향으로 회전시킵니다.
+        Vector3 directionToTarget = (lookAtTargetOnReturn.position - transform.position).normalized;
+        directionToTarget.y = 0; // 수평 방향만 고려
+        Quaternion lookRotation = Quaternion.LookRotation(directionToTarget);
+        rb.MoveRotation(Quaternion.Slerp(rb.rotation, lookRotation, Time.deltaTime * cameraReturnSpeed));
     }
 
     public void FixViewPoint(Transform target)
@@ -192,6 +215,18 @@ public class PlayerLook : MonoBehaviour
         Cursor.visible = false;
         GameManager.instance.CheckSlotMachineStateChanged(true);
     }
+
+    /// <summary>
+    /// 시점 고정을 해제하고 특정 대상 바라보기
+    /// </summary>
+    /// <param name="lookAtTarget">바라볼 대상 위치</param>
+    public void UnfixViewAndLookAt(Transform lookAtTarget)
+    {
+        if(lookAtTarget == null) UnfixViewPoint();
+        lookAtTargetOnReturn = lookAtTarget;
+        UnfixViewPoint();
+    }
+
 
     /// 고정 시점으로 전환하는 속도
     public void SetCameraEnterSpeed(float newSpeed)

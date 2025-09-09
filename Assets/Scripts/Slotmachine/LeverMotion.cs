@@ -25,7 +25,16 @@ public class LeverMotion : MonoBehaviour, IInteractable
     private Coroutine sparkCoroutine;
     private int pullTriggerHash;
 
-    public bool IsInteractable { get { return slotMachine != null && !slotMachine.IsActivating; } }
+    public bool IsInteractable
+    {
+        get
+        {
+            if (slotMachine == null || slotMachine.IsActivating) return false;
+
+            // 플레이어 레벨과 슬롯머신 레벨이 같은지 확인
+            return GameManager.instance.levelData._level == slotMachine.MachineLevel;
+        }
+    }
 
     /*
     public string InteractionPrompt
@@ -63,6 +72,7 @@ public class LeverMotion : MonoBehaviour, IInteractable
         {
             slotMachine.OnActivationStart += SetDisabledColor;
             slotMachine.OnActivationEnd += SetEnabledColor;
+            GameManager.instance.levelManager.OnLevelUp += (level) => UpdateOutlineColor();
         }
         UpdateOutlineColor();
     }
@@ -73,6 +83,7 @@ public class LeverMotion : MonoBehaviour, IInteractable
         {
             slotMachine.OnActivationStart -= SetDisabledColor;
             slotMachine.OnActivationEnd -= SetEnabledColor;
+            GameManager.instance.levelManager.OnLevelUp -= (level) => UpdateOutlineColor();
         }
     }
 

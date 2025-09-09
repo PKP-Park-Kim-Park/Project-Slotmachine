@@ -62,6 +62,30 @@ public class SlotMachine : MonoBehaviour
         }
     }
 
+    private Money _money;
+    private LevelData _levelData;
+
+    public int MinBettingGold { get; private set; }
+    public int MaxBettingGold { get; private set; }
+
+    /// <summary>
+    /// 레벨 데이터에 따라 베팅 금액 리밋 업뎃
+    /// </summary>
+    private void UpdateBettingLimits()
+    {
+        if (_levelData != null)
+        {
+            MinBettingGold = _levelData._minGold;
+            MaxBettingGold = _levelData._maxGold;
+
+            // 베팅 금액이 새로운 리밋을 벗어나는 경우 조정
+            if (BettingGold < MinBettingGold)
+            {
+                BettingGold = MinBettingGold;
+            }
+        }
+    }
+
     // IsActivating 프로퍼티를 상태 기반으로 계산하여 제공
     public bool IsActivating
     {
@@ -114,14 +138,34 @@ public class SlotMachine : MonoBehaviour
 
         rewardChecker = new CheckRewardPattern();
 
-        // 각 릴에 대한 SymbolWeightProcessor를 공통 확률 에셋으로 초기화
         reelWeightProcessors = new SymbolWeightProcessor[reels.Length];
         for (int i = 0; i < reels.Length; i++) reelWeightProcessors[i] = new SymbolWeightProcessor(reelProbability);
+
+        // GameManager가 SlotMachine을 찾아 초기화하도록 변경
+        GameManager.instance?.InitializeSlotMachine(this);
     }
-    private void Start()
+
+    public void Initialize(Money money, LevelData levelData)
     {
-        BettingGold = GameManager.instance.levelData._minGold;
+        _money = money;
+        _levelData = levelData;
+
+        if (_levelData != null)
+        {
+            _levelData.OnLevelChanged += UpdateBettingLimits;
+            UpdateBettingLimits(); // 초기 한도 설정
+            BettingGold = MinBettingGold;
+        }
     }
+
+    private void OnDestroy()
+    {
+        if (_levelData != null)
+        {
+            _levelData.OnLevelChanged -= UpdateBettingLimits;
+        }
+    }
+    
     public void Bet(bool isIncrease)
     {
         // 대기 상태가 아니면 베팅 불가
@@ -131,10 +175,12 @@ public class SlotMachine : MonoBehaviour
 
         if (isIncrease == true)
         {
-            if (GameManager.instance.levelData._maxGold < bettingGold + GameManager.instance.levelData._unitGold)
+            // 다음 베팅 금액이 최대치를 초과하는지 확인
+            if (bettingGold + unitGold > MaxBettingGold)
             {
                 OnBetAttemptFailed?.Invoke();
-                // 배팅가능한 최대치
+                // 최대치로 설정하고 더 이상 진행하지 않음
+                BettingGold = MaxBettingGold;
                 return;
             }
 
@@ -142,10 +188,12 @@ public class SlotMachine : MonoBehaviour
         }
         else if (isIncrease == false)
         {
-            if (GameManager.instance.levelData._minGold > bettingGold - GameManager.instance.levelData._unitGold)
+            // 다음 베팅 금액이 최소치 미만인지 확인
+            if (bettingGold - unitGold < MinBettingGold)
             {
                 OnBetAttemptFailed?.Invoke();
-                // 배팅가능한 최소치
+                // 최소치로 설정하고 더 이상 진행하지 않음
+                BettingGold = MinBettingGold;
                 return;
             }
 
@@ -159,13 +207,13 @@ public class SlotMachine : MonoBehaviour
 
         // 스핀 코루틴이 이미 실행 중이면 중복 실행 방지
         if (spinCoroutine != null) return;
-        if (bettingGold < GameManager.instance.levelData._minGold)
+        if (bettingGold < MinBettingGold)
         {
             // 배팅액 부족!
             return;
         }
 
-        if (GameManager.instance.money._gold < bettingGold)
+        if (_money == null || _money._gold < bettingGold)
         {
             // 소지한 골드 부족
             return;
@@ -186,7 +234,7 @@ public class SlotMachine : MonoBehaviour
     private IEnumerator SpinSequence()
     {
         CurrentState = SlotMachineState.Spinning;
-        GameManager.instance.money.SpendGold(bettingGold);
+        _money?.SpendGold(bettingGold);
 
         // 1. 모든 릴 회전 시작
         for (int i = 0; i < reels.Length; i++)
@@ -271,7 +319,7 @@ public class SlotMachine : MonoBehaviour
             RewardGold = (int)(totalOdds * bettingGold);
 
             yield return new WaitForSeconds(2.0f);
-            GameManager.instance.money.AddGold(rewardGold);
+            _money?.AddGold(rewardGold);
         }
         else
         {

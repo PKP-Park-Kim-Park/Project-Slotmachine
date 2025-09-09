@@ -7,6 +7,7 @@ public enum Symbols
     Carrot = 3,
     Bell = 4,
     Diamond = 5,
-    Star = 6 ,
-    Seven = 7 
+    Star = 6,
+    Seven = 7,
+    Skull = 8
 }

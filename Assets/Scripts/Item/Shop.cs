@@ -76,15 +76,11 @@ public class Shop : MonoBehaviour
             return;
         }
 
-        RarityChances currentChances = rarityTable.chancesByLevel.FirstOrDefault(c => currentLevel._level == c.level);
-
-        if (currentChances.level == 0)
-        {
-            Debug.LogWarning($"레벨 {currentLevel._level}에 해당하는 확률 데이터가 없습니다. 기본 확률을 적용합니다.");
-            // 기본 확률을 적용하기 위해 리스트의 첫 번째 항목을 가져옵니다.
-            // 이 로직은 리스트에 최소한 하나의 항목이 있고 오름차순으로 정렬되어 있음을 가정합니다.
-            currentChances = rarityTable.chancesByLevel.FirstOrDefault();
-        }
+        // 수정된 부분: 현재 레벨보다 작거나 같은 레벨 중 가장 높은 레벨의 데이터를 찾습니다.
+        RarityChances currentChances = rarityTable.chancesByLevel
+            .Where(c => c.level <= currentLevel._level)
+            .OrderByDescending(c => c.level)
+            .FirstOrDefault();
 
         // 확률 변수들을 ScriptableObject에서 가져온 값으로 초기화합니다.
         float commonChance = currentChances.commonChance;

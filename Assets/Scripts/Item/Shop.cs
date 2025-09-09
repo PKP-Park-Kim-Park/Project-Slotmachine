@@ -82,6 +82,13 @@ public class Shop : MonoBehaviour
             .OrderByDescending(c => c.level)
             .FirstOrDefault();
 
+        // 수정된 부분: 유효성 검사 추가
+        if (EqualityComparer<RarityChances>.Default.Equals(currentChances, default(RarityChances)))
+        {
+            Debug.LogError("RarityProbabilityTable에 유효한 확률 데이터가 없습니다. 상점 아이템을 생성할 수 없습니다.");
+            return; // 상점 아이템 생성 중단
+        }
+
         // 확률 변수들을 ScriptableObject에서 가져온 값으로 초기화합니다.
         float commonChance = currentChances.commonChance;
         float rareChance = currentChances.rareChance;

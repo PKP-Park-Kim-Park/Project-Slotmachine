@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
@@ -41,7 +40,7 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
-    public void GetItem(int id, Image image)
+    public void GetItem(int id, Sprite image)
     {
         Debug.Log("아이템 추가 " + id);
         inventorySpace.Add(id);

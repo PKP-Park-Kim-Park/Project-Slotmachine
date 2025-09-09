@@ -30,14 +30,16 @@ public class Shop : MonoBehaviour
         {
             // 플레이어의 재화 확인 및 차감 로직
             // 인벤토리에 아이템 추가 로직
-            bool result = ItemManager.Instance.TryAddItemToInventory(buyItem.id, buyItem.price, buyItem.image);
+            bool result = ItemManager.Instance.TryAddItemToInventory(buyItem.id, buyItem.price, buyItem.sprite);
 
             if(result)
             {
                 Debug.Log($"{buyItem.name} 아이템을 구매했습니다.");
             }
-
-            Debug.Log($"{buyItem.name} 아이템 구매 실패");
+            else
+            {
+                Debug.Log($"{buyItem.name} 아이템 구매 실패");
+            }
         }
     }
     public void RemoveItem(int itemID)

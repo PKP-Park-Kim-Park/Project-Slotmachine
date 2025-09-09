@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 public enum UseType
 {
@@ -86,7 +85,7 @@ public struct ItemDataModel
     public int price;
     public Rarity rarity;
     public HasRisk hasRisk;
-    public Image image;
+    public Sprite sprite;
     public ItemEffectModel itemEffect;
     public ItemEffectModel itemRiskEffect;
 }

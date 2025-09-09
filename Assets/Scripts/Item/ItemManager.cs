@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
-using UnityEngine.UI;
 
 public class ItemManager : MonoBehaviour
 {
@@ -21,7 +20,7 @@ public class ItemManager : MonoBehaviour
     public Func<int, bool> OnCheckCanAddInventoryItem;
     public Func<int, bool> OnRemoveInventoryItem;
 
-    public event Action<int, Image> OnAddInventoryItem;
+    public event Action<int, Sprite> OnAddInventoryItem;
     public event Action<int> OnBuyItem;
 
     private UseItem useItem;
@@ -40,14 +39,11 @@ public class ItemManager : MonoBehaviour
         }
 
         LoadAllItems();
-    }
 
-    private void Start()
-    {
         useItem = new UseItem();
 
         useItem.OnPatternEffectReady += EffectPattern;
-        useItem.OnSymbolEffectReady += EffectSymbol; 
+        useItem.OnSymbolEffectReady += EffectSymbol;
         useItem.OnStressEffectReady += EffectStress;
     }
 
@@ -85,7 +81,7 @@ public class ItemManager : MonoBehaviour
         return null;
     }
 
-    public bool TryAddItemToInventory(int id, int price, Image image)
+    public bool TryAddItemToInventory(int id, int price, Sprite image)
     {
         bool result = OnCheckCanBuyItem.Invoke(price);
         bool result2 = OnCheckCanAddInventoryItem.Invoke(id);

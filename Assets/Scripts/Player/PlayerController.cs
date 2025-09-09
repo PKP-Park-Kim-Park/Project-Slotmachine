@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody myRigid;
     private Outline currentLookAtOutline;
+    private SlotMachine currentLookAtSlotMachine;
     private IInteractable currentLookAtInteractable;
     private Transform currentHitTransform;
     private Vector3 moveInput;
@@ -109,10 +110,28 @@ public class PlayerController : MonoBehaviour
                 // 이전에 바라보던 오브젝트가 있다면 외곽선을 비활성화
                 ClearLookAtObject();
 
-                currentLookAtOutline = hit.transform.GetComponent<Outline>();
-                if (currentLookAtOutline != null)
+                if (playerLook.IsViewFixed)
                 {
-                    currentLookAtOutline.enabled = true;
+                    // 고정 시점: 레버, 버튼 등 개별 컴포넌트의 아웃라인을 켬
+                    currentLookAtOutline = hit.transform.GetComponent<Outline>();
+                    if (currentLookAtOutline != null)
+                    {
+                        currentLookAtOutline.enabled = true;
+                    }
+                }
+                else
+                {
+                    // 일반 시점: 슬롯머신 본체의 아웃라인을 켬
+                    currentLookAtSlotMachine = hit.transform.GetComponentInParent<SlotMachine>();
+                    if (currentLookAtSlotMachine != null)
+                    {
+                        currentLookAtSlotMachine.EnableOutline();
+                    }
+                    else // 슬롯머신이 아닌 다른 상호작용 오브젝트 (예: 문)
+                    {
+                        currentLookAtOutline = hit.transform.GetComponent<Outline>();
+                        if (currentLookAtOutline != null) currentLookAtOutline.enabled = true;
+                    }
                 }
 
                 currentLookAtInteractable = hit.transform.GetComponent<IInteractable>();
@@ -145,7 +164,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         // 레벨이 맞지 않으면 아무것도 하지 않음
-                        Debug.Log($"레벨이 맞지 않아 슬롯머신을 사용할 수 없습니다. (플레이어 레벨: {GameManager.instance.levelData._level}, 슬롯머신 레벨: {slotMachine.MachineLevel})");
+                        Debug.Log($"슬롯머신을 사용할 수 없습니다. (플레이어 레벨: {GameManager.instance.levelData._level}, 슬롯머신 레벨: {slotMachine.MachineLevel})");
                     }
                 }
             }
@@ -159,10 +178,16 @@ public class PlayerController : MonoBehaviour
     // 바라보는 오브젝트 정보를 초기화하는 함수
     private void ClearLookAtObject()
     {
+        if (currentLookAtSlotMachine != null)
+        {
+            currentLookAtSlotMachine.DisableOutline();
+        }
         if (currentLookAtOutline != null)
         {
             currentLookAtOutline.enabled = false;
         }
+
+        currentLookAtSlotMachine = null;
         currentLookAtOutline = null;
         currentLookAtInteractable = null;
         currentHitTransform = null;

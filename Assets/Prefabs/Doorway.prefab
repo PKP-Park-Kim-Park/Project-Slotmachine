@@ -267,7 +267,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outline: {fileID: 1437970684881750985}
-  lockTrigger: {fileID: 0}
   doorLock: 0
 --- !u!114 &1437970684881750985
 MonoBehaviour:
@@ -299,6 +298,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0338860f622ec0148b7ef7309630c76b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyPrefab: {fileID: 0}
+  keyPrefab: {fileID: 4702292506888140698, guid: c19c588feb39d7c4dbf30be65012fbbe, type: 3}
   spawnPoint: {fileID: 6759653167811101671}
   targetLevel: 2

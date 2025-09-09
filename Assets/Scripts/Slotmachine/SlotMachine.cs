@@ -22,6 +22,12 @@ public class SlotMachine : MonoBehaviour
     public event Action OnBetAttemptFailed; // 베팅 +/- 실패 시
     public event Action<int> OnRewardGold;  // 보상 골드 변경 시
 
+    [Header("Outline Settings")]
+    [SerializeField] private Outline outline;
+    [SerializeField] private Color enabledColor = Color.yellow;
+    [SerializeField] private Color disabledColor = Color.red;
+
+
     public int MachineLevel => machineLevel;
     //===============================================
     private SlotMachineState _currentState;
@@ -114,6 +120,8 @@ public class SlotMachine : MonoBehaviour
     [Tooltip("배율 표시 UI")]
     [SerializeField] private ProbabilityScreen probabilityScreen;
     private CheckRewardPattern rewardChecker;
+    [Tooltip("고장 화면 UI")]
+    [SerializeField] private BreakdownScreen[] breakdownScreens;
 
     private int[,] matrix;
     private SymbolWeightProcessor[] reelWeightProcessors;
@@ -146,6 +154,19 @@ public class SlotMachine : MonoBehaviour
 
         // GameManager가 SlotMachine을 찾아 초기화하도록 변경
         GameManager.instance?.InitializeSlotMachine(this);
+
+        if (outline == null)
+        {
+            outline = GetComponent<Outline>();
+        }
+        if (outline != null) {
+            outline.enabled = false;
+        }
+
+        if (breakdownScreens == null || breakdownScreens.Length == 0)
+        {
+            breakdownScreens = GetComponentsInChildren<BreakdownScreen>();
+        }
     }
 
     public void Initialize(Money money, LevelData levelData)
@@ -158,6 +179,13 @@ public class SlotMachine : MonoBehaviour
             _levelData.OnLevelChanged += UpdateBettingLimits;
             UpdateBettingLimits(); // 초기 한도 설정
             BettingGold = MinBettingGold;
+            
+            // 레벨업 이벤트에 아웃라인 업데이트 연결
+            GameManager.instance.levelManager.OnLevelUp += (level) => UpdateOutlineColor();
+            // 슬롯머신 활성화/비활성화 이벤트에 아웃라인 업데이트 연결
+            OnActivationStart += UpdateOutlineColor;
+            OnActivationEnd += UpdateOutlineColor;
+            UpdateOutlineColor(); // 초기 색상 설정
         }
     }
 
@@ -166,6 +194,10 @@ public class SlotMachine : MonoBehaviour
         if (_levelData != null)
         {
             _levelData.OnLevelChanged -= UpdateBettingLimits;
+            // 이벤트 구독 해제
+            GameManager.instance.levelManager.OnLevelUp -= (level) => UpdateOutlineColor();
+            OnActivationStart -= UpdateOutlineColor;
+            OnActivationEnd -= UpdateOutlineColor;
         }
     }
     
@@ -334,6 +366,50 @@ public class SlotMachine : MonoBehaviour
         else
         {
             Debug.Log("당첨된 라인이 없습니다.");
+        }
+    }
+
+    /// <summary>
+    /// 슬롯머신의 아웃라인을 활성화
+    /// </summary>
+    public void EnableOutline()
+    {
+        if (outline != null)
+        {
+            UpdateOutlineColor();
+            outline.enabled = true;
+        }
+    }
+
+    /// <summary>
+    /// 슬롯머신의 아웃라인을 비활성화
+    /// </summary>
+    public void DisableOutline()
+    {
+        if (outline != null)
+        {
+            outline.enabled = false;
+        }
+    }
+
+    /// <summary>
+    /// 상태에 따라 아웃라인 색상을 업데이트
+    /// </summary>
+    public void UpdateOutlineColor()
+    {
+        if (outline == null) return;
+
+        bool isInteractable = (_levelData._level == machineLevel) && !IsActivating;
+        outline.OutlineColor = isInteractable ? enabledColor : disabledColor;
+
+        // 모든 BreakdownScreen의 상태를 업데이트합니다.
+        if (breakdownScreens != null)
+        {
+            foreach (var screen in breakdownScreens)
+            {
+                if (_levelData._level != machineLevel) screen.Show();
+                else screen.Hide();
+            }
         }
     }
 }

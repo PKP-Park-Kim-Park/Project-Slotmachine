@@ -896,7 +896,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 590652ffecfb5e74aa6733bd65f3be2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itmeData: {fileID: 11400000, guid: 39f7335517c6095439fb626708cceec3, type: 2}
+  rarityTable: {fileID: 11400000, guid: 66e6c5a8520277a4aaa15dae3d5fa7b4, type: 2}
 --- !u!114 &811443078
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class ItemManager : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class ItemManager : MonoBehaviour
 
     // 모든 아이템 데이터를 저장할 배열
     private List<ItemDataModel> allItems = new List<ItemDataModel>();
+
+    // 외부(GameManager)에서 LevelData를 요청할 때 사용하는 이벤트
+    public Func<LevelData> OnRequestLevelData;
 
     private void Awake()
     {
@@ -37,7 +41,7 @@ public class ItemManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("ItmeData ScriptableObject가 할당되지 않았습니다!");
+            Debug.LogError("ItemData ScriptableObject가 할당되지 않았습니다!");
         }
     }
 
@@ -45,5 +49,18 @@ public class ItemManager : MonoBehaviour
     public ItemDataModel GetItemData(int itemID)
     {
         return allItems.Find(item => item.id == itemID);
+    }
+
+    internal List<ItemDataModel> GetAllItems()
+    {
+        return allItems;
+    }
+    public LevelData GetCurrentLevelData()
+    {
+        if (OnRequestLevelData != null)
+        {
+            return OnRequestLevelData.Invoke();
+        }
+        return null;
     }
 }

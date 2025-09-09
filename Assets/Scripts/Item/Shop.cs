@@ -1,18 +1,25 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Shop : MonoBehaviour
 {
-    // 아이템 데이터 에셋을 참조합니다.
-    [SerializeField] private ItemData itmeData;
+    [SerializeField] private RarityProbabilityTable rarityTable;
     // 상점에서 판매할 아이템 목록입니다.
     private List<ItemDataModel> shopItems = new List<ItemDataModel>();
 
     // 상점 초기화
     private void Start()
     {
-        // 게임 시작 시 상점 아이템을 초기화하거나 로드하는 로직
-        LoadShopItems();
+        // ItemManager가 로드될 때까지 기다립니다.
+        if (ItemManager.Instance != null)
+        {
+            LoadShopItems();
+        }
+        else
+        {
+            Debug.LogError("ItemManager 인스턴스를 찾을 수 없습니다! ItemManager 스크립트가 씬에 있는지 확인하세요.");
+        }
     }
 
     // 아이템 구매
@@ -40,34 +47,96 @@ public class Shop : MonoBehaviour
     // 상점 아이템 로드
     private void LoadShopItems()
     {
-        // ItmeData ScriptableObject에서 아이템 목록을 가져와
-        // shopItems 리스트에 채웁니다.
-        // 이 부분은 상점의 종류나 레벨에 따라 다르게 구현할 수 있습니다.
-        if (itmeData != null && itmeData.itemDataModels.Count > 0)
-        {
-            shopItems.AddRange(itmeData.itemDataModels);
-        }
+        shopItems.Clear();
+        GenerateShopItems();
+        Debug.Log($"상점 아이템 {shopItems.Count}개 로드 완료.");
+
     }
 
     // 상점 리롤
     public void RerollShop()
     {
-        // shopItems 리스트를 비우고
         shopItems.Clear();
-
-        // 새로운 아이템을 무작위로 선택하여 추가하는 로직
-        // 예시: ItmeData에서 무작위 아이템 3개 선택
-        for (int i = 0; i < 3; i++)
-        {
-            int randomIndex = Random.Range(0, itmeData.itemDataModels.Count);
-            shopItems.Add(itmeData.itemDataModels[randomIndex]);
-        }
+        GenerateShopItems();
         Debug.Log("상점 아이템이 리롤되었습니다.");
     }
 
-    // 상점 아이템 목록을 가져오는 public 메서드 (TestRunner에서 사용)
+    private void GenerateShopItems()
+    {
+        LevelData currentLevel = ItemManager.Instance.GetCurrentLevelData();
+        if (currentLevel == null)
+        {
+            Debug.LogError("레벨 데이터를 가져올 수 없습니다. GameManager의 초기화 상태를 확인하세요.");
+            return;
+        }
+
+        RarityChances currentChances = rarityTable.chancesByLevel.FirstOrDefault(c => currentLevel._level >= c.level);
+        
+        if (rarityTable == null)
+        {
+            Debug.LogError("RarityProbabilityTable이 할당되지 않았습니다. 인스펙터 창에서 할당해주세요.");
+            return;
+        }
+        // 확률 변수들을 ScriptableObject에서 가져온 값으로 초기화합니다.
+        float commonChance = currentChances.commonChance;
+        float rareChance = currentChances.rareChance;
+        float uniqueChance = currentChances.uniqueChance;
+        float legendaryChance = currentChances.legendaryChance;
+
+        List<ItemDataModel> allItems = ItemManager.Instance.GetAllItems();
+        if (allItems == null || allItems.Count == 0)
+        {
+            Debug.LogWarning("ItemManager에 로드된 아이템이 없습니다.");
+            return;
+        }
+
+        // 확률에 따라 3개의 아이템을 선택합니다.
+        for (int i = 0; i < 3; i++)
+        {
+            float rand = Random.value;
+            Rarity rarityToSelect;
+
+            if (rand < legendaryChance)
+            {
+                rarityToSelect = Rarity.Legendary;
+            }
+            else if (rand < legendaryChance + uniqueChance)
+            {
+                rarityToSelect = Rarity.Unique;
+            }
+            else if (rand < legendaryChance + uniqueChance + rareChance)
+            {
+                rarityToSelect = Rarity.Rare;
+            }
+            else
+            {
+                rarityToSelect = Rarity.Common;
+            }
+
+            // 선택된 희귀도를 확인합니다.
+            Debug.Log($"슬롯 {i + 1}에 선택된 희귀도: {rarityToSelect}");
+
+            List<ItemDataModel> filteredItems = allItems.Where(item => item.rarity == rarityToSelect).ToList();
+
+            // 해당 등급의 아이템이 있을 경우, 그 중에서 랜덤으로 추가
+            if (filteredItems.Count > 0)
+            {
+                int randomIndex = Random.Range(0, filteredItems.Count);
+                shopItems.Add(filteredItems[randomIndex]);
+            }
+            // 해당 등급의 아이템이 없을 경우, 모든 아이템 중에서 랜덤으로 추가
+            else
+            {
+                Debug.LogWarning($"{rarityToSelect} 등급의 아이템이 없습니다. 다른 아이템을 추가합니다.");
+                shopItems.Add(allItems[Random.Range(0, allItems.Count)]);
+            }
+        }
+    }
+
+    // 상점 아이템 목록을 가져오는 public 메서드
     public List<ItemDataModel> GetShopItems()
     {
         return shopItems;
     }
+
 }

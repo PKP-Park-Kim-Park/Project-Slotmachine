@@ -30,17 +30,27 @@ public class Shop : MonoBehaviour
         {
             // 플레이어의 재화 확인 및 차감 로직
             // 인벤토리에 아이템 추가 로직
-            Debug.Log($"{buyItem.name} 아이템을 구매했습니다.");
+            bool result = ItemManager.Instance.TryAddItemToInventory(buyItem.id, buyItem.price, buyItem.sprite);
+
+            if(result)
+            {
+                Debug.Log($"{buyItem.name} 아이템을 구매했습니다.");
+            }
+            else
+            {
+                Debug.Log($"{buyItem.name} 아이템 구매 실패");
+            }
         }
     }
-    public void SellItem(ItemDataModel sellItem)
+    public void RemoveItem(int itemID)
     {
-        if (sellItem.id != 0)
+        ItemDataModel removeItem = shopItems.Find(item => item.id == itemID);
+        if (removeItem.id != 0)
         {
             // 플레이어의 인벤토리에서 아이템 제거 로직
             // 플레이어의 재화 추가 로직
-
-            Debug.Log($"{sellItem.name} 아이템을 판매했습니다.");
+            ItemManager.Instance.RemoveItemToInventory(removeItem.id);
+            Debug.Log($"{removeItem.name} 아이템을 판매했습니다.");
         }
     }
 
@@ -125,22 +135,23 @@ public class Shop : MonoBehaviour
                 rarityToSelect = Rarity.Common;
             }
 
-            // 선택된 희귀도를 확인합니다.
-            Debug.Log($"슬롯 {i + 1}에 선택된 희귀도: {rarityToSelect}");
-
             List<ItemDataModel> filteredItems = allItems.Where(item => item.rarity == rarityToSelect).ToList();
 
             // 해당 등급의 아이템이 있을 경우, 그 중에서 랜덤으로 추가
             if (filteredItems.Count > 0)
             {
                 int randomIndex = Random.Range(0, filteredItems.Count);
+                ItemDataModel selectedItem = filteredItems[randomIndex];
                 shopItems.Add(filteredItems[randomIndex]);
+                Debug.Log($"슬롯 {i + 1}: [ID: {selectedItem.id}] {selectedItem.name} ({selectedItem.rarity}) 추가.");
             }
             // 해당 등급의 아이템이 없을 경우, 모든 아이템 중에서 랜덤으로 추가
             else
             {
                 Debug.LogWarning($"{rarityToSelect} 등급의 아이템이 없습니다. 다른 아이템을 추가합니다.");
+                ItemDataModel fallbackItem = allItems[Random.Range(0, allItems.Count)];
                 shopItems.Add(allItems[Random.Range(0, allItems.Count)]);
+                Debug.Log($"슬롯 {i + 1}: [ID: {fallbackItem.id}] {fallbackItem.name} ({fallbackItem.rarity}) 추가 (대체).");
             }
         }
     }
@@ -150,5 +161,4 @@ public class Shop : MonoBehaviour
     {
         return shopItems;
     }
-
 }

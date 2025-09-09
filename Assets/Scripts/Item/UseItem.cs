@@ -26,21 +26,34 @@ public class UseItem
     public event Action<PatternEffectData> OnPatternEffectReady;
     public event Action<StressEffectData> OnStressEffectReady;
 
+    private const float USE_MULTIPLIER = 1.0f;
+    private const float REMOVE_MULTIPLIER = -1.0f;
+
     public void Use(ItemDataModel model)
     {
         Debug.Log($"--- 아이템 사용 시작: {model.name} ---");
+        ProcessItemEffects(model, USE_MULTIPLIER);
+    }
 
+    public void Remove(ItemDataModel model)
+    {
+        Debug.Log($"--- 아이템 취소 시작: {model.name} ---");
+        ProcessItemEffects(model, REMOVE_MULTIPLIER);
+    }
+
+    private void ProcessItemEffects(ItemDataModel model, float multiplier)
+    {
         bool hasGoodEffect = model.hasRisk == HasRisk.Good || model.hasRisk == HasRisk.Both;
         bool hasRiskEffect = model.hasRisk == HasRisk.Risk || model.hasRisk == HasRisk.Both;
 
         if (hasGoodEffect)
         {
-            CheckEffect(model.itemEffect);
+            CheckEffect(model.itemEffect, model.itemEffect.amount * multiplier);
         }
 
         if (hasRiskEffect)
         {
-            CheckEffect(model.itemRiskEffect);
+            CheckEffect(model.itemRiskEffect, model.itemRiskEffect.amount * multiplier);
         }
 
         if (!hasGoodEffect && !hasRiskEffect)
@@ -49,8 +62,9 @@ public class UseItem
         }
     }
 
-    private void CheckEffect(ItemEffectModel effectModel)
+    private void CheckEffect(ItemEffectModel effectModel, float amount)
     {
+
         switch (effectModel.useType)
         {
             case UseType.Symbol:
@@ -58,10 +72,10 @@ public class UseItem
                 SymbolEffectData symbolData = new SymbolEffectData
                 {
                     Symbols = effectModel.flagSymbols,
-                    Amount = effectModel.amount,
+                    Amount = amount,
                     OriginalUseType = effectModel.useType
                 };
-                Debug.Log($"[효과 적용] 심볼 | 타입: {symbolData.OriginalUseType}, 대상: {symbolData.Symbols}, 값: {symbolData.Amount}");
+                Debug.Log($"[효과 적용] 심볼 | 타입: {symbolData.OriginalUseType}, 대상: {symbolData.Symbols}, 값: {amount}");
                 OnSymbolEffectReady?.Invoke(symbolData);
                 break;
 
@@ -69,9 +83,9 @@ public class UseItem
                 PatternEffectData patternData = new PatternEffectData
                 {
                     Patterns = effectModel.flagPatterns,
-                    Amount = effectModel.amount
+                    Amount = amount
                 };
-                Debug.Log($"[효과 적용] 패턴 | 대상: {patternData.Patterns}, 값: {patternData.Amount}");
+                Debug.Log($"[효과 적용] 패턴 | 대상: {patternData.Patterns}, 값: {amount}");
                 OnPatternEffectReady?.Invoke(patternData);
                 break;
 
@@ -79,9 +93,9 @@ public class UseItem
                 StressEffectData stressData = new StressEffectData
                 {
                     StressType = effectModel.stressType,
-                    Amount = effectModel.amount
+                    Amount = amount
                 };
-                Debug.Log($"[효과 적용] 스트레스 | 대상: {stressData.StressType}, 값: {stressData.Amount}");
+                Debug.Log($"[효과 적용] 스트레스 | 대상: {stressData.StressType}, 값: {amount}");
                 OnStressEffectReady?.Invoke(stressData);
                 break;
 

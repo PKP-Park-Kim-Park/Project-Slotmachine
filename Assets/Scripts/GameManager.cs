@@ -38,6 +38,15 @@ public class GameManager : MonoBehaviour
 
         // ItemManager가 로드된 후 이벤트를 구독합니다.
         ItemManager.Instance.OnRequestLevelData += RequestLevelData;
+        ItemManager.Instance.OnCheckCanBuyItem += CheckCanBuyItem;
+        ItemManager.Instance.OnBuyItem += BuyItem;
+    }
+
+    private void OnDestroy()
+    {
+        ItemManager.Instance.OnRequestLevelData -= RequestLevelData;
+        ItemManager.Instance.OnCheckCanBuyItem -= CheckCanBuyItem;
+        ItemManager.Instance.OnBuyItem -= BuyItem;
     }
 
     // 이 메서드는 ItemManager의 이벤트가 호출될 때 실행됩니다.
@@ -149,5 +158,22 @@ public class GameManager : MonoBehaviour
     public void InitializeSlotMachine(SlotMachine slotMachine)
     {
         slotMachine.Initialize(this.money, this.levelData);
+    }
+
+    public bool CheckCanBuyItem(int price)
+    {
+        if(price <= money._gold)
+        {
+            return true;
+        }
+
+        Debug.Log("구매하기에는 돈이 부족");
+        return false;
+    }
+
+    public void BuyItem(int price)
+    {
+        money.SpendGold(price);
+        Debug.Log(price + ": 구매");
     }
 }

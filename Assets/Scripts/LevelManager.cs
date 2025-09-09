@@ -32,7 +32,7 @@ public class LevelManager : MonoBehaviour
         if (_money == null || _levelData == null) return;
 
         // 소지금이 현재 레벨의 최대치(_maxGold)를 초과하면 레벨업
-        if (_money._gold > _levelData._maxGold * 50)
+        if (_money._gold > _levelData._maxGold * 5)
         {
             int newLevel = _levelData._level + 1;
             _levelData.SetLevel(newLevel);

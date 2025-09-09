@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Door : MonoBehaviour, IInteractable
 {
-    // Inspector 필드
     [Header("구성 요소")]
     [Tooltip("상호작용 시 색상을 변경할 Outline 컴포넌트")]
     public Outline outline;

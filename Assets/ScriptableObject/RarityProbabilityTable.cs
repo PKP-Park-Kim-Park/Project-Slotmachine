@@ -12,7 +12,7 @@ public struct RarityChances
     [Range(0f, 1f)] public float legendaryChance;
 }
 
-[CreateAssetMenu(fileName = "RarityProbabilityTable", menuName = "Scriptable Objects/Rarity Probability Table")]
+[CreateAssetMenu(fileName = "RarityProbabilityTable", menuName = "Scriptable Objects/RarityProbabilityTable")]
 public class RarityProbabilityTable : ScriptableObject
 {
     public List<RarityChances> chancesByLevel;

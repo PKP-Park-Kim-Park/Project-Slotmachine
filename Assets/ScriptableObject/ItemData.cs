@@ -90,7 +90,7 @@ public struct ItemDataModel
 }
 
 [CreateAssetMenu(fileName = "ItemData", menuName = "Scriptable Objects/ItemData")]
-public class ItmeData : ScriptableObject
+public class ItemData : ScriptableObject
 {
     public List<ItemDataModel> itemDataModels;
 }

@@ -35,6 +35,15 @@ public class GameManager : MonoBehaviour
         money = new Money(100_000, 0);
         levelManager = gameObject.AddComponent<LevelManager>();
         levelManager.Initialize(money, levelData);
+
+        // ItemManager가 로드된 후 이벤트를 구독합니다.
+        ItemManager.Instance.OnRequestLevelData += RequestLevelData;
+    }
+
+    // 이 메서드는 ItemManager의 이벤트가 호출될 때 실행됩니다.
+    private LevelData RequestLevelData()
+    {
+        return levelData;
     }
 
     public GameData SaveData()

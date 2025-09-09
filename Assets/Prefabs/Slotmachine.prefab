@@ -995,6 +995,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 755effb3ead44c0498a938f6bc777c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
+  enabledColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  disabledColor: {r: 1, g: 0, b: 0, a: 1}
   isIncreaseButton: 1
   slotMachine: {fileID: 0}
 --- !u!1 &3148735149481278749
@@ -2024,6 +2027,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 755effb3ead44c0498a938f6bc777c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 0}
+  enabledColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  disabledColor: {r: 1, g: 0, b: 0, a: 1}
   isIncreaseButton: 0
   slotMachine: {fileID: 0}
 --- !u!1 &6051340246823126781

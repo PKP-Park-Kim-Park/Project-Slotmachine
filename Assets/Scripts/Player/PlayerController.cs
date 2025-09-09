@@ -131,10 +131,23 @@ public class PlayerController : MonoBehaviour
             // 시점 고정 상태가 아니고, 클릭한 오브젝트가 ViewFixObject일 경우
             if (!playerLook.IsViewFixed && currentHitTransform.TryGetComponent(out ViewFixObject viewFix))
             {
-                currentLookAtInteractable.Interact();
-
-                ClearLookAtObject();
-                playerLook.FixViewPoint(viewFix.GetCameraTarget());
+                // 슬롯머신 레벨 체크
+                SlotMachine slotMachine = currentHitTransform.GetComponentInParent<SlotMachine>();
+                if (slotMachine != null)
+                {
+                    if (GameManager.instance.levelData._level == slotMachine.MachineLevel)
+                    {
+                        // 레벨이 맞으면 상호작용 및 시점 고정
+                        currentLookAtInteractable.Interact();
+                        ClearLookAtObject();
+                        playerLook.FixViewPoint(viewFix.GetCameraTarget());
+                    }
+                    else
+                    {
+                        // 레벨이 맞지 않으면 아무것도 하지 않음
+                        Debug.Log($"레벨이 맞지 않아 슬롯머신을 사용할 수 없습니다. (플레이어 레벨: {GameManager.instance.levelData._level}, 슬롯머신 레벨: {slotMachine.MachineLevel})");
+                    }
+                }
             }
             else
             {

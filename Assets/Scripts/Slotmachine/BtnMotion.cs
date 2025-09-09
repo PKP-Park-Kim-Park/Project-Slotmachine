@@ -3,10 +3,19 @@ using UnityEngine;
 public class BtnMotion : MonoBehaviour, IInteractable
 {
     // public string InteractionPrompt => "버튼 누르기";
+    public bool IsInteractable
+    {
+        get
+        {
+            if (slotMachine == null || slotMachine.IsActivating) return false;
+            return GameManager.instance.levelData._level == slotMachine.MachineLevel;
+        }
+    }
+
     private Animator btnAnim;
     [SerializeField] private bool isIncreaseButton;
 
-    private SlotMachine slotMachine;
+    [SerializeField] private SlotMachine slotMachine;
 
     void Awake()
     {
@@ -19,11 +28,16 @@ public class BtnMotion : MonoBehaviour, IInteractable
 
     private void Start()
     {
-        slotMachine = GetComponentInParent<SlotMachine>();
+        if (slotMachine == null)
+        {
+            slotMachine = GetComponentInParent<SlotMachine>();
+        }
     }
 
     public void Interact()
     {
+        if (!IsInteractable) return;
+
         PressBtn();
     }
 

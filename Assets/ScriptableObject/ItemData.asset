@@ -12,4 +12,94 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accb6e6eb81130345aba374b659bd151, type: 3}
   m_Name: ItemData
   m_EditorClassIdentifier: 
-  itemDataModels: []
+  itemDataModels:
+  - id: 1
+    name: "\uC369\uC740 \uBC14\uB098\uB098"
+    price: 10
+    rarity: 1
+    hasRisk: 1
+    image: {fileID: 0}
+    itemEffect:
+      useType: 1
+      flagSymbols: 2
+      flagPatterns: 0
+      stressType: 0
+      amount: -1
+    itemRiskEffect:
+      useType: 0
+      flagSymbols: 0
+      flagPatterns: 0
+      stressType: 0
+      amount: 0
+  - id: 2
+    name: "\uC369\uC740 \uB2E4\uC774\uC544"
+    price: 10
+    rarity: 1
+    hasRisk: 1
+    image: {fileID: 0}
+    itemEffect:
+      useType: 1
+      flagSymbols: 16
+      flagPatterns: 0
+      stressType: 0
+      amount: -1
+    itemRiskEffect:
+      useType: 0
+      flagSymbols: 0
+      flagPatterns: 0
+      stressType: 0
+      amount: 0
+  - id: 3
+    name: "\uB9D0\uB791\uB9D0\uB791 \uACF0\uC778\uD615"
+    price: 25
+    rarity: 2
+    hasRisk: 1
+    image: {fileID: 0}
+    itemEffect:
+      useType: 4
+      flagSymbols: 0
+      flagPatterns: 0
+      stressType: 1
+      amount: 25
+    itemRiskEffect:
+      useType: 0
+      flagSymbols: 0
+      flagPatterns: 0
+      stressType: 0
+      amount: 0
+  - id: 4
+    name: "\uC704\uACE0\uBE44"
+    price: 1000
+    rarity: 3
+    hasRisk: 3
+    image: {fileID: 0}
+    itemEffect:
+      useType: 3
+      flagSymbols: 0
+      flagPatterns: -1
+      stressType: 0
+      amount: 5
+    itemRiskEffect:
+      useType: 4
+      flagSymbols: 0
+      flagPatterns: 0
+      stressType: 1
+      amount: 5
+  - id: 5
+    name: "\uBC15\uAE40\uBC15 \uAD7F\uC988"
+    price: 10000
+    rarity: 4
+    hasRisk: 3
+    image: {fileID: 0}
+    itemEffect:
+      useType: 3
+      flagSymbols: 0
+      flagPatterns: -1
+      stressType: 0
+      amount: 5
+    itemRiskEffect:
+      useType: 1
+      flagSymbols: 128
+      flagPatterns: 0
+      stressType: 0
+      amount: 3

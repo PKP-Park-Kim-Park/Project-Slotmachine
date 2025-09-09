@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fae799ff7f81e9439ae38ab34bc3453, type: 3}
   m_Name: RarityProbabilityTable
   m_EditorClassIdentifier: 
-  chancesByLevel: []
+  chancesByLevel:
+  - level: 1
+    commonChance: 0.4
+    rareChance: 0.3
+    uniqueChance: 0.2
+    legendaryChance: 0.1

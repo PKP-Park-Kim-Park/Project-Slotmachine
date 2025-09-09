@@ -63,6 +63,12 @@ public class Shop : MonoBehaviour
 
     private void GenerateShopItems()
     {
+        if (rarityTable == null)
+        {
+            Debug.LogError("RarityProbabilityTable이 할당되지 않았습니다. 인스펙터 창에서 할당해주세요.");
+            return;
+        }
+
         LevelData currentLevel = ItemManager.Instance.GetCurrentLevelData();
         if (currentLevel == null)
         {
@@ -70,13 +76,16 @@ public class Shop : MonoBehaviour
             return;
         }
 
-        RarityChances currentChances = rarityTable.chancesByLevel.FirstOrDefault(c => currentLevel._level >= c.level);
-        
-        if (rarityTable == null)
+        RarityChances currentChances = rarityTable.chancesByLevel.FirstOrDefault(c => currentLevel._level == c.level);
+
+        if (currentChances.level == 0)
         {
-            Debug.LogError("RarityProbabilityTable이 할당되지 않았습니다. 인스펙터 창에서 할당해주세요.");
-            return;
+            Debug.LogWarning($"레벨 {currentLevel._level}에 해당하는 확률 데이터가 없습니다. 기본 확률을 적용합니다.");
+            // 기본 확률을 적용하기 위해 리스트의 첫 번째 항목을 가져옵니다.
+            // 이 로직은 리스트에 최소한 하나의 항목이 있고 오름차순으로 정렬되어 있음을 가정합니다.
+            currentChances = rarityTable.chancesByLevel.FirstOrDefault();
         }
+
         // 확률 변수들을 ScriptableObject에서 가져온 값으로 초기화합니다.
         float commonChance = currentChances.commonChance;
         float rareChance = currentChances.rareChance;

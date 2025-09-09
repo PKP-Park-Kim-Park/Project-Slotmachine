@@ -55,6 +55,7 @@ public class ItemManager : MonoBehaviour
     {
         return allItems;
     }
+
     public LevelData GetCurrentLevelData()
     {
         if (OnRequestLevelData != null)

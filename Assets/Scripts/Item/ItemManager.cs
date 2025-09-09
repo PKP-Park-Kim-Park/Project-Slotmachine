@@ -1,24 +1,22 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 
 public class ItemManager : MonoBehaviour
 {
-    // ½Ì±ÛÅæ ÀÎ½ºÅÏ½º
+    // ì‹±ê¸€í†¤ ì¸ìŠ¤í„´ìŠ¤
     public static ItemManager Instance { get; private set; }
 
-    // ¸ğµç ¾ÆÀÌÅÛ µ¥ÀÌÅÍ¸¦ ´ã°í ÀÖ´Â ScriptableObject
-    [SerializeField] private ItmeData itmeData;
+    // ëª¨ë“  ì•„ì´í…œ ë°ì´í„°ë¥¼ ë‹´ê³  ìˆëŠ” ScriptableObject
+    [SerializeField] private ItemData itemData;
 
-    // ¸ğµç ¾ÆÀÌÅÛ µ¥ÀÌÅÍ¸¦ ÀúÀåÇÒ ¹è¿­
+    // ëª¨ë“  ì•„ì´í…œ ë°ì´í„°ë¥¼ ì €ì¥í•  ë°°ì—´
     private List<ItemDataModel> allItems = new List<ItemDataModel>();
 
     private void Awake()
     {
-        // ½Ì±ÛÅæ ÆĞÅÏ ±¸Çö
         if (Instance == null)
         {
             Instance = this;
-            // ¾ÀÀÌ ÀüÈ¯µÇ¾îµµ ÆÄ±«µÇÁö ¾Ê°Ô ¼³Á¤
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -29,24 +27,23 @@ public class ItemManager : MonoBehaviour
         LoadAllItems();
     }
 
-    // ScriptableObject¿¡¼­ ¸ğµç ¾ÆÀÌÅÛ µ¥ÀÌÅÍ¸¦ ·Îµå
+    // ScriptableObjectì—ì„œ ëª¨ë“  ì•„ì´í…œ ë°ì´í„°ë¥¼ ë¡œë“œ
     private void LoadAllItems()
     {
-        if (itmeData != null)
+        if (itemData != null)
         {
-            allItems = itmeData.itemDataModels;
-            Debug.Log($"¾ÆÀÌÅÛ µ¥ÀÌÅÍ {allItems.Count}°³ ·Îµå ¿Ï·á.");
+            allItems = itemData.itemDataModels;
+            Debug.Log($"ì•„ì´í…œ ë°ì´í„° {allItems.Count}ê°œ ë¡œë“œ ì™„ë£Œ.");
         }
         else
         {
-            Debug.LogError("ItmeData ScriptableObject°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù!");
+            Debug.LogError("ItmeData ScriptableObjectê°€ í• ë‹¹ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
         }
     }
 
-    // ¾ÆÀÌÅÛ ID·Î ¾ÆÀÌÅÛ µ¥ÀÌÅÍ ¸ğµ¨À» °¡Á®¿À´Â ¸Ş¼­µå
+    // ì•„ì´í…œ IDë¡œ ì•„ì´í…œ ë°ì´í„° ëª¨ë¸ì„ ê°€ì ¸ì˜¤ëŠ” ë©”ì„œë“œ
     public ItemDataModel GetItemData(int itemID)
     {
-        // ¶÷´Ù½ÄÀ» »ç¿ëÇÏ¿© ¸®½ºÆ®¿¡¼­ ID¿¡ ¸Â´Â ¾ÆÀÌÅÛÀ» Ã£½À´Ï´Ù.
         return allItems.Find(item => item.id == itemID);
     }
 }

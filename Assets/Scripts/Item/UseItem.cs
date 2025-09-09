@@ -27,7 +27,7 @@ public class UseItem
     public event Action<StressEffectData> OnStressEffectReady;
 
     private const float USE_MULTIPLIER = 1.0f;
-    private const float UNUSE_MULTIPLIER = -1.0f;
+    private const float REMOVE_MULTIPLIER = -1.0f;
 
     public void Use(ItemDataModel model)
     {
@@ -35,10 +35,10 @@ public class UseItem
         ProcessItemEffects(model, USE_MULTIPLIER);
     }
 
-    public void UnUse(ItemDataModel model)
+    public void Remove(ItemDataModel model)
     {
         Debug.Log($"--- 아이템 취소 시작: {model.name} ---");
-        ProcessItemEffects(model, UNUSE_MULTIPLIER);
+        ProcessItemEffects(model, REMOVE_MULTIPLIER);
     }
 
     private void ProcessItemEffects(ItemDataModel model, float multiplier)
@@ -62,18 +62,8 @@ public class UseItem
         }
     }
 
-    private void CheckEffect(ItemEffectModel effectModel, float amount = 0f)
+    private void CheckEffect(ItemEffectModel effectModel, float amount)
     {
-        float amount1 = 0f;
-
-        if(amount != 0)
-        {
-            amount1 = amount;
-        }
-        else
-        {
-            amount1 = effectModel.amount;
-        }
 
         switch (effectModel.useType)
         {
@@ -82,10 +72,10 @@ public class UseItem
                 SymbolEffectData symbolData = new SymbolEffectData
                 {
                     Symbols = effectModel.flagSymbols,
-                    Amount = amount1,
+                    Amount = amount,
                     OriginalUseType = effectModel.useType
                 };
-                Debug.Log($"[효과 적용] 심볼 | 타입: {symbolData.OriginalUseType}, 대상: {symbolData.Symbols}, 값: {amount1}");
+                Debug.Log($"[효과 적용] 심볼 | 타입: {symbolData.OriginalUseType}, 대상: {symbolData.Symbols}, 값: {amount}");
                 OnSymbolEffectReady?.Invoke(symbolData);
                 break;
 
@@ -93,9 +83,9 @@ public class UseItem
                 PatternEffectData patternData = new PatternEffectData
                 {
                     Patterns = effectModel.flagPatterns,
-                    Amount = amount1
+                    Amount = amount
                 };
-                Debug.Log($"[효과 적용] 패턴 | 대상: {patternData.Patterns}, 값: {amount1}");
+                Debug.Log($"[효과 적용] 패턴 | 대상: {patternData.Patterns}, 값: {amount}");
                 OnPatternEffectReady?.Invoke(patternData);
                 break;
 
@@ -103,9 +93,9 @@ public class UseItem
                 StressEffectData stressData = new StressEffectData
                 {
                     StressType = effectModel.stressType,
-                    Amount = amount1
+                    Amount = amount
                 };
-                Debug.Log($"[효과 적용] 스트레스 | 대상: {stressData.StressType}, 값: {amount1}");
+                Debug.Log($"[효과 적용] 스트레스 | 대상: {stressData.StressType}, 값: {amount}");
                 OnStressEffectReady?.Invoke(stressData);
                 break;
 

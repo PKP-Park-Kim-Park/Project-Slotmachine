@@ -109,7 +109,7 @@ public class ItemManager : MonoBehaviour
         if(result == true)
         {
             ItemDataModel item = allItems.Find(item => item.id == id);
-            useItem.UnUse(item);
+            useItem.Remove(item);
         }
     }
 

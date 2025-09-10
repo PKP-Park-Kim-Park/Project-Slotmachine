@@ -4,7 +4,7 @@ public class Money
     public event Action OnMoneyChanged;
     public int _token { get; private set; }
     public int _gold { get; private set; }
-    private int _startGold;
+    public int _startGold;
     private const int CONVERT_SIZE = 100_000;
 
     public Money(int startGold = 0, int startToken = 0)

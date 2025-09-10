@@ -180,6 +180,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9e6087e900be2f40b41bd299c6341b3, type: 3}
+--- !u!114 &770632031 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6146105695517742317, guid: aa52fda7501e87f44b8c06ee7ed8a423, type: 3}
+  m_PrefabInstance: {fileID: 5689692267833731575}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &921297460 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9201742927471348575, guid: 3781d9cbfa3180f459531695abb39ed8, type: 3}
@@ -10774,6 +10785,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Symbol_Chart
       objectReference: {fileID: 0}
+    - target: {fileID: 5211841788601875015, guid: aa52fda7501e87f44b8c06ee7ed8a423, type: 3}
+      propertyPath: oddsTexts.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5211841788601875015, guid: aa52fda7501e87f44b8c06ee7ed8a423, type: 3}
+      propertyPath: 'oddsTexts.Array.data[7]'
+      value: 
+      objectReference: {fileID: 770632031}
     - target: {fileID: 7217231803347338485, guid: aa52fda7501e87f44b8c06ee7ed8a423, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.213

@@ -621,13 +621,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1149896154553025500}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.70710677, z: 0.70710677, w: 0}
-  m_LocalPosition: {x: 3.9789999, y: 0.050000846, z: -0.76000017}
+  m_LocalRotation: {x: 0.047310498, y: -0.70552236, z: 0.70552236, w: 0.047310498}
+  m_LocalPosition: {x: 3.83, y: 0.050000846, z: -0.76000017}
   m_LocalScale: {x: 2.3, y: 2.3, z: 2.3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 963670532892379641}
-  m_LocalEulerAnglesHint: {x: 90, y: -90, z: 90}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 172.327}
 --- !u!212 &1630980074864685271
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -672,12 +672,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: eb94d596bf1bca3499be63bdf0eb2da6, type: 3}
+  m_Sprite: {fileID: -1927608863, guid: 4d48b3f80fc287c40a15f4812b3cd4ee, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.65, y: 0.65}
+  m_Size: {x: 0.5, y: 0.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1569,7 +1569,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.70710677, z: 0.70710677, w: 0}
   m_LocalPosition: {x: 3.9789999, y: 0.050002337, z: 4.3401084}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 1.8000001, y: 1.8000001, z: 1.8000001}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1411456355565068390}
@@ -1618,7 +1618,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 881908c32805fd14884363a8ebbafaf2, type: 3}
+  m_Sprite: {fileID: 1015772366, guid: 4109c15608a35fc46b92e137475e006f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1656,7 +1656,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
   m_LocalPosition: {x: 3.9790232, y: 0.05000055, z: -1.7104499}
-  m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 9171264739531060171}
@@ -2076,6 +2076,7 @@ MonoBehaviour:
   - {fileID: 1356239282180442931}
   - {fileID: 3704125917096777429}
   - {fileID: 2715071051590606025}
+  - {fileID: 6146105695517742317}
 --- !u!1 &5743951199895930308
 GameObject:
   m_ObjectHideFlags: 0
@@ -3126,7 +3127,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '$ : 5'
+  m_text: '$ : -1.0x'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 254ab13b842e78e4983a9881e733de10, type: 2}
   m_sharedMaterial: {fileID: 442448111083167660, guid: 254ab13b842e78e4983a9881e733de10, type: 2}
@@ -3927,13 +3928,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8497780304748868561}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 3.9789999, y: 0.05000055, z: -2.687}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalRotation: {x: -0.69881433, y: 0.10797493, z: 0.10797493, w: 0.69881433}
+  m_LocalPosition: {x: 3.98, y: 0.05, z: -2.65}
+  m_LocalScale: {x: 2.3, y: 2.3, z: 2.3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 9185416645646555405}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 17.567}
 --- !u!212 &6078556570303364319
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3978,12 +3979,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8651e174f71431f4aa3045b1ba8d9e09, type: 3}
+  m_Sprite: {fileID: -1651311768, guid: 9f78371b73d7efd4bb7aa32cd944a253, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.65, y: 0.65}
+  m_Size: {x: 0.5, y: 0.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

@@ -27,3 +27,5 @@ MonoBehaviour:
     rewardOddsMultiplier: 6
   - symbolType: 7
     rewardOddsMultiplier: 7
+  - symbolType: 8
+    rewardOddsMultiplier: -1

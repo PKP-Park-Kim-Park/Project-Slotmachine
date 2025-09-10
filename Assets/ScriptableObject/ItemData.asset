@@ -18,7 +18,7 @@ MonoBehaviour:
     price: 10
     rarity: 1
     hasRisk: 1
-    image: {fileID: 0}
+    sprite: {fileID: 0}
     itemEffect:
       useType: 1
       flagSymbols: 2
@@ -36,7 +36,7 @@ MonoBehaviour:
     price: 10
     rarity: 1
     hasRisk: 1
-    image: {fileID: 0}
+    sprite: {fileID: 0}
     itemEffect:
       useType: 1
       flagSymbols: 16
@@ -54,7 +54,7 @@ MonoBehaviour:
     price: 25
     rarity: 2
     hasRisk: 1
-    image: {fileID: 0}
+    sprite: {fileID: 0}
     itemEffect:
       useType: 4
       flagSymbols: 0
@@ -72,7 +72,7 @@ MonoBehaviour:
     price: 1000
     rarity: 3
     hasRisk: 3
-    image: {fileID: 0}
+    sprite: {fileID: 0}
     itemEffect:
       useType: 3
       flagSymbols: 0
@@ -90,7 +90,7 @@ MonoBehaviour:
     price: 10000
     rarity: 4
     hasRisk: 3
-    image: {fileID: 0}
+    sprite: {fileID: 0}
     itemEffect:
       useType: 3
       flagSymbols: 0

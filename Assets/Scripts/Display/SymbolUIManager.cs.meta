@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 28e10b4308ebb8245aeddb26a2d2efab
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - symbolWeightData: {fileID: 11400000, guid: a56737cb54763904da75a6ea27a3a79d, type: 2}
+  - symbolRewardOddsData: {fileID: 11400000, guid: a02a11a4a1b0b9a448dac5767ae7800a, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

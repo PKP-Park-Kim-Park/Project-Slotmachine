@@ -28,7 +28,7 @@ public class SkillManager : MonoBehaviour
     private void InitializeDatabase()
     {
         skillDatabase = new Dictionary<int, SkillDataModel>();
-        foreach (var model in allSkillData.skillDataModels)
+        foreach (SkillDataModel model in allSkillData.skillDataModels)
         {
             if (skillDatabase.ContainsKey(model.id))
             {
@@ -60,7 +60,7 @@ public class SkillManager : MonoBehaviour
             return;
         }
 
-        if (activeSkillIds.Contains(skillId))
+        if (activeSkillIds.Contains(skillId) == true)
         {
             DeactivateSkill(skillId);
         }

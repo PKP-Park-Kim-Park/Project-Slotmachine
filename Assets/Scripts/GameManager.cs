@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance; // 싱글톤
 
+    public event Action OnResetSession; // 세션 리셋을 알리는 이벤트
     public event Action<Vector3> OnPlayerPosChanged;
     public event Action OnUnlockDoor;
     public event Action OnLockAllDoors;
@@ -16,7 +17,6 @@ public class GameManager : MonoBehaviour
     public LevelData levelData { get; private set; }
     public Money money { get; private set; }
     public LevelManager levelManager { get; private set; }
-
     private GameData _gameData;
 
     private void Awake()
@@ -108,6 +108,9 @@ public class GameManager : MonoBehaviour
         levelData.SetLevel(1);
         money.ConvertToken();
         OnPlayerPosChanged?.Invoke(new Vector3(1f, 1f, 0f));
+
+        // 모든 구독자(슬롯머신 등)에게 세션 리셋을 방송합니다.
+        OnResetSession?.Invoke();
         OnUnlockDoor?.Invoke();
     }
 

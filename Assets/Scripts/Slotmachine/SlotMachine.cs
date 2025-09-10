@@ -126,6 +126,10 @@ public class SlotMachine : MonoBehaviour
     private int[,] matrix;
     private SymbolWeightProcessor[] reelWeightProcessors;
     private Coroutine spinCoroutine;
+    
+    // 배율 데이터의 런타임 복사본
+    private Dictionary<Patterns, float> patternOddsRuntimeCopy;
+    private Dictionary<Symbols, float> symbolOddsRuntimeCopy;
 
     private void Awake()
     {
@@ -149,11 +153,8 @@ public class SlotMachine : MonoBehaviour
 
         rewardChecker = new CheckRewardPattern();
 
-        reelWeightProcessors = new SymbolWeightProcessor[reels.Length];
-        for (int i = 0; i < reels.Length; i++) reelWeightProcessors[i] = new SymbolWeightProcessor(reelProbability);
-
-        // GameManager가 SlotMachine을 찾아 초기화하도록 변경
-        GameManager.instance?.InitializeSlotMachine(this);
+        // 런타임 데이터 초기화
+        ResetToDefaults();
 
         if (outline == null)
         {
@@ -167,6 +168,42 @@ public class SlotMachine : MonoBehaviour
         {
             breakdownScreens = GetComponentsInChildren<BreakdownScreen>();
         }
+    }
+
+    private void Start()
+    {
+        if (GameManager.instance != null)
+        {
+            // GameManager에 의존성 주입 요청
+            GameManager.instance.InitializeSlotMachine(this);
+            // GameManager의 세션 리셋 이벤트에 초기화 메서드 구독
+            GameManager.instance.OnResetSession += ResetToDefaults;
+        }
+    }
+
+    /// <summary>
+    /// 모든 런타임 배율과 확률 데이터를 원본 ScriptableObject 값으로 리셋합니다.
+    /// </summary>
+    public void ResetToDefaults()
+    {
+        Debug.Log("슬롯머신 데이터를 기본값으로 초기화합니다.");
+
+        // 1. 패턴 및 심볼 '보상 배율'을 원본 SO에서 다시 복사
+        patternOddsRuntimeCopy = new Dictionary<Patterns, float>();
+        foreach (var entry in patternOddsData.rewardPatterns)
+        {
+            patternOddsRuntimeCopy.Add(entry.patternType, entry.rewardOddsMultiplier);
+        }
+
+        symbolOddsRuntimeCopy = new Dictionary<Symbols, float>();
+        foreach (var entry in symbolOddsData.rewardSymbols)
+        {
+            symbolOddsRuntimeCopy.Add(entry.symbolType, entry.rewardOddsMultiplier);
+        }
+
+        // 2. 릴의 '심볼 출현 확률'을 원본 SO를 사용해 재생성
+        reelWeightProcessors = new SymbolWeightProcessor[reels.Length];
+        for (int i = 0; i < reels.Length; i++) reelWeightProcessors[i] = new SymbolWeightProcessor(reelProbability);
     }
 
     public void Initialize(Money money, LevelData levelData)
@@ -193,6 +230,11 @@ public class SlotMachine : MonoBehaviour
     {
         if (_levelData != null)
         {
+            if (GameManager.instance != null)
+            {
+                // GameManager 이벤트 구독 해제
+                GameManager.instance.OnResetSession -= ResetToDefaults;
+            }
             _levelData.OnLevelChanged -= UpdateBettingLimits;
             // 이벤트 구독 해제
             GameManager.instance.levelManager.OnLevelUp -= (level) => UpdateOutlineColor();
@@ -333,7 +375,7 @@ public class SlotMachine : MonoBehaviour
     private IEnumerator ProcessResults()
     {
         // 1. 보상 패턴 확인 및 배율 계산
-        float totalOdds = rewardChecker.CheckReward(matrix, patternOddsData, symbolOddsData);
+        float totalOdds = rewardChecker.CheckReward(matrix, patternOddsRuntimeCopy, symbolOddsRuntimeCopy);
 
         // 2. 당첨 라인 정보 가져오기
         List<WinningLine> winningLines = rewardChecker.WinningLines;

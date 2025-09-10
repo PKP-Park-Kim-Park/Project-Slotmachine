@@ -20,7 +20,7 @@ MonoBehaviour:
     hasRisk: 1
     sprite: {fileID: 0}
     itemEffect:
-      useType: 1
+      useType: 2
       flagSymbols: 2
       flagPatterns: 0
       stressType: 0

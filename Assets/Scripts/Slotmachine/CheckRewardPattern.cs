@@ -10,28 +10,19 @@ public class CheckRewardPattern
     private float totalOdds;
 
     private Dictionary<Symbols, float> symbolOdds = new Dictionary<Symbols, float>(); // 심볼 배율
-    private Dictionary<Patterns, float> partternOdds = new Dictionary<Patterns, float>(); // 패턴 배율
+    private Dictionary<Patterns, float> patternOdds = new Dictionary<Patterns, float>(); // 패턴 배율
 
     private List<WinningLine> winningLines = new List<WinningLine>();
     public List<WinningLine> WinningLines { get { return winningLines; } }
 
-    public float CheckReward(int[,] _matrix, PatternRewardOdds sheet, SymbolRewardOdds sheet2)
+    public float CheckReward(int[,] _matrix, Dictionary<Patterns, float> _patternOdds, Dictionary<Symbols, float> _symbolOdds)
     {
         totalOdds = 0;
         
         winningLines.Clear();
-        partternOdds.Clear();
-        symbolOdds.Clear();
 
-        foreach (var entry in sheet.rewardPatterns)
-        {
-            partternOdds.Add(entry.patternType, entry.rewardOddsMultiplier);
-        }
-
-        foreach (var entry in sheet2.rewardSymbols)
-        {
-            symbolOdds.Add(entry.symbolType, entry.rewardOddsMultiplier);
-        }
+        this.patternOdds = _patternOdds;
+        this.symbolOdds = _symbolOdds;
 
         matrix = _matrix;
 
@@ -396,10 +387,10 @@ public class CheckRewardPattern
         float symbolOdd;
         float patternOdd;
 
-        if (symbolOdds.ContainsKey(symbol) && partternOdds.ContainsKey(pattern))
+        if (symbolOdds.ContainsKey(symbol) && patternOdds.ContainsKey(pattern))
         {
             symbolOdd = symbolOdds[symbol];
-            patternOdd = partternOdds[pattern];
+            patternOdd = patternOdds[pattern];
 
             float currentOdds = symbolOdd * patternOdd;
             totalOdds += currentOdds;

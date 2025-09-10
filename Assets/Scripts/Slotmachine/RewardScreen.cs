@@ -47,7 +47,7 @@ public class RewardScreen : MonoBehaviour
             StopCoroutine(countUpCoroutine);
         }
 
-        if (newRewardGold > 0)
+        if (newRewardGold != 0)
         {
             countUpCoroutine = StartCoroutine(CountUpAnimation(newRewardGold));
         }
@@ -71,7 +71,7 @@ public class RewardScreen : MonoBehaviour
 
         for (float timer = 0; timer < duration; timer += Time.deltaTime)
         {
-            float progress = timer / duration;
+            float progress = timer / duration; // 0에서 1로 진행
             currentGold = Mathf.Lerp(0, targetGold, progress);
             rewardGoldText.text = ((int)currentGold).ToString("N0") + " $";
             yield return null;

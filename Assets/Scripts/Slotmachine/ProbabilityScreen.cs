@@ -95,7 +95,14 @@ public class ProbabilityScreen : MonoBehaviour
     /// </summary>
     private IEnumerator ShowOddsAnimation(float odds)
     {
-        probabilityText.text = $"+ {odds:F1}";
+        if (odds < 0)
+        {
+            probabilityText.text = $"{odds:F1}";
+        }
+        else
+        {
+            probabilityText.text = $"+{odds:F1}";
+        }
 
         yield return StartCoroutine(PopAnimation());
 
@@ -147,14 +154,11 @@ public class ProbabilityScreen : MonoBehaviour
     /// <param name="totalOdds">표시할 총 배율</param>
     public void ShowTotalOdds(float totalOdds)
     {
-        if (totalOdds > 0)
+        if (displayCoroutine != null)
         {
-            if (displayCoroutine != null)
-            {
-                StopCoroutine(displayCoroutine);
-            }
-            displayCoroutine = StartCoroutine(ShowTotalOddsAnimation(totalOdds));
+            StopCoroutine(displayCoroutine);
         }
+        displayCoroutine = StartCoroutine(ShowTotalOddsAnimation(totalOdds));
     }
 
     /// <summary>

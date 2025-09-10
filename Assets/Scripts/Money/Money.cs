@@ -51,6 +51,10 @@ public class Money
 
     public void ConvertToken()
     {
+        if (_gold < 0)
+        {
+            _gold = 0;
+        }
         _token += _gold / CONVERT_SIZE;
         _gold = _startGold;
         OnMoneyChanged?.Invoke();

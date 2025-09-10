@@ -10,6 +10,9 @@ public class ItemManager : MonoBehaviour
     // 모든 아이템 데이터를 담고 있는 ScriptableObject
     [SerializeField] private ItemData itemData;
 
+    // 스트레스 효과를 적용할 PlayerStress 컴포넌트
+    [SerializeField] private PlayerStress playerStress;
+
     // 모든 아이템 데이터를 저장할 배열
     private List<ItemDataModel> allItems = new List<ItemDataModel>();
 
@@ -115,7 +118,28 @@ public class ItemManager : MonoBehaviour
 
     public void EffectStress(StressEffectData stressEffectData)
     {
-        Debug.Log("스트레스 효과 진짜 발동!" + stressEffectData);
+        if (playerStress == null)
+        {
+            Debug.LogError("PlayerStress 컴포넌트가 ItemManager에 할당되지 않았습니다.");
+            return;
+        }
+
+        float amount = stressEffectData.Amount;
+
+        switch (stressEffectData.StressType)
+        {
+            case StressType.CurrentStress:
+                if (amount > 0) playerStress.AddStress(amount);
+                else playerStress.ReduceStress(Mathf.Abs(amount));
+                break;
+
+            case StressType.MaxStress:
+                if (amount > 0) playerStress.IncreaseMaxStress(amount);
+                else playerStress.DecreaseMaxStress(Mathf.Abs(amount));
+                break;
+        }
+
+        Debug.Log($"스트레스 효과 적용 완료: 타입({stressEffectData.StressType}), 양({amount})");
     }
 
     public void EffectPattern(PatternEffectData patternEffectData)

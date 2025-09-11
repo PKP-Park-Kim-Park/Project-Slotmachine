@@ -7,6 +7,7 @@ public class TestRunner : MonoBehaviour
     [SerializeField] private int skillToTestId = 1;
     private Shop shop;
     private SkillManager skillManager;
+    [SerializeField] private SkillShop skillShop;
 
     [Header("원본 데이터 확인용")]
     [SerializeField] private PatternRewardOdds patternOddsData; // 패턴 배율 원본 SO
@@ -52,6 +53,15 @@ public class TestRunner : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             shop.RemoveItem(itemToTestId);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            skillShop.OnClickSkillInShop(1);
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            skillShop.OnClickSkillInShop(2);
         }
     }
 }

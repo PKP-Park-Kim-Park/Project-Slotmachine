@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     public event Action<Vector3> OnPlayerPosChanged;
     public event Action OnUnlockDoor;
     public event Action OnLockAllDoors;
-    public event Func<int> OnRequestDoorLock;
     public event Action<bool> OnSlotMachineStateChanged;
 
     private bool isGaimng;

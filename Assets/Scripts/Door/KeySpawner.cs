@@ -16,7 +16,7 @@ public class KeySpawner : MonoBehaviour
 
     private void Start()
     {
-        LevelManager levelManager = FindObjectOfType<LevelManager>();
+        LevelManager levelManager = FindFirstObjectByType<LevelManager>();
         if (levelManager != null)
         {
             levelManager.OnLevelUp += SpawnKey;
@@ -27,7 +27,7 @@ public class KeySpawner : MonoBehaviour
             GameManager.instance.OnResetSession += HandleSessionReset;
         }
 
-        _playerLook = FindObjectOfType<PlayerLook>();
+        _playerLook = FindFirstObjectByType<PlayerLook>();
 
         if (keyPrefab == null)
         {
@@ -47,7 +47,7 @@ public class KeySpawner : MonoBehaviour
 
     private void OnDestroy()
     {
-        LevelManager levelManager = FindObjectOfType<LevelManager>();
+        LevelManager levelManager = FindFirstObjectByType<LevelManager>();
         if (levelManager != null)
         {
             levelManager.OnLevelUp -= SpawnKey;

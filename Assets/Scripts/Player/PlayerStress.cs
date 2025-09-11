@@ -13,19 +13,28 @@ public class PlayerStress : MonoBehaviour, IItemEffectReceiver
 
     private void Start()
     {
-        // ItemManager가 존재하면 자신을 등록합니다.
+        // ItemManager가 존재하면 자신을 등록
         if (ItemManager.Instance != null)
         {
             ItemManager.Instance.RegisterReceiver(this);
+        }
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.OnResetSession += ResetStress;
         }
     }
 
     private void OnDestroy()
     {
-        // 오브젝트 파괴 시 ItemManager에서 등록을 해제합니다. (null 참조 방지)
+        // 오브젝트 파괴 시 ItemManager에서 등록을 해제 (null 참조 방지)
         if (ItemManager.Instance != null)
         {
             ItemManager.Instance.UnregisterReceiver(this);
+        }
+        // 오브젝트 파괴 시 메모리 누수를 방지하기 위해 이벤트를 해제
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.OnResetSession -= ResetStress;
         }
     }
 
@@ -63,6 +72,19 @@ public class PlayerStress : MonoBehaviour, IItemEffectReceiver
         // 최대치가 감소하면 현재 스트레스가 최대치를 초과하지 않도록 조정
         currentStress = Mathf.Min(currentStress, maxStress);
         OnStressChanged?.Invoke(currentStress);
+    }
+
+    /// <summary>
+    /// GameManager에 의해 호출되어 스트레스 수치 초기화
+    /// </summary>
+    private void ResetStress()
+    {
+        currentStress = 50f;
+        maxStress = 100f;
+
+        OnStressChanged?.Invoke(currentStress);
+        OnMaxStressChanged?.Invoke(maxStress);
+        Debug.Log("스트레스 수치가 초기화되었습니다.");
     }
 
     #region IItemEffectReceiver Implementation

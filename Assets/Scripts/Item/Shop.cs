@@ -20,6 +20,21 @@ public class Shop : MonoBehaviour
         {
             Debug.LogError("ItemManager 인스턴스를 찾을 수 없습니다! ItemManager 스크립트가 씬에 있는지 확인하세요.");
         }
+
+        // GameManager의 세션 리셋 이벤트에 상점 아이템 리로드 메서드를 구독합니다.
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.OnResetSession += LoadShopItems;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // 오브젝트 파괴 시 메모리 누수를 방지하기 위해 이벤트를 해제합니다.
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.OnResetSession -= LoadShopItems;
+        }
     }
 
     // 아이템 구매

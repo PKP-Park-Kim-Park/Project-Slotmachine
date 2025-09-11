@@ -42,6 +42,7 @@ public class Shop : MonoBehaviour
             }
         }
     }
+
     public void RemoveItem(int itemID)
     {
         ItemDataModel removeItem = shopItems.Find(item => item.id == itemID);
@@ -60,7 +61,6 @@ public class Shop : MonoBehaviour
         shopItems.Clear();
         GenerateShopItems();
         Debug.Log($"상점 아이템 {shopItems.Count}개 로드 완료.");
-
     }
 
     // 상점 리롤
@@ -86,13 +86,13 @@ public class Shop : MonoBehaviour
             return;
         }
 
-        // 수정된 부분: 현재 레벨보다 작거나 같은 레벨 중 가장 높은 레벨의 데이터를 찾습니다.
+        // 현재 레벨보다 작거나 같은 레벨 중 가장 높은 레벨의 데이터를 찾습니다.
         RarityChances currentChances = rarityTable.chancesByLevel
             .Where(c => c.level <= currentLevel._level)
             .OrderByDescending(c => c.level)
             .FirstOrDefault();
 
-        // 수정된 부분: 유효성 검사 추가
+        // 유효성 검사 추가
         if (EqualityComparer<RarityChances>.Default.Equals(currentChances, default(RarityChances)))
         {
             Debug.LogError("RarityProbabilityTable에 유효한 확률 데이터가 없습니다. 상점 아이템을 생성할 수 없습니다.");
@@ -112,9 +112,18 @@ public class Shop : MonoBehaviour
             return;
         }
 
+        // 아이템 중복 방지를 위해 전체 아이템 목록을 복사합니다.
+        List<ItemDataModel> availableItems = new List<ItemDataModel>(allItems);
+
         // 확률에 따라 3개의 아이템을 선택합니다.
         for (int i = 0; i < 3; i++)
         {
+            if (availableItems.Count == 0)
+            {
+                Debug.LogWarning("더 이상 선택 가능한 아이템이 없습니다. 상점을 채울 수 없습니다.");
+                break;
+            }
+
             float rand = Random.value;
             Rarity rarityToSelect;
 
@@ -135,22 +144,36 @@ public class Shop : MonoBehaviour
                 rarityToSelect = Rarity.Common;
             }
 
-            List<ItemDataModel> filteredItems = allItems.Where(item => item.rarity == rarityToSelect).ToList();
+            // 해당 등급의 아이템만 필터링합니다.
+            List<ItemDataModel> filteredItems = availableItems.Where(item => item.rarity == rarityToSelect).ToList();
 
-            // 해당 등급의 아이템이 있을 경우, 그 중에서 랜덤으로 추가
             if (filteredItems.Count > 0)
             {
+                // 필터링된 아이템 중에서 랜덤으로 선택합니다.
                 int randomIndex = Random.Range(0, filteredItems.Count);
                 ItemDataModel selectedItem = filteredItems[randomIndex];
-                shopItems.Add(filteredItems[randomIndex]);
+                shopItems.Add(selectedItem);
+
+                // 선택된 아이템을 사용 가능한 목록에서 제거하여 중복을 방지합니다.
+                availableItems.Remove(selectedItem);
                 Debug.Log($"슬롯 {i + 1}: [ID: {selectedItem.id}] {selectedItem.name} ({selectedItem.rarity}) 추가.");
             }
-            // 해당 등급의 아이템이 없을 경우, 모든 아이템 중에서 랜덤으로 추가
             else
             {
                 Debug.LogWarning($"{rarityToSelect} 등급의 아이템이 없습니다. 다른 아이템을 추가합니다.");
-                ItemDataModel fallbackItem = allItems[Random.Range(0, allItems.Count)];
-                shopItems.Add(allItems[Random.Range(0, allItems.Count)]);
+
+                ItemDataModel fallbackItem = default(ItemDataModel); // default로 초기화
+
+                // 중복되지 않는 아이템을 찾을 때까지 반복합니다.
+                do
+                {
+                    int randomIndex = Random.Range(0, availableItems.Count);
+                    fallbackItem = availableItems[randomIndex];
+                }
+                while (shopItems.Any(item => item.id == fallbackItem.id));
+
+                shopItems.Add(fallbackItem);
+                availableItems.Remove(fallbackItem);
                 Debug.Log($"슬롯 {i + 1}: [ID: {fallbackItem.id}] {fallbackItem.name} ({fallbackItem.rarity}) 추가 (대체).");
             }
         }

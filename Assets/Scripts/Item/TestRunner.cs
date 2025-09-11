@@ -28,10 +28,15 @@ public class TestRunner : MonoBehaviour
             skillManager.ToggleSkill(skillToTestId);
         }
 
-        // R 키를 누르면 상점을 리롤합니다.
+        // R 키를 누르면 상점을 판매합니다.
         if (Input.GetKeyDown(KeyCode.R))
         {
             shop.RemoveItem(itemToTestId);
+        }
+        // T 키를 누르면 상점을 리롤합니다.
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            shop.RerollShop();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -6,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance; // 싱글톤
 
+    public event Action OnResetSession; // 세션 리셋을 알리는 이벤트
     public event Action<Vector3> OnPlayerPosChanged;
     public event Action OnUnlockDoor;
     public event Action OnLockAllDoors;
@@ -16,7 +18,6 @@ public class GameManager : MonoBehaviour
     public LevelData levelData { get; private set; }
     public Money money { get; private set; }
     public LevelManager levelManager { get; private set; }
-
     private GameData _gameData;
 
     private void Awake()
@@ -43,7 +44,6 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-
         // ItemManager가 로드된 후 이벤트를 구독합니다.
         ItemManager.Instance.OnRequestLevelData += RequestLevelData;
         ItemManager.Instance.OnCheckCanBuyItem += CheckCanBuyItem;
@@ -108,6 +108,9 @@ public class GameManager : MonoBehaviour
         levelData.SetLevel(1);
         money.ConvertToken();
         OnPlayerPosChanged?.Invoke(new Vector3(1f, 1f, 0f));
+
+        // 모든 구독자(슬롯머신 등)에게 세션 리셋을 방송합니다.
+        OnResetSession?.Invoke();
         OnUnlockDoor?.Invoke();
     }
 
@@ -159,14 +162,13 @@ public class GameManager : MonoBehaviour
         OnLockAllDoors?.Invoke();
     }
 
-    /// <summary>
-    /// SlotMachine에 필요한 의존성을 주입하여 초기화합니다.
-    /// </summary>
-    /// <param name="slotMachine">초기화할 SlotMachine 인스턴스</param>
-    public void InitializeSlotMachine(SlotMachine slotMachine)
-    {
-        slotMachine.Initialize(this.money, this.levelData);
-    }
+     /// <summary>
+     /// IInitializable 인터페이스를 구현하는 모든 오브젝트를 초기화합니다.
+     /// </summary>
+     public void InitializeObject(IInitializable initializableObject)
+     {
+         initializableObject.Initialize(this);
+     }
 
     public bool CheckCanBuyItem(int price)
     {

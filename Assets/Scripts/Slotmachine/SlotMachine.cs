@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class SlotMachine : MonoBehaviour
+public class SlotMachine : MonoBehaviour, IInitializable, IItemEffectReceiver
 {
     [Header("Machine Settings")] [SerializeField] private int machineLevel = 1;
     // 슬롯머신의 상태를 나타내는 열거형
@@ -126,6 +127,10 @@ public class SlotMachine : MonoBehaviour
     private int[,] matrix;
     private SymbolWeightProcessor[] reelWeightProcessors;
     private Coroutine spinCoroutine;
+    
+    // 배율 데이터의 런타임 복사본
+    private Dictionary<Patterns, float> patternOddsRuntimeCopy;
+    private Dictionary<Symbols, float> symbolOddsRuntimeCopy;
 
     private void Awake()
     {
@@ -149,11 +154,8 @@ public class SlotMachine : MonoBehaviour
 
         rewardChecker = new CheckRewardPattern();
 
-        reelWeightProcessors = new SymbolWeightProcessor[reels.Length];
-        for (int i = 0; i < reels.Length; i++) reelWeightProcessors[i] = new SymbolWeightProcessor(reelProbability);
-
-        // GameManager가 SlotMachine을 찾아 초기화하도록 변경
-        GameManager.instance?.InitializeSlotMachine(this);
+        // 런타임 데이터 초기화
+        ResetToDefaults();
 
         if (outline == null)
         {
@@ -169,10 +171,52 @@ public class SlotMachine : MonoBehaviour
         }
     }
 
-    public void Initialize(Money money, LevelData levelData)
+    private void Start()
     {
-        _money = money;
-        _levelData = levelData;
+        if (GameManager.instance != null)
+        {
+            // GameManager에 자신(IInitializable)을 전달하여 초기화를 요청합니다.
+            GameManager.instance.InitializeObject(this);
+            // GameManager의 세션 리셋 이벤트에 초기화 메서드 구독
+            GameManager.instance.OnResetSession += ResetToDefaults;
+        }
+
+        if (ItemManager.Instance != null)
+        {
+            // ItemManager에 자신을 등록
+            ItemManager.Instance.RegisterReceiver(this);
+        }
+    }
+
+    /// <summary>
+    /// 모든 런타임 배율과 확률 데이터를 원본 ScriptableObject 값으로 리셋
+    /// </summary>
+    public void ResetToDefaults()
+    {
+        Debug.Log("슬롯머신 데이터를 기본값으로 초기화합니다.");
+
+        // 1. 패턴 및 심볼 '보상 배율'을 원본 SO에서 다시 복사
+        patternOddsRuntimeCopy = new Dictionary<Patterns, float>();
+        foreach (var entry in patternOddsData.rewardPatterns)
+        {
+            patternOddsRuntimeCopy.Add(entry.patternType, entry.rewardOddsMultiplier);
+        }
+
+        symbolOddsRuntimeCopy = new Dictionary<Symbols, float>();
+        foreach (var entry in symbolOddsData.rewardSymbols)
+        {
+            symbolOddsRuntimeCopy.Add(entry.symbolType, entry.rewardOddsMultiplier);
+        }
+
+        // 2. 릴의 '심볼 출현 확률'을 원본 SO를 사용해 재생성
+        reelWeightProcessors = new SymbolWeightProcessor[reels.Length];
+        for (int i = 0; i < reels.Length; i++) reelWeightProcessors[i] = new SymbolWeightProcessor(reelProbability);
+    }
+
+    public void Initialize(GameManager gameManager)
+    {
+        _money = gameManager.money;
+        _levelData = gameManager.levelData;
 
         if (_levelData != null)
         {
@@ -193,6 +237,11 @@ public class SlotMachine : MonoBehaviour
     {
         if (_levelData != null)
         {
+            if (GameManager.instance != null)
+            {
+                // GameManager 이벤트 구독 해제
+                GameManager.instance.OnResetSession -= ResetToDefaults;
+            }
             _levelData.OnLevelChanged -= UpdateBettingLimits;
             // 이벤트 구독 해제
             GameManager.instance.levelManager.OnLevelUp -= (level) => UpdateOutlineColor();
@@ -333,7 +382,7 @@ public class SlotMachine : MonoBehaviour
     private IEnumerator ProcessResults()
     {
         // 1. 보상 패턴 확인 및 배율 계산
-        float totalOdds = rewardChecker.CheckReward(matrix, patternOddsData, symbolOddsData);
+        float totalOdds = rewardChecker.CheckReward(matrix, patternOddsRuntimeCopy, symbolOddsRuntimeCopy);
 
         // 2. 당첨 라인 정보 가져오기
         List<WinningLine> winningLines = rewardChecker.WinningLines;
@@ -412,4 +461,95 @@ public class SlotMachine : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// 아이템으로 인한 심볼 관련 효과를 런타임 데이터에 적용합니다.
+    /// </summary>
+    /// <param name="symbolEffectData">적용할 심볼 효과 데이터</param>
+    public void ApplySymbolEffect(SymbolEffectData symbolEffectData)
+    {
+        // 1. 심볼 '보상 배율' 변경
+        if (symbolEffectData.OriginalUseType == UseType.SymbolReward)
+        {
+            // Flag로 지정된 모든 심볼에 대해 반복
+            foreach (Symbols symbol in Enum.GetValues(typeof(Symbols)))
+            {
+                //if (symbol == Symbols.None) continue;
+
+                if (symbolEffectData.Symbols.HasFlag((FlagSymbols)Enum.Parse(typeof(FlagSymbols), symbol.ToString())))
+                {
+                    if (symbolOddsRuntimeCopy.ContainsKey(symbol))
+                    {
+                        float previousOdds = symbolOddsRuntimeCopy[symbol];
+                        symbolOddsRuntimeCopy[symbol] += symbolEffectData.Amount;
+                        Debug.Log($"[아이템 효과] 심볼 '{symbol}' 보상 배율 변경: {previousOdds:F2} -> {symbolOddsRuntimeCopy[symbol]:F2} ({symbolEffectData.Amount:F2})");
+
+                    }
+                }
+            }
+        }
+        // 2. 심볼 '등장 확률' 변경
+        else if (symbolEffectData.OriginalUseType == UseType.Symbol)
+        {
+            // Flag로 지정된 모든 심볼에 대해 반복
+            foreach (Symbols symbol in Enum.GetValues(typeof(Symbols)))
+            {
+                //if (symbol == Symbols.None) continue;
+
+                if (symbolEffectData.Symbols.HasFlag((FlagSymbols)Enum.Parse(typeof(FlagSymbols), symbol.ToString())))
+                {
+                    // 모든 릴의 확률 프로세서에 효과 적용
+                    foreach (var processor in reelWeightProcessors)
+                    {
+                        processor.SetProbability(symbol, symbolEffectData.Amount);
+                    }
+                    Debug.Log($"[아이템 효과] 심볼 '{symbol}' 등장 확률에 {symbolEffectData.Amount}%p 만큼 변화를 시도했습니다.");
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 아이템으로 인한 패턴 관련 효과를 런타임 데이터에 적용합니다.
+    /// </summary>
+    /// <param name="patternEffectData">적용할 패턴 효과 데이터</param>
+    public void ApplyPatternEffect(PatternEffectData patternEffectData)
+    {
+        // Flag로 지정된 모든 패턴에 대해 반복
+        foreach (Patterns pattern in Enum.GetValues(typeof(Patterns)))
+        {
+            if (pattern == Patterns.None) continue;
+
+            if (patternEffectData.Patterns.HasFlag((FlagPatterns)Enum.Parse(typeof(FlagPatterns), pattern.ToString())))
+            {
+                if (patternOddsRuntimeCopy.ContainsKey(pattern))
+                {
+                    float previousOdds = patternOddsRuntimeCopy[pattern];
+                    patternOddsRuntimeCopy[pattern] += patternEffectData.Amount;
+                    Debug.Log($"[아이템 효과] 패턴 '{pattern}' 보상 배율 변경: {previousOdds:F2} -> {patternOddsRuntimeCopy[pattern]:F2} ({patternEffectData.Amount:F2})");
+                }
+            }
+        }
+    }
+
+    #region IItemEffectReceiver Implementation
+    public bool CanReceive(EffectType type)
+    {
+        // 이 클래스는 심볼과 패턴 효과만 처리할 수 있습니다.
+        return type == EffectType.Symbol || type == EffectType.Pattern;
+    }
+
+    public void ReceiveEffect(EffectType type, object data)
+    {
+        // 타입에 따라 적절한 메서드를 호출합니다.
+        if (type == EffectType.Symbol && data is SymbolEffectData symbolData)
+        {
+            ApplySymbolEffect(symbolData);
+        }
+        else if (type == EffectType.Pattern && data is PatternEffectData patternData)
+        {
+            ApplyPatternEffect(patternData);
+        }
+    }
+    #endregion
 }

@@ -11,6 +11,7 @@ public class Inventory : MonoBehaviour
         ItemManager.Instance.OnCheckCanAddInventoryItem += CanGetItem;
         ItemManager.Instance.OnRemoveInventoryItem += DeleteItem;
         ItemManager.Instance.OnAddInventoryItem += GetItem;
+        GameManager.instance.OnResetSession += ResetInventory;
     }
 
     private void OnDestroy()
@@ -18,6 +19,7 @@ public class Inventory : MonoBehaviour
         ItemManager.Instance.OnCheckCanAddInventoryItem -= CanGetItem;
         ItemManager.Instance.OnRemoveInventoryItem -= DeleteItem;
         ItemManager.Instance.OnAddInventoryItem -= GetItem;
+        GameManager.instance.OnResetSession -= ResetInventory;
     }
 
     public bool CanGetItem(int id)
@@ -65,5 +67,14 @@ public class Inventory : MonoBehaviour
             Debug.Log("삭제할 아이템이 없음 " + id);
             return false;
         }
+    }
+
+    /// <summary>
+    /// GameManager 호출 -> 인벤토리 초기화
+    /// </summary>
+    private void ResetInventory()
+    {
+        inventorySpace.Clear();
+        Debug.Log("인벤토리가 초기화되었습니다.");
     }
 }

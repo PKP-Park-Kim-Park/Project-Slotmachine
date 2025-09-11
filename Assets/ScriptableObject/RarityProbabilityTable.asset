@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chancesByLevel:
   - level: 1
-    commonChance: 0.4
-    rareChance: 0.3
-    uniqueChance: 0.2
-    legendaryChance: 0.1
+    commonChance: 1
+    rareChance: 0
+    uniqueChance: 0
+    legendaryChance: 0

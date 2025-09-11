@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public LevelData levelData { get; private set; }
     public Money money { get; private set; }
     public LevelManager levelManager { get; private set; }
+    private SlotMachine mainSlotMachine; // 슬롯머신 참조 저장
     private GameData _gameData;
 
     private void Awake()
@@ -168,6 +169,7 @@ public class GameManager : MonoBehaviour
     /// <param name="slotMachine">초기화할 SlotMachine 인스턴스</param>
     public void InitializeSlotMachine(SlotMachine slotMachine)
     {
+        this.mainSlotMachine = slotMachine; // 슬롯머신 참조 저장
         slotMachine.Initialize(this.money, this.levelData);
     }
 

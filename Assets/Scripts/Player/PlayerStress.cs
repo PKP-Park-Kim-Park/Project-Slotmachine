@@ -11,6 +11,24 @@ public class PlayerStress : MonoBehaviour
     public UnityEvent OnMaxStressReached;
     public UnityEvent<float> OnMaxStressChanged;
 
+    private void Start()
+    {
+        // ItemManager가 존재하면 자신을 등록합니다.
+        if (ItemManager.Instance != null)
+        {
+            ItemManager.Instance.RegisterPlayerStress(this);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // 오브젝트 파괴 시 ItemManager에서 등록을 해제합니다. (null 참조 방지)
+        if (ItemManager.Instance != null)
+        {
+            ItemManager.Instance.UnregisterPlayerStress();
+        }
+    }
+
     public void AddStress(float amount)
     {
         currentStress = Mathf.Min(currentStress + amount, maxStress);

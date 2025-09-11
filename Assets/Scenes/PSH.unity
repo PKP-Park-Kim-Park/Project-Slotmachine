@@ -562,7 +562,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 39f7335517c6095439fb626708cceec3, type: 2}
-  playerStress: {fileID: 448877372}
 --- !u!4 &922335954
 Transform:
   m_ObjectHideFlags: 0

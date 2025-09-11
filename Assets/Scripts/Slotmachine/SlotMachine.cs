@@ -179,6 +179,12 @@ public class SlotMachine : MonoBehaviour
             // GameManager의 세션 리셋 이벤트에 초기화 메서드 구독
             GameManager.instance.OnResetSession += ResetToDefaults;
         }
+
+        if (ItemManager.Instance != null)
+        {
+            // ItemManager에 자신을 등록
+            ItemManager.Instance.RegisterSlotMachine(this);
+        }
     }
 
     /// <summary>
@@ -451,6 +457,51 @@ public class SlotMachine : MonoBehaviour
             {
                 if (_levelData._level != machineLevel) screen.Show();
                 else screen.Hide();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 아이템으로 인한 심볼 관련 효과를 런타임 데이터에 적용합니다.
+    /// </summary>
+    /// <param name="symbolEffectData">적용할 심볼 효과 데이터</param>
+    public void ApplySymbolEffect(SymbolEffectData symbolEffectData)
+    {
+        // 1. 심볼 '보상 배율' 변경
+        if (symbolEffectData.OriginalUseType == UseType.SymbolReward)
+        {
+            // Flag로 지정된 모든 심볼에 대해 반복
+            foreach (Symbols symbol in Enum.GetValues(typeof(Symbols)))
+            {
+                //if (symbol == Symbols.None) continue;
+
+                if (symbolEffectData.Symbols.HasFlag((FlagSymbols)Enum.Parse(typeof(FlagSymbols), symbol.ToString())))
+                {
+                    if (symbolOddsRuntimeCopy.ContainsKey(symbol))
+                    {
+                        symbolOddsRuntimeCopy[symbol] += symbolEffectData.Amount;
+                        Debug.Log($"[아이템 효과] 심볼 '{symbol}'의 보상 배율이 {symbolEffectData.Amount}만큼 변경되었습니다. 현재 배율: {symbolOddsRuntimeCopy[symbol]}");
+                    }
+                }
+            }
+        }
+        // 2. 심볼 '등장 확률' 변경
+        else if (symbolEffectData.OriginalUseType == UseType.Symbol)
+        {
+            // Flag로 지정된 모든 심볼에 대해 반복
+            foreach (Symbols symbol in Enum.GetValues(typeof(Symbols)))
+            {
+                //if (symbol == Symbols.None) continue;
+
+                if (symbolEffectData.Symbols.HasFlag((FlagSymbols)Enum.Parse(typeof(FlagSymbols), symbol.ToString())))
+                {
+                    // 모든 릴의 확률 프로세서에 효과 적용
+                    foreach (var processor in reelWeightProcessors)
+                    {
+                        processor.SetProbability(symbol, symbolEffectData.Amount);
+                    }
+                    Debug.Log($"[아이템 효과] 심볼 '{symbol}'의 등장 확률이 {symbolEffectData.Amount}%p 만큼 변경되었습니다.");
+                }
             }
         }
     }

@@ -7,11 +7,10 @@ public class ItemManager : MonoBehaviour
     // 싱글톤 인스턴스
     public static ItemManager Instance { get; private set; }
 
-    // 모든 아이템 데이터를 담고 있는 ScriptableObject
     [SerializeField] private ItemData itemData;
 
-    // 스트레스 효과를 적용할 PlayerStress 컴포넌트
-    [SerializeField] private PlayerStress playerStress;
+    private PlayerStress playerStress;
+    private SlotMachine targetSlotMachine;
 
     // 모든 아이템 데이터를 저장할 배열
     private List<ItemDataModel> allItems = new List<ItemDataModel>();
@@ -116,6 +115,30 @@ public class ItemManager : MonoBehaviour
         }
     }
 
+    // --- 외부 컴포넌트 등록/해제 ---
+
+    /// <summary>
+    /// PlayerStress 컴포넌트를 ItemManager에 등록합니다.
+    /// </summary>
+    public void RegisterPlayerStress(PlayerStress stressComponent)
+    {
+        playerStress = stressComponent;
+        Debug.Log("[ItemManager] PlayerStress가 등록되었습니다.");
+    }
+
+    /// <summary>
+    /// SlotMachine 컴포넌트를 ItemManager에 등록합니다.
+    /// </summary>
+    public void RegisterSlotMachine(SlotMachine slotMachineComponent)
+    {
+        targetSlotMachine = slotMachineComponent;
+        Debug.Log("[ItemManager] SlotMachine이 등록되었습니다.");
+    }
+
+    // 씬 전환 등으로 컴포넌트가 파괴될 때 참조를 null로 설정할 수 있습니다. (선택적)
+    public void UnregisterPlayerStress() => playerStress = null;
+    public void UnregisterSlotMachine() => targetSlotMachine = null;
+
     public void EffectStress(StressEffectData stressEffectData)
     {
         if (playerStress == null)
@@ -150,5 +173,13 @@ public class ItemManager : MonoBehaviour
     public void EffectSymbol(SymbolEffectData symbolEffectData)
     {
         Debug.Log("심볼 효과 진짜 발동!" + symbolEffectData);
+        if (targetSlotMachine != null)
+        {
+            targetSlotMachine.ApplySymbolEffect(symbolEffectData);
+        }
+        else
+        {
+            Debug.LogWarning("[ItemManager] 아이템 효과를 적용할 SlotMachine이 지정되지 않았습니다.");
+        }
     }
 }

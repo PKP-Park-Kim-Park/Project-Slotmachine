@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -25,66 +25,66 @@ public class SkillShop : MonoBehaviour
             }
             skillsByLevel[skillData.level].Add(skillData);
         }
-        Debug.Log("½ºÅ³ »óÁ¡ ÃÊ±âÈ­ ¿Ï·á.");
+        Debug.Log("ìŠ¤í‚¬ ì§„ì—´ ì™„ë£Œ.");
     }
 
     /// <summary>
-    /// [ÇÙ½É ÇÔ¼ö] UI¿¡¼­ ½ºÅ³À» Å¬¸¯ÇßÀ» ¶§ È£ÃâÇÒ ´ÜÀÏ ÇÔ¼ö.
-    /// ±¸¸Å, È°¼ºÈ­, ºñÈ°¼ºÈ­, ±³Ã¼ ·ÎÁ÷À» ¸ğµÎ Ã³¸®ÇÕ´Ï´Ù.
+    /// [í•µì‹¬ í•¨ìˆ˜] UIì—ì„œ ìŠ¤í‚¬ì„ í´ë¦­í–ˆì„ ë•Œ í˜¸ì¶œí•  ë‹¨ì¼ í•¨ìˆ˜.
+    /// êµ¬ë§¤, í™œì„±í™”, ë¹„í™œì„±í™”, êµì²´ ë¡œì§ì„ ëª¨ë‘ ì²˜ë¦¬í•©ë‹ˆë‹¤.
     /// </summary>
     public void OnClickSkillInShop(int id)
     {
         SkillDataModel skill = FindSkillById(id);
         if (skill.id == 0)
         {
-            return; // À¯È¿ÇÏÁö ¾ÊÀº ½ºÅ³
+            return; // ìœ íš¨í•˜ì§€ ì•Šì€ ìŠ¤í‚¬
         }
 
         bool isOwned = ownedSkillIds.Contains(id);
         bool isActive = activeSkillIds.Contains(id);
 
-        // --- ½Ã³ª¸®¿À 1: ¼ÒÀ¯ÇÑ ½ºÅ³À» Å¬¸¯ÇÑ °æ¿ì ---
+        // --- ì‹œë‚˜ë¦¬ì˜¤ 1: ì†Œìœ í•œ ìŠ¤í‚¬ì„ í´ë¦­í•œ ê²½ìš° ---
         if (isOwned)
         {
-            if (isActive) // ÀÌ¹Ì È°¼ºÈ­µÈ ½ºÅ³ -> ºñÈ°¼ºÈ­
+            if (isActive) // ì´ë¯¸ í™œì„±í™”ëœ ìŠ¤í‚¬ -> ë¹„í™œì„±í™”
             {
                 DeactivateSkill(id);
             }
-            else // ¼ÒÀ¯ÇßÁö¸¸ ºñÈ°¼ºÈ­µÈ ½ºÅ³ -> È°¼ºÈ­ (±³Ã¼ ·ÎÁ÷ Æ÷ÇÔ)
+            else // ì†Œìœ í–ˆì§€ë§Œ ë¹„í™œì„±í™”ëœ ìŠ¤í‚¬ -> í™œì„±í™” (êµì²´ ë¡œì§ í¬í•¨)
             {
                 TryActivateWithSwap(skill);
             }
         }
-        // --- ½Ã³ª¸®¿À 2: ¼ÒÀ¯ÇÏÁö ¾ÊÀº ½ºÅ³À» Å¬¸¯ÇÑ °æ¿ì ---
+        // --- ì‹œë‚˜ë¦¬ì˜¤ 2: ì†Œìœ í•˜ì§€ ì•Šì€ ìŠ¤í‚¬ì„ í´ë¦­í•œ ê²½ìš° ---
         else
         {
-            // ±¸¸Å ½Ãµµ
+            // êµ¬ë§¤ ì‹œë„
             if (CanBuySkill(skill))
             {
-                ProcessPurchase(skill); // ±¸¸Å Ã³¸®
-                TryActivateWithSwap(skill); // ±¸¸Å ÈÄ Áï½Ã È°¼ºÈ­ (±³Ã¼ ·ÎÁ÷ Æ÷ÇÔ)
+                ProcessPurchase(skill); // êµ¬ë§¤ ì²˜ë¦¬
+                TryActivateWithSwap(skill); // êµ¬ë§¤ í›„ ì¦‰ì‹œ í™œì„±í™” (êµì²´ ë¡œì§ í¬í•¨)
             }
         }
     }
 
     private void TryActivateWithSwap(SkillDataModel skillToActivate)
     {
-        // ±ÔÄ¢ : °°Àº ·¹º§ÀÇ ½ºÅ³ÀÌ ÀÌ¹Ì È°¼ºÈ­µÇ¾î ÀÖ´Â°¡?
-        // FirstOrDefault: Á¶°Ç¿¡ ¸Â´Â Ã¹¹øÂ° ¿ä¼Ò¸¦ Ã£°Å³ª ¾øÀ¸¸é ±âº»°ª(0) ¹İÈ¯
+        // ê·œì¹™ : ê°™ì€ ë ˆë²¨ì˜ ìŠ¤í‚¬ì´ ì´ë¯¸ í™œì„±í™”ë˜ì–´ ìˆëŠ”ê°€?
+        // FirstOrDefault: ì¡°ê±´ì— ë§ëŠ” ì²«ë²ˆì§¸ ìš”ì†Œë¥¼ ì°¾ê±°ë‚˜ ì—†ìœ¼ë©´ ê¸°ë³¸ê°’(0) ë°˜í™˜
         int conflictingSkillId = activeSkillIds.FirstOrDefault(id => FindSkillById(id).level == skillToActivate.level);
 
         if (conflictingSkillId != 0)
         {
-            // Ãæµ¹ÇÏ´Â ½ºÅ³ÀÌ ÀÖÀ¸¸é, ¸ÕÀú ºñÈ°¼ºÈ­ (ÀÚµ¿ ±³Ã¼)
+            // ì¶©ëŒí•˜ëŠ” ìŠ¤í‚¬ì´ ìˆìœ¼ë©´, ë¨¼ì € ë¹„í™œì„±í™” (ìë™ êµì²´)
             DeactivateSkill(conflictingSkillId);
-            Debug.Log($"[{conflictingSkillId}] ½ºÅ³À» ÀÚµ¿À¸·Î ºñÈ°¼ºÈ­ÇÏ°í ±³Ã¼¸¦ ÁØºñÇÕ´Ï´Ù.");
+            Debug.Log($"[{conflictingSkillId}] ìŠ¤í‚¬ì„ ìë™ìœ¼ë¡œ ë¹„í™œì„±í™”í•˜ê³  êµì²´ë¥¼ ì¤€ë¹„í•©ë‹ˆë‹¤.");
         }
 
-        // ¸ğµç ±ÔÄ¢ Åë°ú, ½ºÅ³ È°¼ºÈ­
+        // ëª¨ë“  ê·œì¹™ í†µê³¼, ìŠ¤í‚¬ í™œì„±í™”
         ActivateSkill(skillToActivate.id);
     }
 
-    // ´Ü¼ø ±¸¸Å Ã³¸® (µ¥ÀÌÅÍ º¯°æ)
+    // ë‹¨ìˆœ êµ¬ë§¤ ì²˜ë¦¬ (ë°ì´í„° ë³€ê²½)
     private void ProcessPurchase(SkillDataModel skill)
     {
         SkillManager.instance.BuySkill(skill.price);
@@ -95,54 +95,54 @@ public class SkillShop : MonoBehaviour
         {
             maxUnlockedLevel = nextLevel;
         }
-        Debug.Log($"[{skill.id}] ½ºÅ³ ±¸¸Å ¿Ï·á.");
+        Debug.Log($"[{skill.id}] ìŠ¤í‚¬ êµ¬ë§¤ ì™„ë£Œ.");
     }
 
-    // ±¸¸Å °¡´É ¿©ºÎ¸¸ È®ÀÎ
+    // êµ¬ë§¤ ê°€ëŠ¥ ì—¬ë¶€ë§Œ í™•ì¸
     private bool CanBuySkill(SkillDataModel skill)
     {
         if (ownedSkillIds.Contains(skill.id))
         {
-            Debug.Log("±¸¸Å ºÒ°¡: ÀÌ¹Ì ¼ÒÀ¯ÇÑ ½ºÅ³ÀÔ´Ï´Ù.");
+            Debug.Log("êµ¬ë§¤ ë¶ˆê°€: ì´ë¯¸ ì†Œìœ í•œ ìŠ¤í‚¬ì…ë‹ˆë‹¤.");
             return false;
         }
         if (skill.level > maxUnlockedLevel)
         {
-            Debug.Log($"±¸¸Å ºÒ°¡: {skill.level}·¹º§ÀÌ ¾ÆÁ÷ ÇØ±İµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.Log($"êµ¬ë§¤ ë¶ˆê°€: {skill.level}ë ˆë²¨ì´ ì•„ì§ í•´ê¸ˆë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
             return false;
         }
         if (!SkillManager.instance.CheckCanBuySkill(skill.price))
         {
-            Debug.Log("±¸¸Å ºÒ°¡: ÀçÈ­°¡ ºÎÁ·ÇÕ´Ï´Ù.");
+            Debug.Log("êµ¬ë§¤ ë¶ˆê°€: ì¬í™”ê°€ ë¶€ì¡±í•©ë‹ˆë‹¤.");
             return false;
         }
         return true;
     }
 
-    // [ÇïÆÛ] ´Ü¼ø È°¼ºÈ­ (¸®½ºÆ® Ãß°¡ ¹× SkillManager È£Ãâ)
+    // [í—¬í¼] ë‹¨ìˆœ í™œì„±í™” (ë¦¬ìŠ¤íŠ¸ ì¶”ê°€ ë° SkillManager í˜¸ì¶œ)
     private void ActivateSkill(int id)
     {
         if (activeSkillIds.Contains(id))
         {
-            return; // Áßº¹ È°¼ºÈ­ ¹æÁö
+            return; // ì¤‘ë³µ í™œì„±í™” ë°©ì§€
         }
 
         activeSkillIds.Add(id);
         SkillManager.instance.ToggleSkill(id);
-        Debug.Log($"[{id}] ½ºÅ³ È°¼ºÈ­. (È°¼º ½½·Ô: {activeSkillIds.Count})");
+        Debug.Log($"[{id}] ìŠ¤í‚¬ í™œì„±í™”. (í™œì„± ìŠ¬ë¡¯: {activeSkillIds.Count})");
     }
 
-    // [ÇïÆÛ] ´Ü¼ø ºñÈ°¼ºÈ­ (¸®½ºÆ® Á¦°Å ¹× SkillManager È£Ãâ)
+    // [í—¬í¼] ë‹¨ìˆœ ë¹„í™œì„±í™” (ë¦¬ìŠ¤íŠ¸ ì œê±° ë° SkillManager í˜¸ì¶œ)
     private void DeactivateSkill(int id)
     {
         if (!activeSkillIds.Contains(id))
         {
-            return; // ºñÈ°¼ºÈ­µÈ °É ¶Ç ºñÈ°¼ºÈ­ ¹æÁö
+            return; // ë¹„í™œì„±í™”ëœ ê±¸ ë˜ ë¹„í™œì„±í™” ë°©ì§€
         }
 
         activeSkillIds.Remove(id);
         SkillManager.instance.ToggleSkill(id);
-        Debug.Log($"[{id}] ½ºÅ³ ºñÈ°¼ºÈ­. (È°¼º ½½·Ô: {activeSkillIds.Count})");
+        Debug.Log($"[{id}] ìŠ¤í‚¬ ë¹„í™œì„±í™”. (í™œì„± ìŠ¬ë¡¯: {activeSkillIds.Count})");
     }
 
     private SkillDataModel FindSkillById(int id)

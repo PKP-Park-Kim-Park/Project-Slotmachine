@@ -109,9 +109,9 @@ public class GameManager : MonoBehaviour
         money.ConvertToken();
         OnPlayerPosChanged?.Invoke(new Vector3(1f, 1f, 0f));
 
-        // 모든 구독자(슬롯머신 등)에게 세션 리셋을 방송합니다.
+        // 모든 구독자에게 세션 리셋하고, 모든 문 잠금
         OnResetSession?.Invoke();
-        OnUnlockDoor?.Invoke();
+        OnLockAllDoors?.Invoke();
     }
 
     public bool CheckGameOver()
@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// OnUnlockDoor 이벤트를 외부에서 발생시키기 위한 public 메서드입니다.
+    /// OnUnlockDoor 이벤트를 외부에서 발생시키기 위한 public 메서드
     /// </summary>
     public void TriggerUnlockDoor()
     {
@@ -155,7 +155,7 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 모든 문을 잠그는 OnLockAllDoors 이벤트를 발생시킵니다.
+    /// 모든 문을 잠그는 OnLockAllDoors 이벤트를 발생
     /// </summary>
     public void TriggerLockAllDoors()
     {
@@ -163,7 +163,7 @@ public class GameManager : MonoBehaviour
     }
 
      /// <summary>
-     /// IInitializable 인터페이스를 구현하는 모든 오브젝트를 초기화합니다.
+     /// IInitializable 인터페이스를 구현하는 모든 오브젝트를 초기화
      /// </summary>
      public void InitializeObject(IInitializable initializableObject)
      {

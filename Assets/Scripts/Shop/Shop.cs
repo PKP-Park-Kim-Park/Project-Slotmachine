@@ -81,6 +81,7 @@ public class Shop : MonoBehaviour
     // 상점 리롤
     public void RerollShop()
     {
+        GameManager.instance.BuyItem(5);
         shopItems.Clear();
         GenerateShopItems();
         Debug.Log("상점 아이템이 리롤되었습니다.");
@@ -130,6 +131,8 @@ public class Shop : MonoBehaviour
         // 아이템 중복 방지를 위해 전체 아이템 목록을 복사합니다.
         List<ItemDataModel> availableItems = new List<ItemDataModel>(allItems);
 
+        shopItems.Clear(); // 기존 상점 아이템 초기화
+
         // 확률에 따라 3개의 아이템을 선택합니다.
         for (int i = 0; i < 3; i++)
         {
@@ -162,41 +165,28 @@ public class Shop : MonoBehaviour
             // 해당 등급의 아이템만 필터링합니다.
             List<ItemDataModel> filteredItems = availableItems.Where(item => item.rarity == rarityToSelect).ToList();
 
+            ItemDataModel selectedItem = default(ItemDataModel);
+
             if (filteredItems.Count > 0)
             {
                 // 필터링된 아이템 중에서 랜덤으로 선택합니다.
                 int randomIndex = Random.Range(0, filteredItems.Count);
-                ItemDataModel selectedItem = filteredItems[randomIndex];
-                shopItems.Add(selectedItem);
-
-                // 선택된 아이템을 사용 가능한 목록에서 제거하여 중복을 방지합니다.
-                availableItems.Remove(selectedItem);
+                selectedItem = filteredItems[randomIndex];
                 Debug.Log($"슬롯 {i + 1}: [ID: {selectedItem.id}] {selectedItem.name} ({selectedItem.rarity}) 추가.");
             }
             else
             {
+                // 원하는 등급의 아이템이 없을 경우, 다른 등급에서 무작위로 선택합니다.
                 Debug.LogWarning($"{rarityToSelect} 등급의 아이템이 없습니다. 다른 아이템을 추가합니다.");
-
-                ItemDataModel fallbackItem = default(ItemDataModel); // default로 초기화
-
-                // 중복되지 않는 아이템을 찾을 때까지 반복합니다.
-                do
-                {
-                    int randomIndex = Random.Range(0, availableItems.Count);
-                    fallbackItem = availableItems[randomIndex];
-                }
-                while (shopItems.Any(item => item.id == fallbackItem.id));
-
-                shopItems.Add(fallbackItem);
-                availableItems.Remove(fallbackItem);
-                Debug.Log($"슬롯 {i + 1}: [ID: {fallbackItem.id}] {fallbackItem.name} ({fallbackItem.rarity}) 추가 (대체).");
+                int randomIndex = Random.Range(0, availableItems.Count);
+                selectedItem = availableItems[randomIndex];
+                Debug.Log($"슬롯 {i + 1}: [ID: {selectedItem.id}] {selectedItem.name} ({selectedItem.rarity}) 추가 (대체).");
             }
+
+            shopItems.Add(selectedItem);
+            availableItems.Remove(selectedItem);
         }
     }
-
-    // 상점 아이템 목록을 가져오는 public 메서드
-    public List<ItemDataModel> GetShopItems()
-    {
-        return shopItems;
-    }
 }
+
+

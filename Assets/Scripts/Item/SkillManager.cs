@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class SkillManager : MonoBehaviour
 {
-    [Header("필수 데이터 및 컴포넌트")]
+    public static SkillManager instance;
+
+    [Header("need data and component")]
     [SerializeField] private SkillData allSkillData;
     [SerializeField] private PlayerStress playerStress;
     // ... 스킬 로직에 필요한 다른 컴포넌트들을 여기에 추가 ...
@@ -20,6 +22,16 @@ public class SkillManager : MonoBehaviour
 
     private void Awake()
     {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         InitializeDatabase();
         InitializeLogics();
     }
@@ -93,9 +105,23 @@ public class SkillManager : MonoBehaviour
     }
 
     // --- 데이터 조회 및 상태 확인용 public 메서드 ---
-    public SkillDataModel GetSkillData(int skillId)
+    public SkillData GetSkillData()
     {
-        skillDatabase.TryGetValue(skillId, out SkillDataModel data);
-        return data;
+        return allSkillData;
+    }
+
+    public bool CheckCanBuySkill(int price)
+    {
+        if (GameManager.instance.money._token >= price)
+        {
+            return true;
+        }
+
+        return true;
+    }
+
+    public void BuySkill(int price)
+    {
+        GameManager.instance.money.SpendToken(price);
     }
 }

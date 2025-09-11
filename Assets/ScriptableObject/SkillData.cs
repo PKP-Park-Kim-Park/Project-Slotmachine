@@ -13,6 +13,7 @@ public struct SkillDataModel
     public int num;
     public float amount;
     public int price;
+    public Sprite sprite;
 }
 
 [CreateAssetMenu(fileName = "SkillData", menuName = "Scriptable Objects/SkillData")]

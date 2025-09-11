@@ -20,3 +20,12 @@ MonoBehaviour:
     num: 1
     amount: 10
     price: 100
+    sprite: {fileID: 745378040, guid: 15253af29fc25db4291b681e71977d48, type: 3}
+  - id: 2
+    skill: 1
+    description: "\uC2A4\uD2B8\uB808\uC2A4 \uCD5C\uB300\uCE58 \uC99D\uAC00"
+    level: 1
+    num: 1
+    amount: 10
+    price: 100
+    sprite: {fileID: 745378040, guid: 15253af29fc25db4291b681e71977d48, type: 3}

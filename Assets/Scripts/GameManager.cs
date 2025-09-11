@@ -44,7 +44,6 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-
         // ItemManager가 로드된 후 이벤트를 구독합니다.
         ItemManager.Instance.OnRequestLevelData += RequestLevelData;
         ItemManager.Instance.OnCheckCanBuyItem += CheckCanBuyItem;

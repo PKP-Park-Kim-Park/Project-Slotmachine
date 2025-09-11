@@ -507,4 +507,27 @@ public class SlotMachine : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// 아이템으로 인한 패턴 관련 효과를 런타임 데이터에 적용합니다.
+    /// </summary>
+    /// <param name="patternEffectData">적용할 패턴 효과 데이터</param>
+    public void ApplyPatternEffect(PatternEffectData patternEffectData)
+    {
+        // Flag로 지정된 모든 패턴에 대해 반복
+        foreach (Patterns pattern in Enum.GetValues(typeof(Patterns)))
+        {
+            if (pattern == Patterns.None) continue;
+
+            if (patternEffectData.Patterns.HasFlag((FlagPatterns)Enum.Parse(typeof(FlagPatterns), pattern.ToString())))
+            {
+                if (patternOddsRuntimeCopy.ContainsKey(pattern))
+                {
+                    float previousOdds = patternOddsRuntimeCopy[pattern];
+                    patternOddsRuntimeCopy[pattern] += patternEffectData.Amount;
+                    Debug.Log($"[아이템 효과] 패턴 '{pattern}' 보상 배율 변경: {previousOdds:F2} -> {patternOddsRuntimeCopy[pattern]:F2} ({patternEffectData.Amount:F2})");
+                }
+            }
+        }
+    }
 }

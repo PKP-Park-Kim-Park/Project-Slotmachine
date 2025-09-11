@@ -353,7 +353,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6891947094901107057, guid: e9e6087e900be2f40b41bd299c6341b3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -895,7 +896,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b182cd349e2d82f498f0aeaa8dcde8e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemToTestId: 1
+  itemToTestId: 4
   skillToTestId: 1
   patternOddsData: {fileID: 11400000, guid: 70910bfa3fef46148b6e89179a31bc85, type: 2}
   symbolOddsData: {fileID: 11400000, guid: a02a11a4a1b0b9a448dac5767ae7800a, type: 2}

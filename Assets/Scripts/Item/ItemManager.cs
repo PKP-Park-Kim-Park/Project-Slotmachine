@@ -168,6 +168,14 @@ public class ItemManager : MonoBehaviour
     public void EffectPattern(PatternEffectData patternEffectData)
     {
         Debug.Log("패턴 효과 진짜 발동!" + patternEffectData);
+        if (targetSlotMachine != null)
+        {
+            targetSlotMachine.ApplyPatternEffect(patternEffectData);
+        }
+        else
+        {
+            Debug.LogWarning("[ItemManager] 아이템 효과를 적용할 SlotMachine이 지정되지 않았습니다.");
+        }
     }
 
     public void EffectSymbol(SymbolEffectData symbolEffectData)

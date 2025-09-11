@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -17,7 +18,6 @@ public class GameManager : MonoBehaviour
     public LevelData levelData { get; private set; }
     public Money money { get; private set; }
     public LevelManager levelManager { get; private set; }
-    private SlotMachine mainSlotMachine; // 슬롯머신 참조 저장
     private GameData _gameData;
 
     private void Awake()
@@ -162,15 +162,13 @@ public class GameManager : MonoBehaviour
         OnLockAllDoors?.Invoke();
     }
 
-    /// <summary>
-    /// SlotMachine에 필요한 의존성을 주입하여 초기화합니다.
-    /// </summary>
-    /// <param name="slotMachine">초기화할 SlotMachine 인스턴스</param>
-    public void InitializeSlotMachine(SlotMachine slotMachine)
-    {
-        this.mainSlotMachine = slotMachine; // 슬롯머신 참조 저장
-        slotMachine.Initialize(this.money, this.levelData);
-    }
+     /// <summary>
+     /// IInitializable 인터페이스를 구현하는 모든 오브젝트를 초기화합니다.
+     /// </summary>
+     public void InitializeObject(IInitializable initializableObject)
+     {
+         initializableObject.Initialize(this);
+     }
 
     public bool CheckCanBuyItem(int price)
     {

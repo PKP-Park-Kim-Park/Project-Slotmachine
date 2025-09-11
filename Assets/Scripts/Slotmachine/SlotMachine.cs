@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class SlotMachine : MonoBehaviour
+public class SlotMachine : MonoBehaviour, IInitializable, IItemEffectReceiver
 {
     [Header("Machine Settings")] [SerializeField] private int machineLevel = 1;
     // 슬롯머신의 상태를 나타내는 열거형
@@ -174,8 +175,8 @@ public class SlotMachine : MonoBehaviour
     {
         if (GameManager.instance != null)
         {
-            // GameManager에 의존성 주입 요청
-            GameManager.instance.InitializeSlotMachine(this);
+            // GameManager에 자신(IInitializable)을 전달하여 초기화를 요청합니다.
+            GameManager.instance.InitializeObject(this);
             // GameManager의 세션 리셋 이벤트에 초기화 메서드 구독
             GameManager.instance.OnResetSession += ResetToDefaults;
         }
@@ -183,7 +184,7 @@ public class SlotMachine : MonoBehaviour
         if (ItemManager.Instance != null)
         {
             // ItemManager에 자신을 등록
-            ItemManager.Instance.RegisterSlotMachine(this);
+            ItemManager.Instance.RegisterReceiver(this);
         }
     }
 
@@ -212,10 +213,10 @@ public class SlotMachine : MonoBehaviour
         for (int i = 0; i < reels.Length; i++) reelWeightProcessors[i] = new SymbolWeightProcessor(reelProbability);
     }
 
-    public void Initialize(Money money, LevelData levelData)
+    public void Initialize(GameManager gameManager)
     {
-        _money = money;
-        _levelData = levelData;
+        _money = gameManager.money;
+        _levelData = gameManager.levelData;
 
         if (_levelData != null)
         {
@@ -530,4 +531,25 @@ public class SlotMachine : MonoBehaviour
             }
         }
     }
+
+    #region IItemEffectReceiver Implementation
+    public bool CanReceive(EffectType type)
+    {
+        // 이 클래스는 심볼과 패턴 효과만 처리할 수 있습니다.
+        return type == EffectType.Symbol || type == EffectType.Pattern;
+    }
+
+    public void ReceiveEffect(EffectType type, object data)
+    {
+        // 타입에 따라 적절한 메서드를 호출합니다.
+        if (type == EffectType.Symbol && data is SymbolEffectData symbolData)
+        {
+            ApplySymbolEffect(symbolData);
+        }
+        else if (type == EffectType.Pattern && data is PatternEffectData patternData)
+        {
+            ApplyPatternEffect(patternData);
+        }
+    }
+    #endregion
 }

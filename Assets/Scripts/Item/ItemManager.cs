@@ -7,11 +7,8 @@ public class ItemManager : MonoBehaviour
     // 싱글톤 인스턴스
     public static ItemManager Instance { get; private set; }
 
-    [SerializeField] private ItemData itemData;
-
-    private PlayerStress playerStress;
-    private SlotMachine targetSlotMachine;
-
+    [SerializeField] private ItemData itemData; 
+    private List<IItemEffectReceiver> effectReceivers = new List<IItemEffectReceiver>();
     // 모든 아이템 데이터를 저장할 배열
     private List<ItemDataModel> allItems = new List<ItemDataModel>();
 
@@ -117,77 +114,44 @@ public class ItemManager : MonoBehaviour
 
     // --- 외부 컴포넌트 등록/해제 ---
 
-    /// <summary>
-    /// PlayerStress 컴포넌트를 ItemManager에 등록합니다.
-    /// </summary>
-    public void RegisterPlayerStress(PlayerStress stressComponent)
+    public void RegisterReceiver(IItemEffectReceiver receiver)
     {
-        playerStress = stressComponent;
-        Debug.Log("[ItemManager] PlayerStress가 등록되었습니다.");
+        if (!effectReceivers.Contains(receiver))
+        {
+            effectReceivers.Add(receiver);
+            Debug.Log($"[ItemManager] {receiver.GetType().Name}가 등록되었습니다.");
+        }
     }
 
-    /// <summary>
-    /// SlotMachine 컴포넌트를 ItemManager에 등록합니다.
-    /// </summary>
-    public void RegisterSlotMachine(SlotMachine slotMachineComponent)
+    public void UnregisterReceiver(IItemEffectReceiver receiver)
     {
-        targetSlotMachine = slotMachineComponent;
-        Debug.Log("[ItemManager] SlotMachine이 등록되었습니다.");
+        effectReceivers.Remove(receiver);
+        Debug.Log($"[ItemManager] {receiver.GetType().Name}가 등록 해제되었습니다.");
     }
-
-    // 씬 전환 등으로 컴포넌트가 파괴될 때 참조를 null로 설정할 수 있습니다. (선택적)
-    public void UnregisterPlayerStress() => playerStress = null;
-    public void UnregisterSlotMachine() => targetSlotMachine = null;
 
     public void EffectStress(StressEffectData stressEffectData)
     {
-        if (playerStress == null)
-        {
-            Debug.LogError("PlayerStress 컴포넌트가 ItemManager에 할당되지 않았습니다.");
-            return;
-        }
-
-        float amount = stressEffectData.Amount;
-
-        switch (stressEffectData.StressType)
-        {
-            case StressType.CurrentStress:
-                if (amount > 0) playerStress.AddStress(amount);
-                else playerStress.ReduceStress(Mathf.Abs(amount));
-                break;
-
-            case StressType.MaxStress:
-                if (amount > 0) playerStress.IncreaseMaxStress(amount);
-                else playerStress.DecreaseMaxStress(Mathf.Abs(amount));
-                break;
-        }
-
-        Debug.Log($"스트레스 효과 적용 완료: 타입({stressEffectData.StressType}), 양({amount})");
+        ApplyEffect(EffectType.Stress, stressEffectData);
     }
 
     public void EffectPattern(PatternEffectData patternEffectData)
     {
-        Debug.Log("패턴 효과 진짜 발동!" + patternEffectData);
-        if (targetSlotMachine != null)
-        {
-            targetSlotMachine.ApplyPatternEffect(patternEffectData);
-        }
-        else
-        {
-            Debug.LogWarning("[ItemManager] 아이템 효과를 적용할 SlotMachine이 지정되지 않았습니다.");
-        }
+        ApplyEffect(EffectType.Pattern, patternEffectData);
     }
 
     public void EffectSymbol(SymbolEffectData symbolEffectData)
     {
-        Debug.Log("심볼 효과 진짜 발동!" + symbolEffectData);
-        if (targetSlotMachine != null)
+        ApplyEffect(EffectType.Symbol, symbolEffectData);
+    }
+
+    private void ApplyEffect(EffectType type, object data)
+    {
+        foreach (var receiver in effectReceivers)
         {
-            targetSlotMachine.ApplySymbolEffect(symbolEffectData);
-        }
-        else
-        {
-            Debug.LogWarning("[ItemManager] 아이템 효과를 적용할 SlotMachine이 지정되지 않았습니다.");
+            if (receiver.CanReceive(type))
+            {
+                receiver.ReceiveEffect(type, data);
+            }
         }
     }
 }

@@ -479,8 +479,10 @@ public class SlotMachine : MonoBehaviour
                 {
                     if (symbolOddsRuntimeCopy.ContainsKey(symbol))
                     {
+                        float previousOdds = symbolOddsRuntimeCopy[symbol];
                         symbolOddsRuntimeCopy[symbol] += symbolEffectData.Amount;
-                        Debug.Log($"[아이템 효과] 심볼 '{symbol}'의 보상 배율이 {symbolEffectData.Amount}만큼 변경되었습니다. 현재 배율: {symbolOddsRuntimeCopy[symbol]}");
+                        Debug.Log($"[아이템 효과] 심볼 '{symbol}' 보상 배율 변경: {previousOdds:F2} -> {symbolOddsRuntimeCopy[symbol]:F2} ({symbolEffectData.Amount:F2})");
+
                     }
                 }
             }
@@ -500,7 +502,7 @@ public class SlotMachine : MonoBehaviour
                     {
                         processor.SetProbability(symbol, symbolEffectData.Amount);
                     }
-                    Debug.Log($"[아이템 효과] 심볼 '{symbol}'의 등장 확률이 {symbolEffectData.Amount}%p 만큼 변경되었습니다.");
+                    Debug.Log($"[아이템 효과] 심볼 '{symbol}' 등장 확률에 {symbolEffectData.Amount}%p 만큼 변화를 시도했습니다.");
                 }
             }
         }

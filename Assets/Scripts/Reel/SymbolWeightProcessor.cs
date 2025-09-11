@@ -153,7 +153,7 @@ public class SymbolWeightProcessor
 
         RecalculateTotalProbability();
 
-        Debug.Log($"'{symbol}' 심볼 확률 {actualChange:+0.00;-0.00}% 변경됨. (현재: {targetSymbol.probability:F2}%)");
+        Debug.Log($"[{sourceName}] '{symbol}' 심볼 확률 {actualChange:+0.00;-0.00}%p 변경됨. (현재: {targetSymbol.probability:F2}%)");
         LogAllProbabilities();
     }
 

@@ -49,6 +49,7 @@ public class Door : MonoBehaviour, IInteractable
         }
 
         InitializeOutline();
+        Lock();
     }
 
     private void OnEnable()

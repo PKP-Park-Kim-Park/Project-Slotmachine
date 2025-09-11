@@ -188,7 +188,7 @@ public class SlotMachine : MonoBehaviour
     }
 
     /// <summary>
-    /// 모든 런타임 배율과 확률 데이터를 원본 ScriptableObject 값으로 리셋합니다.
+    /// 모든 런타임 배율과 확률 데이터를 원본 ScriptableObject 값으로 리셋
     /// </summary>
     public void ResetToDefaults()
     {

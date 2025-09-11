@@ -119,14 +119,14 @@ public class ItemManager : MonoBehaviour
         if (!effectReceivers.Contains(receiver))
         {
             effectReceivers.Add(receiver);
-            Debug.Log($"[ItemManager] {receiver.GetType().Name}가 등록되었습니다.");
+            // Debug.Log($"[ItemManager] {receiver.GetType().Name}가 등록되었습니다.");
         }
     }
 
     public void UnregisterReceiver(IItemEffectReceiver receiver)
     {
         effectReceivers.Remove(receiver);
-        Debug.Log($"[ItemManager] {receiver.GetType().Name}가 등록 해제되었습니다.");
+        // Debug.Log($"[ItemManager] {receiver.GetType().Name}가 등록 해제되었습니다.");
     }
 
     public void EffectStress(StressEffectData stressEffectData)

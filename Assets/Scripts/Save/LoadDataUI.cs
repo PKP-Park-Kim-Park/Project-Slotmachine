@@ -44,7 +44,7 @@ public class LoadDataUI : MonoBehaviour
                     }
                     else
                     {
-                        text.text = $"Has Data {i - 1} !!!";
+                        text.text = $"Has Data {i} !!!";
                     }
 
                     button.onClick.AddListener(() => OnclickLoadDataButton(capturedIndex));

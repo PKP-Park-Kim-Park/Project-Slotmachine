@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class SaveDataUI : MonoBehaviour
 {
     [SerializeField] private GameObject scrollView;
-    [SerializeField] private GameObject[] loadDataButtonList;
+    [SerializeField] private GameObject[] saveDataButtonList;
     [SerializeField] private Button xButton;
 
     private void Start()
@@ -19,18 +19,18 @@ public class SaveDataUI : MonoBehaviour
     private void Initialize()
     {
         GameData[] gameDatas = DataManager.instance.GetAllSlotsForUI();
-        for (int i = 0; i < gameDatas.Length; i++)
+        for (int i = 0; i < saveDataButtonList.Length; i++)
         {
             int capturedIndex = i;
 
-            TextMeshProUGUI text = loadDataButtonList[i].GetComponentInChildren<TextMeshProUGUI>();
-            Button button = loadDataButtonList[i].GetComponent<Button>();
+            TextMeshProUGUI text = saveDataButtonList[i].GetComponentInChildren<TextMeshProUGUI>();
+            Button button = saveDataButtonList[i].GetComponent<Button>();
 
             if (text != null)
             {
                 if (gameDatas[i + 1] != null)
                 {
-                    text.text = $"Has Data {i} !!!";
+                    text.text = $"Has Data {i + 1} !!!";
                     button.onClick.AddListener(() => OnclickSaveDataButton(capturedIndex));
                 }
                 else
@@ -62,7 +62,7 @@ public class SaveDataUI : MonoBehaviour
     {
         GameData gameData = GameManager.instance.SaveData();
         DataManager.instance.SaveSlotData(index, gameData);
-        TextMeshProUGUI text = loadDataButtonList[index].GetComponentInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI text = saveDataButtonList[index].GetComponentInChildren<TextMeshProUGUI>();
         text.text = $"Has Data {index} !!!";
     }
 }

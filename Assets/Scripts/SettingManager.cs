@@ -22,12 +22,13 @@ public class SettingManager : MonoBehaviour
     public TextMeshProUGUI bgmText;
     public TextMeshProUGUI sfxText;
 
-    public Button saveButton;
     public Button exitButton;
 
     private const string MouseSensitivityKey = "MouseSensitivity";
     private const string BgmVolumeKey = "BgmVolume";
     private const string SfxVolumeKey = "SfxVolume";
+
+    [SerializeField] private GameObject scrollView;
 
     private bool isSlotmachineState = true;
     void Start()
@@ -62,7 +63,6 @@ public class SettingManager : MonoBehaviour
         GameObject playerObject = GameObject.FindWithTag("Player");
         playerLook = playerObject.GetComponent<PlayerLook>();
 
-        saveButton.onClick.AddListener(OnclickSaveButton);
         exitButton.onClick.AddListener(OnclickExitButton);
 
         GameManager.instance.OnSlotMachineStateChanged += HandleSlotStateChange;
@@ -71,7 +71,8 @@ public class SettingManager : MonoBehaviour
     void Update()
     {
         if (isSlotmachineState &&
-            Input.GetKeyDown(KeyCode.Escape))
+            Input.GetKeyDown(KeyCode.Escape) &&
+            scrollView.activeInHierarchy == false)
         {
             ToggleSettings();
         }
@@ -196,12 +197,6 @@ public class SettingManager : MonoBehaviour
         {
             sfxText.text = (volume * 100).ToString("F0") + "%";
         }
-    }
-
-    public void OnclickSaveButton()
-    {
-        GameData gameData = GameManager.instance.SaveData();
-        DataManager.instance.SaveAutoData(gameData);
     }
 
     public void OnclickExitButton()

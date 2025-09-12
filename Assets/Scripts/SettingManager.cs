@@ -201,13 +201,13 @@ public class SettingManager : MonoBehaviour
     public void OnclickSaveButton()
     {
         GameData gameData = GameManager.instance.SaveData();
-        DataManager.instance.SaveGameData(gameData);
+        DataManager.instance.SaveAutoData(gameData);
     }
 
     public void OnclickExitButton()
     {
         GameData gameData = GameManager.instance.SaveData();
-        DataManager.instance.SaveGameData(gameData);
+        DataManager.instance.SaveAutoData(gameData);
         SceneManager.LoadScene("Title");
     }
 

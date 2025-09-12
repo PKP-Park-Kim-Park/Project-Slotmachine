@@ -17,12 +17,13 @@ public class TitleManager : MonoBehaviour
     }
 
     // 불러오기 버튼
-    public void OnLoadGameButtonClicked()
+    public void OnLoadGameButtonClicked(int index)
     {
-        bool canLoad = DataManager.instance.LoadGameData();
 
-        if (canLoad)
+        GameData gameData = DataManager.instance.LoadData(index);
+        if(gameData != null)
         {
+            GameManager.instance.LoadData(gameData);
             SceneManager.LoadScene("MainScene");
             Debug.Log("게임 불러오기!");
         }

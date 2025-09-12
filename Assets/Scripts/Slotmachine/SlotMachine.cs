@@ -71,6 +71,18 @@ public class SlotMachine : MonoBehaviour, IInitializable, IItemEffectReceiver
             OnRewardGold?.Invoke(value);
         }
     }
+    private int spinCount;
+    public int SpinCount
+    {
+        get { return spinCount; }
+        private set
+        {
+            if (spinCount == value) return;
+            spinCount = value;
+            // TODO: 스핀 횟수 변경 시 필요한 UI 업데이트나 로직 이벤트 추가
+            // OnSpinCountChanged?.Invoke(value);
+        }
+    }
 
     private Money _money;
     private LevelData _levelData;
@@ -194,6 +206,7 @@ public class SlotMachine : MonoBehaviour, IInitializable, IItemEffectReceiver
     public void ResetToDefaults()
     {
         Debug.Log("슬롯머신 데이터를 기본값으로 초기화합니다.");
+        SpinCount = 0;
 
         // 1. 패턴 및 심볼 '보상 배율'을 원본 SO에서 다시 복사
         patternOddsRuntimeCopy = new Dictionary<Patterns, float>();
@@ -325,6 +338,8 @@ public class SlotMachine : MonoBehaviour, IInitializable, IItemEffectReceiver
     private IEnumerator SpinSequence()
     {
         CurrentState = SlotMachineState.Spinning;
+        SpinCount++;
+        Debug.Log($"스핀 횟수: {SpinCount}");
         _money?.SpendGold(bettingGold);
 
         // 1. 모든 릴 회전 시작

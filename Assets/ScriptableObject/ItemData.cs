@@ -82,6 +82,7 @@ public struct ItemDataModel
 {
     public int id;
     public string name;
+    public string description;
     public int price;
     public Rarity rarity;
     public HasRisk hasRisk;

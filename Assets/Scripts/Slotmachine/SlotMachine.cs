@@ -79,7 +79,7 @@ public class SlotMachine : MonoBehaviour, IInitializable, IItemEffectReceiver
         {
             if (spinCount == value) return;
             spinCount = value;
-            // TODO: 스핀 횟수 변경 시 필요한 UI 업데이트나 로직이 있다면 여기에 이벤트를 추가할 수 있습니다.
+            // TODO: 스핀 횟수 변경 시 필요한 UI 업데이트나 로직 이벤트 추가
             // OnSpinCountChanged?.Invoke(value);
         }
     }

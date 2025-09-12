@@ -45,6 +45,7 @@ public class Shop : MonoBehaviour
         }
     }
 
+    // 아이템 구매
     public void BuyItem(int itemID)
     {
         ItemDataModel buyItem = shopItems.Find(item => item.id == itemID);
@@ -52,18 +53,12 @@ public class Shop : MonoBehaviour
         if (buyItem.id != 0)
         {
             // 플레이어의 재화 확인 및 차감 로직 (예시)
-            if (GameManager.instance.money._gold < buyItem.price)
-            {
-                Debug.Log("골드가 부족합니다!");
-                return;
-            }
-            // _gold 값을 직접 변경하지 않고 SpendGold 메서드 사용
-            bool spent = GameManager.instance.money.SpendGold(buyItem.price);
-            if (!spent)
-            {
-                Debug.Log("골드 차감에 실패했습니다!");
-                return;
-            }
+            // if (GameManager.instance.PlayerGold < buyItem.price)
+            // {
+            //     Debug.Log("골드가 부족합니다!");
+            //     return;
+            // }
+            // GameManager.instance.PlayerGold -= buyItem.price;
 
             bool result = ItemManager.Instance.TryAddItemToInventory(buyItem.id, buyItem.price, buyItem.sprite);
 

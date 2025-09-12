@@ -18,7 +18,7 @@ MonoBehaviour:
     price: 10
     rarity: 1
     hasRisk: 1
-    sprite: {fileID: 0}
+    sprite: {fileID: -888281076, guid: 15253af29fc25db4291b681e71977d48, type: 3}
     itemEffect:
       useType: 2
       flagSymbols: 2
@@ -33,10 +33,10 @@ MonoBehaviour:
       amount: 0
   - id: 2
     name: "\uC369\uC740 \uB2E4\uC774\uC544"
-    price: 10
+    price: 15
     rarity: 1
     hasRisk: 1
-    sprite: {fileID: 0}
+    sprite: {fileID: 1607541131, guid: c258ab93ad5ada740ae774c4e3c09478, type: 3}
     itemEffect:
       useType: 1
       flagSymbols: 16
